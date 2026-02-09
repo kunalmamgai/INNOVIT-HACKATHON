@@ -1,41 +1,51 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+ 
 import DarkModeToggle from './DarkModeToggle'
 
-export default function Navbar(){
-  const { t, i18n } = useTranslation()
+export default function Navbar({ currentUser, onLogout }){
   return (
-    <header className="bg-gradient-to-r from-earth via-gray-800 to-earth backdrop-blur sticky top-0 z-30 shadow-2xl border-b-2 border-gold">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex gap-4 flex-shrink-0 border-r border-gold/30 pr-6">
-          <div className="text-gold font-bold text-xl drop-shadow-lg">🛕</div>
-          <div className="text-gold font-bold text-lg drop-shadow-lg whitespace-nowrap">{t('siteTitle')}</div>
-        </div>
-        <nav className="hidden md:flex gap-5 items-center flex-1 ml-6 justify-center pr-8">
-          <NavLink to="/heritage" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('heritage')}</NavLink>
-          <NavLink to="/festivals" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('festivals')}</NavLink>
-          <NavLink to="/arts" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('arts')}</NavLink>
-          <NavLink to="/cuisine" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('cuisine')}</NavLink>
-          <NavLink to="/languages" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('languages')}</NavLink>
-          <NavLink to="/explore" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('explore')}</NavLink>
-        </nav>
-        
-        <div className="hidden md:flex gap-5 items-center flex-shrink-0 border-l border-gold/30 pl-6">
-          <NavLink to="/" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('home')}</NavLink>
-          <NavLink to="/about" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('about')}</NavLink>
-          <NavLink to="/contact" className="text-white hover:text-gold transition-colors duration-300 font-medium text-sm">{t('contact')}</NavLink>
-          <div className="border-l border-gold/30 pl-3 flex gap-2 items-center">
-            <select
-              aria-label="language"
-              onChange={(e)=>i18n.changeLanguage(e.target.value)}
-              className="bg-gray-700 text-white border border-gold/50 px-2 py-1 rounded text-sm hover:border-gold transition-colors font-medium cursor-pointer"
-              defaultValue={i18n.language}
-            >
-              <option value="en">EN</option>
-              <option value="hi">हिंदी</option>
-            </select>
-            <DarkModeToggle />
+    <header className="sticky top-0 z-40">
+      <div className="bg-white dark:bg-gradient-to-r dark:from-[#0b1220] dark:via-[#102030] dark:to-[#0b1220] border-b border-gray-200 dark:border-gold/20 dark:backdrop-blur shadow-sm dark:shadow-none transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
+          <NavLink to="/" className="flex items-center gap-4 no-underline hover:opacity-90 transition-opacity">
+            <div className="w-16 h-20 flex-shrink-0 bg-gradient-to-br from-gold/10 to-gold/5 dark:from-gold/10 dark:to-gold/5 rounded-lg p-1.5 border border-gold/30 shadow-lg hover:shadow-xl transition-shadow">
+              <img src="/assets/heritage-logo.svg" alt="Heritage & Culture Portal Logo" className="w-full h-full object-contain" />
+            </div>
+            <div className="flex flex-col gap-0">
+              <div className="text-gold font-extrabold text-base md:text-lg leading-tight">Heritage & Culture</div>
+              <div className="text-gold/80 text-xs md:text-sm font-semibold tracking-wider">PORTAL</div>
+            </div>
+          </NavLink>
+
+          <nav className="hidden xl:flex items-center gap-1.5 flex-1 justify-center">
+            <NavLink to="/heritage" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Heritage Sites</NavLink>
+            <NavLink to="/festivals" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">Festivals & Traditions</NavLink>
+            <NavLink to="/arts" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Art & Crafts</NavLink>
+            <NavLink to="/cuisine" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Cuisine</NavLink>
+            <NavLink to="/languages" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">Languages & Literature</NavLink>
+            <NavLink to="/explore" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Explore</NavLink>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-2">
+              <NavLink to="/" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-medium text-xs px-2 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Home</NavLink>
+              <NavLink to="/about" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-medium text-xs px-2 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">About</NavLink>
+              <NavLink to="/contact" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-medium text-xs px-2 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Contact</NavLink>
+            </div>
+
+            {currentUser ? (
+              <div className="flex items-center gap-2">
+                <span className="text-gold font-medium text-sm">{currentUser.name}</span>
+                <button onClick={onLogout} className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition">Logout</button>
+              </div>
+            ) : (
+              <NavLink to="/login" className="bg-gold text-gray-900 px-4 py-2 rounded font-semibold hover:bg-gold/90 transition text-sm">Login</NavLink>
+            )}
+
+            <div className="flex items-center gap-2 pl-3">
+              <DarkModeToggle />
+            </div>
           </div>
         </div>
       </div>
