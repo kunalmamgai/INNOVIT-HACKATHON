@@ -12,10 +12,10 @@ export default function Footer(){
           <div>
             <h3 className="text-gold font-bold text-lg mb-3 drop-shadow">Explore</h3>
             <ul className="space-y-1 text-sm">
-              <li><a href="#heritage" className="text-gray-200 hover:text-gold transition-colors">Heritage Sites</a></li>
-              <li><a href="#festivals" className="text-gray-200 hover:text-gold transition-colors">Festivals</a></li>
-              <li><a href="#cuisine" className="text-gray-200 hover:text-gold transition-colors">Cuisine</a></li>
-              <li><a href="#languages" className="text-gray-200 hover:text-gold transition-colors">Languages</a></li>
+              <li><a href="heritage" className="text-gray-200 hover:text-gold transition-colors">Heritage Sites</a></li>
+              <li><a href="festivals" className="text-gray-200 hover:text-gold transition-colors">Festivals</a></li>
+              <li><a href="cuisine" className="text-gray-200 hover:text-gold transition-colors">Cuisine</a></li>
+              <li><a href="languages" className="text-gray-200 hover:text-gold transition-colors">Languages</a></li>
             </ul>
           </div>
           <div>
