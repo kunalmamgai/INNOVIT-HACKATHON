@@ -1,10 +1,10 @@
-import React, { lazy } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import React, { lazy, useState, useEffect } from 'react'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+import { useStore } from './store/useStore'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import './styles/main.css'
-import { useEffect } from "react";
 
 
 const Home = lazy(() => import('./pages/Home'))
@@ -16,9 +16,14 @@ const Languages = lazy(() => import('./pages/Languages'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Explore = lazy(() => import('./pages/Explore'))
+const Login = lazy(() => import('./pages/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
+  const dark = useStore(state => state.dark);
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/places")
       .then((res) => res.json())
@@ -28,17 +33,55 @@ export default function App() {
       .catch((err) => {
         console.error("FETCH ERROR:", err);
       });
+
+    // Check if user is already logged in
+    const savedUser = localStorage.getItem("currentUser");
+    if (savedUser) {
+      setCurrentUser(JSON.parse(savedUser));
+    }
+
+    // Load dark mode preferences
+    useStore.getState().loadPrefs();
+
+    // Listen for login events from the Login page so currentUser updates immediately
+    const handler = (e) => {
+      try {
+        const user = e && e.detail ? e.detail : null;
+        if (user) setCurrentUser(user);
+      } catch (err) { /* ignore */ }
+    };
+    window.addEventListener('user-logged-in', handler);
+
+    return () => {
+      window.removeEventListener('user-logged-in', handler);
+    };
   }, []);
+
+  // Apply dark mode to document
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [dark]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("currentUser");
+    setCurrentUser(null);
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex flex-col motif">
       <Helmet>
         <title>Heritage & Culture Portal</title>
       </Helmet>
-      <Navbar />
+      <Navbar currentUser={currentUser} onLogout={handleLogout} />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/heritage" element={<Heritage />} />
           <Route path="/festivals" element={<Festivals />} />
           <Route path="/arts" element={<ArtCrafts />} />
@@ -46,7 +89,7 @@ export default function App() {
           <Route path="/languages" element={<Languages />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route path="/explore" element={<Explore currentUser={currentUser} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
