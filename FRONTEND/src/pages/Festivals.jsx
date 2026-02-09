@@ -85,15 +85,15 @@ export default function Festivals() {
         <input
           {...register("search")}
           placeholder="Search festivals"
-          className="border px-3 py-2 w-full md:w-1/2 rounded"
+          className="border px-3 py-2 w-full text-black md:w-1/2 rounded"
         />
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4 mt-6">
+      <div className="grid md:grid-cols-3 text-black gap-4 mt-6">
         {list.map((f) => (
           <div
             key={f.id}
-            className="relative overflow-hidden min-h-[140px] bg-gradient-to-r from-gray-900 via-gray-800 to-transparent rounded shadow p-4 text-white border border-gold/30"
+            className="relative overflow-hidden min-h-[145px] bg-gradient-to-r from-gray-900 via-gray-800 to-transparent rounded shadow p-4 text-white border border-gold/30"
           >
             {/* TEXT CONTENT */}
             <div className="relative z-10 max-w-[60%]">
@@ -110,7 +110,7 @@ export default function Festivals() {
             <img
               src={f.image}
               alt={f.name}
-              className="festival-image"
+              className="festival-image "
             />
           </div>
         ))}
