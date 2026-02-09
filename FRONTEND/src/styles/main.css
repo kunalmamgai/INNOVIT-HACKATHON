@@ -3,37 +3,92 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root{
   --earth: #7A5C3A;
   --sand: #F4EBD9;
   --gold: #C09A4B;
+  /* Light mode colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9f9f9;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555555;
+  --border-color: #e0e0e0;
 }
 
-html,
-body,
-#root {
-  height: 100%;
+html.dark {
+  --bg-primary: #0f172a;
+  --text-primary: #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --border-color: #333333;
 }
 
-body {
+html,body,#root { height: 100%; }
+
+/* Light Mode (default) */
+body { 
   font-family: Poppins, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 50%, #1a1a1a 100%);
-  color: #f0f0f0;
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 50%, #f5f5f5 100%);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode */
+html.dark body {
+  background: linear-gradient(180deg, #0b1220 0%, #0f172a 50%, #0b1220 100%);
+  color: var(--text-primary);
 }
 
 .hero-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  opacity: 1;
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 1;
 }
 
-.motif {
-  background-image: radial-gradient(circle at 10% 10%, rgba(192, 154, 75, 0.06), transparent 20%), radial-gradient(circle at 90% 90%, rgba(122, 92, 58, 0.04), transparent 15%);
+.motif { 
+  background-image: radial-gradient(circle at 10% 10%, rgba(192,154,75,0.06), transparent 20%), radial-gradient(circle at 90% 90%, rgba(122,92,58,0.04), transparent 15%); 
 }
+
+/* Text Color Transitions */
+a, button, label {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Light mode specific styles */
+body input[type="text"],
+body input[type="email"],
+body input[type="password"],
+body textarea,
+body select {
+  background: #ffffff;
+  color: #1a1a1a;
+  border-color: #e0e0e0;
+}
+
+body input::placeholder {
+  color: #999999;
+}
+
+/* Dark mode text colors */
+html.dark input[type="text"],
+html.dark input[type="email"],
+html.dark input[type="password"],
+html.dark textarea,
+html.dark select {
+  background: #1a2332;
+  color: #f0f0f0;
+  border-color: #333333;
+}
+
+html.dark input::placeholder {
+  color: #888888;
+}
+
+html.dark a {
+  color: inherit;
+}
+
+html.dark button {
+  color: inherit;
+}
+
 
 /* Leaflet CSS fallback import via JS */
 
