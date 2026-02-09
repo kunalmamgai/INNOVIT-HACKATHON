@@ -14,8 +14,8 @@ export default function Carousel(){
           <div key={it.id} className="min-w-[280px] bg-white rounded shadow overflow-hidden">
             <img src={it.img} alt={it.title} className="h-40 w-full object-cover" />
             <div className="p-3">
-              <h4 className="font-bold">{it.title}</h4>
-              <p className="text-sm text-gray-600">{it.desc}</p>
+              <h4 className="font-bold text-black">{it.title}</h4>
+              <p className="text-black">{it.desc}</p>
             </div>
           </div>
         ))}

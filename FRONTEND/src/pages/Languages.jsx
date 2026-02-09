@@ -13,7 +13,7 @@ export default function Languages(){
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-white">Languages & Literature</h1>
+      <h1 className="text-2xl font-bold text-blue">Languages & Literature</h1>
       <div className="grid md:grid-cols-3 gap-4 mt-6">
         {languages.map(l=> (
           <div key={l.id} className="bg-gray-800 rounded shadow p-4 cursor-pointer hover:shadow-lg transition text-white border border-gold/30" onClick={()=>setSelected(l)}>
