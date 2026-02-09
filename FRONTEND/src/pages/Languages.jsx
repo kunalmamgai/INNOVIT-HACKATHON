@@ -16,7 +16,7 @@ export default function Languages(){
       <h1 className="text-2xl font-bold text-white">Languages & Literature</h1>
       <div className="grid md:grid-cols-3 gap-4 mt-6">
         {languages.map(l=> (
-          <div key={l.id} className="bg-gray-800 rounded shadow p-4 cursor-pointer hover:shadow-lg transition text-white border border-gold/30" onClick={()=>setSelected(l)}>
+          <div key={l.id} className="relative overflow-hidden min-h-[145px] bg-gradient-to-r from-gray-900 via-gray-800 to-transparent rounded shadow p-4 text-white border border-gold/30" onClick={()=>setSelected(l)}>
             <h3 className="font-bold text-lg text-gold">{l.name}</h3>
             <p className="font-noto text-2xl mt-2 text-white">{l.script}</p>
             <p className="text-sm text-gray-300 mt-2">{l.speakers} speakers</p>
