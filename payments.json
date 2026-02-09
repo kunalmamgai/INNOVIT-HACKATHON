@@ -1,0 +1,51 @@
+[
+  {
+    "payment_id": "PAY_20260207221606_0",
+    "booking_id": "BOOK_20260207221600_1",
+    "user_id": "testuser123",
+    "amount": 550,
+    "payment_method": "card",
+    "status": "completed",
+    "timestamp": "2026-02-07T22:16:06.066871"
+  },
+  {
+    "payment_id": "PAY_20260207223456_1",
+    "booking_id": "BOOK_20260207223433_4",
+    "user_id": "upiuser",
+    "amount": 30,
+    "payment_method": "upi",
+    "upi_id": "upiuser@bank",
+    "status": "completed",
+    "timestamp": "2026-02-07T22:34:56.744138"
+  },
+  {
+    "payment_id": "PAY_20260207223728_2",
+    "booking_id": "BOOK_20260207223646_5",
+    "user_id": "rasesh_varshney",
+    "amount": 125,
+    "payment_method": "upi",
+    "upi_id": "raseshvarshney-1@okhdfcbank",
+    "status": "completed",
+    "timestamp": "2026-02-07T22:37:28.357853"
+  },
+  {
+    "payment_id": "PAY_20260207224705_3",
+    "booking_id": "BOOK_20260207224649_6",
+    "user_id": "rasesh_varshney_",
+    "amount": 30,
+    "payment_method": "upi",
+    "upi_id": "raseshvarshney@gmail.com",
+    "status": "completed",
+    "timestamp": "2026-02-07T22:47:05.131950"
+  },
+  {
+    "payment_id": "PAY_20260208144638_4",
+    "booking_id": "BOOK_20260208144621_7",
+    "user_id": "rasesh_varshney_",
+    "amount": 11000,
+    "payment_method": "upi",
+    "upi_id": "raseshvarshney@gmail.com",
+    "status": "completed",
+    "timestamp": "2026-02-08T14:46:38.368489"
+  }
+]
