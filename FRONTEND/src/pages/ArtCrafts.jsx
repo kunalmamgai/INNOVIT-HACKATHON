@@ -11,7 +11,7 @@ export default function ArtCrafts(){
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-white">Art & Crafts Gallery</h1>
+      <h1 className="text-2xl font-bold ">Art & Crafts Gallery</h1>
       <div className="grid md:grid-cols-3 gap-4 mt-6">
         {crafts.map(c=> (
           <div key={c.id} className="cursor-pointer rounded overflow-hidden shadow hover:scale-105 transition" onClick={()=>setSelected(c)}>

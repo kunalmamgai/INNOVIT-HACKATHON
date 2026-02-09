@@ -169,7 +169,7 @@ export default function Explore({ currentUser: propUser }) {
   if (!places.length) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">Explore Delhi Heritage</h1>
+        <h1 className="text-4xl font-bold text-black mb-4">Explore Delhi Heritage</h1>
         <p className="text-gray-300">Loading monuments...</p>
       </div>
     );
@@ -177,7 +177,7 @@ export default function Explore({ currentUser: propUser }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-2 text-white">Explore Delhi Heritage</h1>
+      <h1 className="text-4xl font-bold mb-2 ">Explore Delhi Heritage</h1>
       <p className="text-gray-300 mb-8">{currentUser ? `Welcome, ${currentUser.name}! Click on any monument to learn more and book a tour.` : 'Explore monuments — login to book to reserve tours.'}</p>
       
       {message && (

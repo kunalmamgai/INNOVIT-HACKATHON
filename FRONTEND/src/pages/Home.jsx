@@ -16,7 +16,7 @@ export default function Home(){
       </div>
 
       <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} className="max-w-6xl mx-auto px-4 py-10">
-        <h2 className="text-2xl font-semibold mb-4 text-white">Featured Heritage Sites</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-blue">Featured Heritage Sites</h2>
         <Carousel />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">

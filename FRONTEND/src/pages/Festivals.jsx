@@ -77,7 +77,7 @@ export default function Festivals() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-white">
+      <h1 className="text-2xl font-bold text-blue">
         Festivals & Traditions
       </h1>
 
