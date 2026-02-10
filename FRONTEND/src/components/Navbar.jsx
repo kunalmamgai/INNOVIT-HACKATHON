@@ -9,8 +9,8 @@ export default function Navbar({ currentUser, onLogout }){
       <div className="bg-white dark:bg-gradient-to-r dark:from-[#0b1220] dark:via-[#102030] dark:to-[#0b1220] border-b border-gray-200 dark:border-gold/20 dark:backdrop-blur shadow-sm dark:shadow-none transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
           <NavLink to="/" className="flex items-center gap-4 no-underline hover:opacity-90 transition-opacity">
-            <div className="w-16 h-20 flex-shrink-0 bg-gradient-to-br from-gold/10 to-gold/5 dark:from-gold/10 dark:to-gold/5 rounded-lg p-1.5 border border-gold/30 shadow-lg hover:shadow-xl transition-shadow">
-              <img src="/assets/logo.svg" alt="Heritage & Culture Portal Logo" className="w-full h-full object-contain" />
+            <div className="w-16 h-20 flex-shrink-0 bg-gradient-to-br from-gold/10 to-gold/5 dark:from-gold/10 dark:to-gold/5 rounded-lg border border-gold/30 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+              <img src="/assets/logo.svg" alt="Heritage & Culture Portal Logo" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col gap-0">
               <div className="text-gold font-extrabold text-base md:text-lg leading-tight">Heritage & Culture</div>
