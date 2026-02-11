@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 const languages = [
   { id:1, name:'Hindi', script:'देवनागरी', speakers:'345M' },
   { id:2, name:'Tamil', script:'தமிழ்', speakers:'75M' },
-  { id:3, name:'Sanskrit', script:'संस्कृत', speakers:'25k' },
-  { id:3, name:'Sanskrit', script:'संस्कृत', speakers:'25k' },
   { id:3, name:'Sanskrit', script:'संस्कृत', speakers:'25k' }
+  
 ]
 
 export default function Languages(){
