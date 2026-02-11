@@ -25,7 +25,7 @@ export default function App() {
   const dark = useStore(state => state.dark);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/places")
+    fetch("https://delhi-heritage-api.onrender.com/places")
       .then((res) => res.json())
       .then((data) => {
         console.log("PLACES FROM BACKEND:", data);

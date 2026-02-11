@@ -76,7 +76,7 @@ export default function Heritage(){
   const fetchPlaces = async () => {
     try {
       setLoading(true)
-      const response = await fetch('http://localhost:8000/places')
+      const response = await fetch('https://delhi-heritage-api.onrender.com/places')
       if (!response.ok) throw new Error('Failed to fetch places')
       const data = await response.json()
       setPlaces(Array.isArray(data) ? data : Object.values(data))

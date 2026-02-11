@@ -29,7 +29,7 @@ export default function Explore({ currentUser: propUser }) {
 
   useEffect(() => {
     // Load places
-    fetch("http://127.0.0.1:8000/places")
+    fetch("https://delhi-heritage-api.onrender.com/places")
       .then((res) => res.json())
       .then((data) => {
         const placesArray = Array.isArray(data) ? data : Object.entries(data).map(([key, value]) => ({
@@ -69,7 +69,7 @@ export default function Explore({ currentUser: propUser }) {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/bookings", {
+      const response = await fetch("https://delhi-heritage-api.onrender.com/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -134,7 +134,7 @@ export default function Explore({ currentUser: propUser }) {
       };
       if (method === "upi") body.upi_id = paymentData.upiId;
 
-      const response = await fetch("http://127.0.0.1:8000/payments", {
+      const response = await fetch("https://delhi-heritage-api.onrender.com/payments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
