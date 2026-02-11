@@ -10,7 +10,7 @@ app = FastAPI(title="Delhi Heritage Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # frontend
+    allow_origins=["http://localhost:5173", "https://your-vercel-app.vercel.app"],  # Add your Vercel URL after deployment
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
