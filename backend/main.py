@@ -10,7 +10,7 @@ app = FastAPI(title="Delhi Heritage Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://innovit-hackathon.vercel.app"],
+    allow_origins=["http://localhost:5173", "https://heritage-and-cultue-portal.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
