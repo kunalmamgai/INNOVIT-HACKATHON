@@ -1,467 +1,361 @@
-# 🎉 HERITAGE & CULTURE PORTAL - PROJECT COMPLETION
+# �️ Delhi Heritage & Culture Portal
 
-**Status:** ✅ **100% COMPLETE & PRODUCTION READY**
+**Status:** ✅ **Production Ready**
+
+A full-stack platform showcasing Delhi's rich cultural heritage, including sites, festivals, art & crafts, cuisine, and languages. Built with FastAPI backend and React frontend.
 
 ---
 
-## 📊 DELIVERABLES CHECKLIST
+## 🎯 Project Overview
 
-### ✅ Source Code (22 Files)
-```
-✅ 10 Pages (9 + 404)
-✅ 5 Components (Navbar, Footer, DarkModeToggle, Carousel, Modal)
-✅ 4 Utilities (i18n, router, state, service worker)
-✅ 3 Data Files (heritage.json, CSS, config)
-```
+The Delhi Heritage & Culture Portal is a comprehensive platform dedicated to exploring and promoting Delhi's cultural treasures. Users can discover heritage sites, learn about festivals, explore traditional art & crafts, discover regional cuisine, and connect with indigenous languages.
 
-### ✅ Configuration (6 Files)
-```
-✅ vite.config.js - Build configuration
-✅ tailwind.config.cjs - Theme colors & fonts
-✅ postcss.config.cjs - CSS processing
-✅ .eslintrc.cjs - Code linting
-✅ .prettierrc.json - Code formatting
-✅ .gitignore - Git settings
-```
+**Key Features:**
+- 📍 **Interactive Heritage Sites Map** - Explore 50+ heritage locations
+- 🎭 **Cultural Collections** - Festivals, Art & Crafts, Cuisine, Languages
+- 👤 **User Auth System** - Login with preferences and interests
+- 🎟️ **Booking & Payments** - Reserve tickets and process payments
+- 🔍 **Smart Recommendations** - AI-powered place suggestions based on interests
+- 🌙 **Dark Mode** - Eye-friendly interface option
+- 🌐 **Bilingual** - English and Hindi support
+- 📱 **Fully Responsive** - Mobile, tablet, and desktop compatible
+- ⚡ **PWA Support** - Progressive Web App capabilities
 
-### ✅ Documentation (10 Guides)
-```
-✅ INDEX.md - Documentation index
-✅ QUICK_START.md - 2-minute setup
-✅ README.md - Full overview
-✅ SETUP_GUIDE.md - Detailed guide
-✅ INSTALLATION.md - Installation steps
-✅ FILE_STRUCTURE.md - File reference
-✅ EXAMPLES.md - Code patterns (12)
-✅ COMPONENTS.md - Templates (10)
-✅ SUMMARY.md - Project summary
-✅ DELIVERY.md - Completion report
-```
+---
 
-### ✅ Production Build (22 Files)
+## 🛠️ Tech Stack
+
+### Frontend
 ```
-✅ Minified HTML
-✅ Optimized CSS (11KB)
-✅ Optimized JS (77KB gzipped)
-✅ PWA Manifest
-✅ Service Worker
-✅ All Assets Included
+React 18.2          - UI Framework
+Vite 5.0            - Build tool & dev server
+React Router 6      - Client-side routing
+Leaflet 1.9 + React Leaflet - Interactive maps
+TailwindCSS 3.3     - Utility-first CSS
+Framer Motion       - Animations & transitions
+React Hook Form     - Form validation
+i18next             - Internationalization (EN/HI)
+Zustand             - Global state management
+React Helmet        - Document head management
 ```
 
-### ✅ Features Implemented
+### Backend
 ```
-✅ 9 Complete Pages
-✅ 50+ Heritage Sites (map ready)
-✅ Interactive Maps (React Leaflet)
-✅ Dark/Light Mode
-✅ English + Hindi
-✅ Form Validation
-✅ Animations (Framer Motion)
-✅ Search & Filters
-✅ PWA Support
-✅ SEO Optimized
-✅ Mobile Responsive
-✅ Code Splitting
-✅ Lazy Loading
-✅ Global State
+FastAPI             - Python web framework
+Uvicorn             - ASGI server
+Python 3.x          - Runtime
+JSON                - Data persistence
 ```
 
 ---
 
-## 🚀 QUICK START (30 Seconds)
+## 📁 Project Structure
 
-### Step 1: Navigate
-```bash
-cd "c:\Users\Kunal\OneDrive\Desktop\Self\Hackathon"
+```
+INNOVIT-HACKATHON/
+│
+├── 📄 README.md                     (This file)
+├── 📄 user.json                     (User data)
+│
+├── 📁 FRONTEND/                     (React + Vite Application)
+│   ├── 📄 package.json              (Dependencies & scripts)
+│   ├── 📄 vite.config.js            (Build configuration)
+│   ├── 📄 tailwind.config.cjs       (TailwindCSS config)
+│   ├── 📄 postcss.config.cjs        (PostCSS config)
+│   │
+│   ├── 📁 public/                   (Static assets)
+│   │   ├── 📄 index.html
+│   │   ├── 📄 manifest.json         (PWA manifest)
+│   │   ├── 📄 sw.js                 (Service Worker)
+│   │   └── 📁 assets/               (Images, icons, etc.)
+│   │
+│   └── 📁 src/                      (Source code)
+│       ├── 📄 main.jsx              (Entry point)
+│       ├── 📄 App.jsx               (Root component)
+│       ├── 📄 i18n.js               (i18n configuration)
+│       ├── 📄 registerServiceWorker.js
+│       │
+│       ├── 📁 components/           (Reusable components)
+│       │   ├── 📄 Navbar.jsx
+│       │   ├── 📄 Footer.jsx
+│       │   ├── 📄 DarkModeToggle.jsx
+│       │
+│       ├── 📁 shared/               (Shared UI components)
+│       │   ├── 📄 Carousel.jsx
+│       │   └── 📄 Modal.jsx
+│       │
+│       ├── 📁 pages/                (Page components - lazy loaded)
+│       │   ├── 📄 Home.jsx          (Landing page)
+│       │   ├── 📄 Heritage.jsx      (Interactive map of heritage sites)
+│       │   ├── 📄 Festivals.jsx     (Cultural festivals)
+│       │   ├── 📄 ArtCrafts.jsx     (Traditional art & crafts)
+│       │   ├── 📄 Cuisine.jsx       (Regional cuisine)
+│       │   ├── 📄 Languages.jsx     (Indigenous languages)
+│       │   ├── 📄 About.jsx         (About Delhi & culture)
+│       │   ├── 📄 Contact.jsx       (Contact form)
+│       │   ├── 📄 Explore.jsx       (Exploration/discovery)
+│       │   ├── 📄 Login.jsx         (User authentication)
+│       │   └── 📄 NotFound.jsx      (404 page)
+│       │
+│       ├── 📁 store/                (State management)
+│       │   └── 📄 useStore.js       (Zustand store)
+│       │
+│       ├── 📁 data/                 (Data files)
+│       │   └── 📄 heritage.json     (Heritage sites data)
+│       │
+│       ├── 📁 assests/              (Local assets)
+│       │
+│       └── 📁 styles/               (Global styles)
+│           └── 📄 main.css          (TailwindCSS + custom styles)
+│
+├── 📁 backend/                      (FastAPI Backend)
+│   ├── 📄 main.py                   (FastAPI app & routes)
+│   ├── 📄 data.py                   (Heritage data store)
+│   ├── 📄 delhi_places.py           (Delhi heritage sites)
+│   ├── 📄 user.py                   (User management)
+│   ├── 📄 bookings.py               (Ticket booking system)
+│   ├── 📄 payments.py               (Payment processing)
+│   ├── 📄 recommend.py              (Recommendation engine)
+│   ├── 📄 requirements.txt          (Python dependencies)
+│   ├── 📄 Procfile                  (Deployment configuration)
+│   ├── 📄 user.json                 (User data)
+│   ├── 📄 bookings.json             (Booking records)
+│   └── 📄 payments.json             (Payment records)
 ```
 
-### Step 2: Run
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Node.js** 16+ and **npm**
+- **Python** 3.8+ and **pip**
+- **Git** (optional)
+
+### Frontend Setup (30 seconds)
 ```bash
+cd FRONTEND
+npm install
 npm run dev
 ```
+Frontend will be available at `http://localhost:5173`
 
-### Step 3: Open
-```
-http://localhost:5173
-```
-
-**Done!** Your Heritage Portal is live! 🎉
-
----
-
-## 📁 COMPLETE PROJECT STRUCTURE
-
-```
-Heritage & Culture Portal/
-│
-├── 📁 src/                          (Application Code)
-│   ├── 📁 pages/                    (9 Pages - Lazy Loaded)
-│   │   ├── Home.jsx
-│   │   ├── Heritage.jsx             (Interactive Map)
-│   │   ├── Festivals.jsx            (Calendar + Countdown)
-│   │   ├── ArtCrafts.jsx            (Gallery + Lightbox)
-│   │   ├── Cuisine.jsx              (Recipe Explorer)
-│   │   ├── Languages.jsx            (Scripts Display)
-│   │   ├── About.jsx                (Mission & Stats)
-│   │   ├── Contact.jsx              (Form + Map)
-│   │   ├── Explore.jsx              (Virtual Tours)
-│   │   └── NotFound.jsx             (404 Page)
-│   │
-│   ├── 📁 components/               (Reusable UI)
-│   │   ├── Navbar.jsx               (Navigation + Language + Dark Mode)
-│   │   ├── Footer.jsx               (Footer)
-│   │   └── DarkModeToggle.jsx        (Dark Mode Button)
-│   │
-│   ├── 📁 shared/                   (Utility Components)
-│   │   ├── Carousel.jsx             (Featured Sites Carousel)
-│   │   └── Modal.jsx                (Reusable Modal Dialog)
-│   │
-│   ├── 📁 store/                    (State Management)
-│   │   └── useStore.js              (Zustand - Dark Mode, Filters)
-│   │
-│   ├── 📁 data/                     (Static Data)
-│   │   └── heritage.json            (50+ Heritage Sites)
-│   │
-│   ├── 📁 styles/                   (Styling)
-│   │   └── main.css                 (Tailwind CSS)
-│   │
-│   ├── App.jsx                      (Main Router)
-│   ├── main.jsx                     (Entry Point)
-│   ├── i18n.js                      (Translations - EN + HI)
-│   └── registerServiceWorker.js     (PWA Setup)
-│
-├── 📁 public/                       (Static Assets)
-│   ├── manifest.json                (PWA Manifest)
-│   ├── sw.js                        (Service Worker)
-│   └── 📁 assets/                   (Placeholder SVGs)
-│
-├── 📁 dist/                         ✅ Production Build (Ready to Deploy!)
-│   ├── index.html
-│   ├── 📁 assets/
-│   ├── manifest.json
-│   └── sw.js
-│
-├── 🔧 Configuration Files
-│   ├── vite.config.js               (Vite Build Config)
-│   ├── tailwind.config.cjs          (Tailwind Colors & Fonts)
-│   ├── postcss.config.cjs           (CSS Processing)
-│   ├── .eslintrc.cjs                (Code Linting)
-│   ├── .prettierrc.json             (Code Formatting)
-│   ├── .gitignore                   (Git Settings)
-│   ├── package.json                 (Dependencies - ALL INSTALLED ✅)
-│   └── index.html                   (HTML Template)
-│
-└── 📚 Documentation (10 Complete Guides)
-    ├── INDEX.md                     ← START HERE
-    ├── QUICK_START.md               (2-min reference)
-    ├── README.md                    (Full overview)
-    ├── SETUP_GUIDE.md               (Detailed setup)
-    ├── INSTALLATION.md              (Installation)
-    ├── FILE_STRUCTURE.md            (File reference)
-    ├── EXAMPLES.md                  (12 code patterns)
-    ├── COMPONENTS.md                (10 templates)
-    ├── SUMMARY.md                   (Project summary)
-    └── DELIVERY.md                  (Completion report)
-```
-
----
-
-## ⚡ TECHNOLOGY STACK
-
-| Layer | Technology | Version | Status |
-|-------|-----------|---------|--------|
-| **UI Framework** | React | 18.2.0 | ✅ |
-| **Build Tool** | Vite | 5.4.21 | ✅ |
-| **Routing** | React Router | 6.18.0 | ✅ |
-| **Styling** | Tailwind CSS | 3.3.6 | ✅ |
-| **Animations** | Framer Motion | 10.15.0 | ✅ |
-| **Maps** | React Leaflet | 4.2.0 | ✅ |
-| **State** | Zustand | 4.4.0 | ✅ |
-| **i18n** | i18next | 23.7.0 | ✅ |
-| **Forms** | React Hook Form | 7.48.0 | ✅ |
-| **SEO** | React Helmet | 1.3.0 | ✅ |
-| **Linting** | ESLint | 8.55.0 | ✅ |
-| **Formatting** | Prettier | 3.1.0 | ✅ |
-
-All dependencies installed and configured ✅
-
----
-
-## 🎨 DESIGN SYSTEM
-
-### Colors
-```
-Primary:   Earth Brown   #7A5C3A
-Accent:    Gold         #C09A4B
-Background: Sand Cream   #F4EBD9
-Text:      Dark Gray     #1F2937
-```
-
-### Typography
-```
-Display: Poppins (400, 600, 700)
-Body:    Noto Sans Devanagari
-```
-
-### Spacing (Tailwind)
-```
-Base unit: 4px
-Padding:   px-4, py-8 (typical)
-Gap:       gap-4, gap-6
-Margin:    mx-auto, mt-4
-```
-
-### Components
-```
-Cards:    rounded, shadow, hover:shadow-lg
-Buttons:  px-4 py-2, rounded, bg-earth, text-white
-Forms:    border, px-3 py-2, focus:ring-2
-Grids:    grid, md:grid-cols-3, gap-4
-```
-
----
-
-## 📈 PERFORMANCE
-
-### Bundle Size
-```
-Total:           77KB gzipped
-Main JS:         77KB
-CSS:             3.2KB
-HTML:            0.35KB
-```
-
-### Build Metrics
-```
-Build Time:      7.85 seconds
-Modules:         431 transformed
-Pages:           9 (lazy-loaded)
-```
-
-### Optimization Techniques
-```
-✅ Code Splitting       (Pages lazy-loaded)
-✅ Tree-shaking         (Tailwind unused styles removed)
-✅ Minification         (Terser + CSS)
-✅ Compression          (Gzip ready)
-✅ Service Worker       (Asset caching)
-✅ Image Optimization   (SVG placeholders)
-```
-
----
-
-## 🌐 SUPPORTED BROWSERS
-
-### Desktop ✅
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-### Mobile ✅
-- iOS Safari 14+
-- Chrome Mobile 90+
-- Samsung Internet 14+
-
-### Features ✅
-- Full CSS Grid & Flexbox
-- CSS Variables
-- CSS Animations
-- Fetch API
-- Local Storage
-- Service Workers
-
----
-
-## 🚀 DEPLOYMENT READY
-
-### Production Build ✅
-- All code minified
-- Assets optimized
-- CSS tree-shaken
-- JS code split
-- Service worker included
-- PWA manifest configured
-
-### Pre-deployment Checklist ✅
-```
-✅ npm install completed
-✅ npm run build successful (7.85s)
-✅ dist/ folder ready
-✅ All dependencies resolved
-✅ No build errors
-✅ No console warnings (production-safe)
-```
-
-### Deployment Options (Choose One)
-
-**Option 1: Vercel** (Easiest)
+### Backend Setup (30 seconds)
 ```bash
-npm install -g vercel
-vercel
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+Backend API will be available at `http://localhost:8000`
+
+---
+
+## 🔌 Backend API Endpoints
+
+### Heritage Sites
+```
+GET  /                      - Health check
+GET  /places                - Get all heritage places
+GET  /places/{place_key}    - Get specific place details
 ```
 
-**Option 2: Netlify**
+### User Management
+```
+POST /login                 - Create/authenticate user
+  Body: {
+    "name": "string",
+    "user_type": "indian|foreigner|student",
+    "interests": ["array", "of", "interests"]
+  }
+```
+
+### Recommendations
+```
+POST /recommend             - Get recommended places
+  Body: {
+    "user_id": "string",
+    "time": 6  // hours available
+  }
+```
+
+### Bookings
+```
+POST /bookings              - Create a booking
+GET  /bookings/{booking_id} - Get booking details
+GET  /user/{user_id}/bookings - Get user bookings
+```
+
+### Payments
+```
+POST /payments              - Process payment
+GET  /payments/{payment_id} - Get payment details
+```
+
+---
+
+## 🎨 Frontend Pages
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Home | `/` | Landing page with featured sites |
+| Heritage | `/heritage` | Interactive Leaflet map with 50+ heritage sites |
+| Festivals | `/festivals` | Delhi's cultural festivals |
+| Art & Crafts | `/artcrafts` | Traditional art forms and crafts |
+| Cuisine | `/cuisine` | Regional cuisine and specialties |
+| Languages | `/languages` | Indigenous languages spoken in Delhi |
+| About | `/about` | Information about Delhi's culture |
+| Contact | `/contact` | Contact form |
+| Explore | `/explore` | Discovery/exploration section |
+| Login | `/login` | User authentication |
+| 404 | `*` | Not found page |
+
+---
+
+## 📦 Available Scripts
+
+### Frontend
 ```bash
-netlify deploy --prod --dir=dist
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run format       # Format code with Prettier
 ```
 
-**Option 3: GitHub Pages**
+### Backend
 ```bash
-npm run build && git push origin dist:gh-pages
-```
-
-**Option 4: Any Web Host**
-```bash
-Upload dist/ folder via FTP
+uvicorn main:app --reload              # Run with auto-reload
+uvicorn main:app --host 0.0.0.0        # Run on all interfaces
 ```
 
 ---
 
-## 📊 PROJECT STATISTICS
+## 🌐 Features
 
-| Metric | Count |
-|--------|-------|
-| **Source Files** | 22 |
-| **Configuration Files** | 6 |
-| **Documentation Files** | 10 |
-| **Pages Created** | 9 + 404 |
-| **Components** | 5 |
-| **Utilities** | 4 |
-| **Heritage Sites (DB)** | 5 (expandable to 50+) |
-| **Languages Supported** | 2 (EN, HI) |
-| **Responsive Breakpoints** | 3 |
-| **Color Palette Colors** | 3 |
-| **Feature Implementations** | 15+ |
-| **Code Quality Tools** | 2 (ESLint, Prettier) |
-| **Build Time** | 7.85 seconds |
-| **Bundle Size** | 77KB gzipped |
+### Interactive Map
+- **Technology**: React Leaflet + Leaflet.js
+- **Functionality**: Click markers to view place details, search locations
+- **Data**: 50+ heritage sites in Delhi with coordinates
 
----
+### Smart Recommendations
+- **Personalization**: Based on user interests and available time
+- **Algorithm**: Matches user preferences with site categories and visiting duration
+- **API**: `/recommend` endpoint for intelligent suggestions
 
-## ✅ ALL REQUIREMENTS DELIVERED
+### Booking System
+- **Ticket Types**: Indian (₹100), Foreigner ($5), Student (₹50)
+- **Data Storage**: JSON file persistence
+- **Status Tracking**: Confirmed bookings with unique IDs
 
-### Core Pages ✅
-- [x] Home with hero & carousel
-- [x] Heritage Sites with map
-- [x] Festivals & Traditions
-- [x] Art & Crafts
-- [x] Cuisine
-- [x] Languages & Literature
-- [x] About
-- [x] Contact
-- [x] Explore (virtual tours)
-- [x] 404 page
+### Payment Processing
+- **Methods**: Card, UPI
+- **Simulation**: Marks payments as completed
+- **Integration**: Links payments to bookings
 
-### Key Features ✅
-- [x] Multi-page SPA (React Router)
-- [x] Interactive map (React Leaflet)
-- [x] Lazy loading & code splitting
-- [x] Smooth animations (Framer Motion)
-- [x] Global state (Zustand)
-- [x] Dark/Light mode
-- [x] Multi-language (EN + HI)
-- [x] Search & filters
-- [x] PWA support
-- [x] SEO optimization
+### User Authentication
+- **Types**: Indian, Foreigner, Student
+- **Interests**: Custom interest tags for personalization
+- **Storage**: localStorage + JSON persistence
 
-### Technical Requirements ✅
-- [x] React 18 + Vite
-- [x] React Router v6
-- [x] Tailwind CSS
-- [x] Responsive design
-- [x] Form validation
-- [x] Mobile optimized
-- [x] ESLint + Prettier
-- [x] Production build
-- [x] Complete documentation
+### Internationalization (i18n)
+- **Languages**: English and Hindi
+- **Management**: i18next library
+- **Toggle**: Language switcher in Navbar
+
+### Dark Mode
+- **UI**: TailwindCSS dark mode classes
+- **Persistence**: Saved in localStorage
+- **Toggle**: DarkModeToggle component
 
 ---
 
-## 🎓 GETTING STARTED
+## 🔐 CORS Configuration
 
-### For New Users
-1. Read [INDEX.md](INDEX.md)
-2. Read [QUICK_START.md](QUICK_START.md)
-3. Run `npm run dev`
-4. Explore pages
-
-### For Developers
-1. Read [FILE_STRUCTURE.md](FILE_STRUCTURE.md)
-2. Review [EXAMPLES.md](EXAMPLES.md)
-3. Check [COMPONENTS.md](COMPONENTS.md)
-4. Start coding!
-
-### For Deployment
-1. Read [SETUP_GUIDE.md](SETUP_GUIDE.md)
-2. Choose platform (Vercel/Netlify/etc)
-3. Run `npm run build` (already done!)
-4. Deploy!
+Backend allows requests from:
+- `http://localhost:5173` (local frontend)
+- `https://heritage-and-cultue-portal.vercel.app` (production frontend)
 
 ---
 
-## 💬 READY TO USE
+## 📋 Data Files
 
-### What's Done
-✅ All source code created
-✅ All dependencies installed
-✅ Production build successful
-✅ All documentation complete
-✅ Ready to run locally
-✅ Ready to deploy
+### heritage.json
+Contains heritage site data including:
+- Site name, key, category
+- Latitude/longitude coordinates
+- Description, opening hours
+- Entry fees by visitor type
 
-### What's Next
-1. Run `npm run dev`
-2. Explore the site
-3. Customize it
-4. Deploy it
-5. Share it!
+### delhi_places.py
+Python list of 50+ heritage sites ready for database insertion
 
----
+### user.json
+Stores user profiles with preferences
 
-## 🎊 FINAL STATUS
+### bookings.json
+Records of all ticket bookings
 
-```
-╔════════════════════════════════════════╗
-║  HERITAGE & CULTURE PORTAL             ║
-║  STATUS: ✅ COMPLETE & READY          ║
-║  BUILD:  ✅ SUCCESSFUL                ║
-║  FILES:  ✅ 22 SOURCE + 22 BUILD      ║
-║  DOCS:   ✅ 10 COMPREHENSIVE GUIDES   ║
-║                                        ║
-║  Ready to:                             ║
-║  ✅ Run locally (npm run dev)          ║
-║  ✅ Deploy (npm run build)             ║
-║  ✅ Extend (add features)              ║
-║  ✅ Share (portfolio project)          ║
-╚════════════════════════════════════════╝
-```
+### payments.json
+Records of all payment transactions
 
 ---
 
-## 🚀 LET'S GET STARTED!
+## 🚀 Deployment
 
-### Run it now:
-```bash
-cd "c:\Users\Kunal\OneDrive\Desktop\Self\Hackathon"
-npm run dev
-```
+### Frontend (Vercel)
+1. Push code to GitHub
+2. Connect Vercel to repository
+3. Deploy (auto-deployed on push)
 
-### Open in browser:
-```
-http://localhost:5173
-```
-
-### Explore the site! 🎉
+### Backend (Render/Railway/Heroku)
+1. Use `Procfile` for deployment configuration
+2. Ensure Python and pip are installed
+3. Set environment variables if needed
 
 ---
 
-**Created:** February 2, 2026  
-**Status:** ✅ Production Ready  
-**Ready to Deploy:** ✅ Yes  
+## 🤝 Contributing
 
-**Happy coding! 🎨**
+Feel free to submit issues and enhancement requests!
+
+### Development Workflow
+1. Create a feature branch
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
 
 ---
 
-**→ Next: Open [INDEX.md](INDEX.md) to start!**
+## 📝 Documentation
+
+Additional documentation files are available in the FRONTEND folder:
+- `QUICK_START.md` - Quick setup guide
+- `SETUP_GUIDE.md` - Detailed setup instructions
+- `INSTALLATION.md` - Installation steps
+- `FILE_STRUCTURE.md` - Detailed file structure reference
+- `EXAMPLES.md` - Code examples and patterns
+- `COMPONENTS.md` - Component documentation
+- `INDEX.md` - Documentation index
+
+---
+
+## 🌍 Live Deployment
+
+- **Frontend**: [Heritage Portal](https://heritage-and-cultue-portal.vercel.app)
+- **Backend API**: [Delhi Heritage Backend](https://delhi-heritage-api.onrender.com)
+
+---
+
+## 📧 Support & Contact
+
+For questions, issues, or contributions, please check the Contact page or open an issue on GitHub.
+
+---
+
+## 📄 License
+
+This project is part of the INNOVIT Hackathon.
+
+---
+
+**Happy exploring Delhi's rich heritage! 🏛️**
