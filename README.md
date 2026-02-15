@@ -1,4 +1,4 @@
-# �️ Delhi Heritage & Culture Portal
+# �️ Heritage & Culture Portal
 
 **Status:** ✅ **Production Ready**
 
