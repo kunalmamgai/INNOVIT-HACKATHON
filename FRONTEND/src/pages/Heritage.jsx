@@ -39,29 +39,21 @@ export default function Heritage(){
   // Build Leaflet icons for each place after places load
   useEffect(() => {
     let active = true
-    const objectUrls = []
 
     const buildIcons = async () => {
       const map = {}
-      await Promise.all(
-        places.map(async (site, idx) => {
-          const name = site.name || site.title || 'monument'
-          // Always use local asset if path starts with /assets/
-          const imageUrl = (site.image && site.image.startsWith('/assets/'))
-            ? site.image
-            : (site.image || `https://source.unsplash.com/80x80/?${name.split(' ').join('%20')}`)
-          try {
-            const resp = await fetch(imageUrl, { mode: 'cors' })
-            if (!resp.ok) throw new Error('fetch failed')
-            const blob = await resp.blob()
-            const objUrl = URL.createObjectURL(blob)
-            objectUrls.push(objUrl)
-            map[site.id || idx] = L.icon({ iconUrl: objUrl, iconSize: [50, 50], iconAnchor: [25, 50], popupAnchor: [0, -50] })
-          } catch (err) {
-            map[site.id || idx] = undefined
-          }
-        })
-      )
+      // Use local default icon instead of fetching from external sources to avoid CORS issues
+      const defaultIcon = L.icon({ 
+        iconUrl: '/assets/logo.svg', 
+        iconSize: [50, 50], 
+        iconAnchor: [25, 50], 
+        popupAnchor: [0, -50] 
+      })
+      
+      places.forEach((site, idx) => {
+        map[site.id || idx] = defaultIcon
+      })
+      
       if (active) setIcons(map)
     }
 
@@ -69,7 +61,6 @@ export default function Heritage(){
 
     return () => {
       active = false
-      objectUrls.forEach(u => URL.revokeObjectURL(u))
     }
   }, [places])
 
