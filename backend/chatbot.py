@@ -1,14 +1,19 @@
 import os
 from openai import OpenAI
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import traceback
 import json
 
 # Load environment variables from .env file
-load_dotenv()
+# Try to find and load .env from current dir or parent directories
+dotenv_path = find_dotenv()
+if dotenv_path:
+    load_dotenv(dotenv_path)
+else:
+    load_dotenv()
 
 # Initialize OpenRouter client (OpenAI-compatible)
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
 
 def get_ai_response(user_message: str, conversation_history: list = None) -> str:
     """

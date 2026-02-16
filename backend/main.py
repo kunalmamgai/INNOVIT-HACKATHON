@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from data import HeritageStore
 from delhi_places import delhi_places
 from user import create_user, get_user
+from chatbot import get_ai_response
 
 
 app = FastAPI(title="Delhi Heritage Backend")
@@ -10,7 +11,11 @@ app = FastAPI(title="Delhi Heritage Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://heritage-and-cultue-portal.vercel.app"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://heritage-and-cultue-portal.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -60,8 +65,13 @@ def recommend(data: dict):
     if not user:
         return {"error": "User not logged in"}
 
-    return recommend_places (
-        store=store,
-        user=user,
-        time_limit=time_limit
-    )
+    return {"error": "Recommendation feature coming soon"}
+
+
+@app.post("/chat")
+def chat_endpoint(data: dict):
+    """Chat endpoint that forwards to the chatbot helper."""
+    message = data.get("message", "")
+    history = data.get("conversation_history", [])
+    resp = get_ai_response(message, conversation_history=history)
+    return {"response": resp}

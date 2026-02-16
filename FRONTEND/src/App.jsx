@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import { useStore } from './store/useStore'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import ChatBot from './components/ChatBot'
 import './styles/main.css'
 
 
@@ -94,6 +95,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <ChatBot />
     </div>
   )
 }
