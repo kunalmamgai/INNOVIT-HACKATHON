@@ -1,1 +1,13 @@
-/*    /index.html   200
+# Don't redirect static assets, API calls, or files with extensions
+/assets/*    :splat
+/*.js        :splat
+/*.css       :splat
+/*.json      :splat
+/*.svg       :splat
+/*.png       :splat
+/*.jpg       :splat
+/*.gif       :splat
+/*.woff*     :splat
+/api/*       :splat
+# Redirect all other routes to index.html for React Router
+/*           /index.html  200
