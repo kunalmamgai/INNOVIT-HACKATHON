@@ -16,6 +16,9 @@ export default defineConfig({
   build: {
     target: 'esnext',
     minify: 'terser',
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: false,
     terserOptions: {
       compress: { drop_console: true }
     }

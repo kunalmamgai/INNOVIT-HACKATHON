@@ -88,7 +88,7 @@ export default function Cuisine() {
 
             {/* IMAGE */}
             <img
-              src={r.image}
+              src={r.image || "/assets/placeholder-image.svg"}
               alt={r.name}
               className="
                 absolute right-0 top-0 h-full w-2/3 object-cover

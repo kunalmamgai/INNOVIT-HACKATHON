@@ -108,7 +108,7 @@ export default function Festivals() {
 
             {/* IMAGE */}
             <img
-              src={f.image}
+              src={f.image || "/assets/placeholder-image.svg"}
               alt={f.name}
               className="festival-image"
             />

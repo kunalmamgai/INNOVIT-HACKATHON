@@ -191,8 +191,9 @@ export default function Heritage(){
               <img 
                 src={(selected.image && selected.image.startsWith('/assets/'))
                   ? selected.image
-                  : (selected.image || `https://source.unsplash.com/800x600/?${(selected.name || selected.title).split(' ').join('%20')}`)}
+                  : (selected.image || '/assets/placeholder-image.svg')}
                 alt={selected.name}
+                onError={(e) => { e.target.src = '/assets/placeholder-image.svg' }}
                 className="w-full h-80 object-cover rounded-lg shadow-xl"
               />
             </div>

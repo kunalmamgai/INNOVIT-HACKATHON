@@ -201,11 +201,11 @@ export default function Explore({ currentUser: propUser }) {
             className="relative group h-64 rounded-lg overflow-hidden shadow-lg cursor-pointer border border-gold/30 hover:shadow-2xl transition"
           >
             <img
-              src={p.image || "https://via.placeholder.com/400x300"}
+              src={p.image || "/assets/placeholder-image.svg"}
               alt={p.name}
               className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
               onError={(e) => {
-                e.target.src = "https://via.placeholder.com/400x300?text=" + encodeURIComponent(p.name);
+                e.target.src = "/assets/placeholder-image.svg";
               }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70 group-hover:opacity-50 transition" />

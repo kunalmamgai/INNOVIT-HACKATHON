@@ -14,11 +14,13 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://localhost:5174",
-        "https://heritage-and-cultue-portal.vercel.app"
+        "https://heritage-and-cultue-portal.vercel.app",
+        "http://127.0.0.1:8000"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 
