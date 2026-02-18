@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 
 const communities = [
 	{
@@ -38,48 +38,114 @@ const communities = [
 	},
 ]
 
-const discussions = [
-	{
-		id: 1,
-		communityId: 2,
-		author: 'Ananya',
-		text: 'What are your favorite cultural events to attend in winter?',
-		likes: 32,
-		comments: 11,
-	},
-	{
-		id: 2,
-		communityId: 4,
-		author: 'Rahul',
-		text: 'Looking for authentic food routes during upcoming festivals. Suggestions?',
-		likes: 21,
-		comments: 8,
-	},
-	{
-		id: 3,
-		communityId: 5,
-		author: 'Sanya',
-		text: 'Which apps are best for documenting local heritage sites with photos?',
-		likes: 18,
-		comments: 6,
-	},
-	{
-		id: 4,
-		communityId: 1,
-		author: 'Vivek',
-		text: 'Any ideas for a health awareness campaign at the neighborhood level?',
-		likes: 26,
-		comments: 13,
-	},
-]
+// initial discussions are fetched from backend
+
 
 export default function Community() {
 	const [selectedCommunityId, setSelectedCommunityId] = useState(0)
+	const [discussions, setDiscussions] = useState([])
+	const [currentUser, setCurrentUser] = useState(null)
+	const [showComments, setShowComments] = useState({})
+	const [commentsByDiscussion, setCommentsByDiscussion] = useState({})
+	const [newCommentText, setNewCommentText] = useState({})
+	const [newCommentAuthor, setNewCommentAuthor] = useState({})
+	const [liking, setLiking] = useState({})
+
+	useEffect(() => {
+		fetch('http://127.0.0.1:8000/discussions')
+			.then((r) => r.json())
+			.then((data) => setDiscussions(data))
+			.catch(() => {})
+
+		// load logged-in user from localStorage (App stores it as "currentUser")
+		const saved = localStorage.getItem('currentUser')
+		if (saved) {
+			try {
+				setCurrentUser(JSON.parse(saved))
+			} catch (e) {}
+		}
+	}, [])
 
 	const filteredDiscussions = useMemo(() => {
 		if (!selectedCommunityId) return discussions
 		return discussions.filter((item) => item.communityId === selectedCommunityId)
-	}, [selectedCommunityId])
+	}, [selectedCommunityId, discussions])
+
+	async function handleLike(discussionId) {
+		if (liking[discussionId]) return
+		setLiking((s) => ({ ...s, [discussionId]: true }))
+		// optimistic UI
+		setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: (d.likes || 0) + 1 } : d)))
+		try {
+			const res = await fetch('http://127.0.0.1:8000/like', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ discussion_id: discussionId }),
+			})
+			const data = await res.json()
+			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: data.likes } : d)))
+		} catch (e) {
+			console.error(e)
+			// rollback optimistic update on error
+			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: Math.max((d.likes||1)-1, 0) } : d)))
+		} finally {
+			setLiking((s) => ({ ...s, [discussionId]: false }))
+		}
+	}
+
+	async function toggleComments(discussionId) {
+		const isOpen = !!showComments[discussionId]
+		if (!isOpen) {
+			try {
+				const res = await fetch(`http://127.0.0.1:8000/comments?discussion_id=${discussionId}`)
+				const data = await res.json()
+				setCommentsByDiscussion((prev) => ({ ...prev, [discussionId]: data }))
+			} catch (e) {
+				console.error(e)
+			}
+		}
+		setShowComments((s) => ({ ...s, [discussionId]: !isOpen }))
+	}
+
+	async function postComment(discussionId) {
+		const text = newCommentText[discussionId]
+		const author = (currentUser && currentUser.user_id) || newCommentAuthor[discussionId] || 'anonymous'
+		if (!text) return
+		try {
+			const res = await fetch('http://127.0.0.1:8000/comments', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ discussion_id: discussionId, author, text }),
+			})
+			const newComment = await res.json()
+			setCommentsByDiscussion((prev) => ({
+				...prev,
+				[discussionId]: [...(prev[discussionId] || []), newComment],
+			}))
+			// increment comment count locally
+			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, comments: (d.comments || 0) + 1 } : d)))
+			setNewCommentText((s) => ({ ...s, [discussionId]: '' }))
+		} catch (e) {
+			console.error(e)
+		}
+	}
+
+	async function deleteComment(commentId, discussionId) {
+		if (!confirm('Delete this comment?')) return
+		try {
+			await fetch(`http://127.0.0.1:8000/comments?comment_id=${encodeURIComponent(commentId)}`, {
+				method: 'DELETE',
+			})
+			// remove locally
+			setCommentsByDiscussion((prev) => ({
+				...prev,
+				[discussionId]: (prev[discussionId] || []).filter((c) => c.comment_id !== commentId),
+			}))
+			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, comments: Math.max((d.comments||1)-1, 0) } : d)))
+		} catch (e) {
+			console.error(e)
+		}
+	}
 
 	return (
 		<div className="max-w-6xl mx-auto px-4 py-8">
@@ -132,6 +198,7 @@ export default function Community() {
 					{filteredDiscussions.map((discussion) => {
 						const linkedCommunity = communities.find((community) => community.id === discussion.communityId)
 
+
 						return (
 							<article key={discussion.id} className="bg-gray-900 border border-gold/20 rounded p-4">
 								<div className="flex items-center justify-between">
@@ -140,9 +207,50 @@ export default function Community() {
 								</div>
 								<p className="text-gray-200 mt-3">{discussion.text}</p>
 								<div className="flex items-center gap-4 mt-4 text-xs text-gray-400">
-									<span>❤️ {discussion.likes} likes</span>
-									<span>💬 {discussion.comments} comments</span>
+									<button type="button" onClick={() => handleLike(discussion.id)} disabled={!!liking[discussion.id]} className="hover:underline">❤️ {discussion.likes || 0} likes</button>
+									<button type="button" onClick={() => toggleComments(discussion.id)} className="hover:underline">💬 {discussion.comments || 0} comments</button>
 								</div>
+
+								{showComments[discussion.id] && (
+									<div className="mt-3 border-t pt-3">
+										<div className="space-y-2">
+											{(commentsByDiscussion[discussion.id] || []).map((c) => (
+												<div key={c.comment_id} className="text-sm">
+													<div className="flex justify-between items-start">
+														<p className="text-xs text-gray-400">@{c.author} • <span className="text-gold">{new Date(c.created_at).toLocaleString()}</span></p>
+														{currentUser && currentUser.user_id === c.author && (
+															<button onClick={() => deleteComment(c.comment_id, discussion.id)} className="text-xs text-red-400 hover:underline">Delete</button>
+														)}
+													</div>
+													<p className="text-gray-200">{c.text}</p>
+												</div>
+											))}
+										</div>
+
+										<div className="mt-3">
+										{!currentUser ? (
+											<input
+												className="w-full mb-2 p-2 rounded bg-gray-800 text-white text-sm"
+												placeholder="Your name (optional)"
+												value={newCommentAuthor[discussion.id] || ''}
+												onChange={(e) => setNewCommentAuthor((s) => ({ ...s, [discussion.id]: e.target.value }))}
+											/>
+										) : (
+											<p className="text-xs text-gray-400 mb-2">Posting as <span className="text-gold">{currentUser.user_id}</span></p>
+										)}
+											<textarea
+												className="w-full p-2 rounded bg-gray-800 text-white text-sm"
+												rows={3}
+												placeholder="Write a comment..."
+												value={newCommentText[discussion.id] || ''}
+												onChange={(e) => setNewCommentText((s) => ({ ...s, [discussion.id]: e.target.value }))}
+											/>
+											<div className="flex justify-end mt-2">
+												<button type="button" onClick={() => postComment(discussion.id)} className="px-3 py-1 bg-gold rounded text-gray-900 text-sm">Post</button>
+											</div>
+										</div>
+									</div>
+								)}
 							</article>
 						)
 					})}
