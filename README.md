@@ -273,7 +273,7 @@ uvicorn main:app --host 0.0.0.0        # Run on all interfaces
 
 Backend allows requests from:
 - `http://localhost:5173` (local frontend)
-- `https://heritage-and-cultue-portal.vercel.app` (production frontend)
+- `https://heritage-and-culture-portal.vercel.app/` (production frontend)
 
 ---
 
@@ -341,7 +341,7 @@ Additional documentation files are available in the FRONTEND folder:
 
 ## 🌍 Live Deployment
 
-- **Frontend**: [Heritage Portal](https://heritage-and-cultue-portal.vercel.app)
+- **Frontend**: [Heritage Portal](https://heritage-and-culture-portal.vercel.app/)
 - **Backend API**: [Delhi Heritage Backend](https://delhi-heritage-api.onrender.com)
 
 ---

@@ -18,7 +18,7 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "http://localhost:5174",
         "http://127.0.0.1:5174",
-        "https://heritage-and-cultue-portal.vercel.app",
+        "https://heritage-and-culture-portal.vercel.app/",
         "http://127.0.0.1:8000"
     ],
     allow_credentials=True,
