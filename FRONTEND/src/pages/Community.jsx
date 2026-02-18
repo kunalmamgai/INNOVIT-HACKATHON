@@ -64,6 +64,13 @@ export default function Community() {
 				setCurrentUser(JSON.parse(saved))
 			} catch (e) {}
 		}
+
+		// ensure we have a persistent guest id for anonymous likes
+		let guest = localStorage.getItem('guestId')
+		if (!guest) {
+			guest = 'guest_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9)
+			localStorage.setItem('guestId', guest)
+		}
 	}, [])
 
 	const filteredDiscussions = useMemo(() => {
@@ -77,10 +84,11 @@ export default function Community() {
 		// optimistic UI
 		setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: (d.likes || 0) + 1 } : d)))
 		try {
+			const identifier = (currentUser && currentUser.user_id) || localStorage.getItem('guestId')
 			const res = await fetch('http://127.0.0.1:8000/like', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ discussion_id: discussionId }),
+				body: JSON.stringify({ discussion_id: discussionId, user_id: identifier }),
 			})
 			const data = await res.json()
 			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: data.likes } : d)))
