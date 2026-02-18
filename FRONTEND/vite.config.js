@@ -8,10 +8,12 @@ export default defineConfig({
     port: 5173,
     strictPort: false,
     proxy: {
-      '/chat': 'http://127.0.0.1:8000',
-      '/places': 'http://127.0.0.1:8000',
-      '/login': 'http://127.0.0.1:8000',
-      '/recommend': 'http://127.0.0.1:8000',
+      '/chat': 'https://delhi-heritage-api.onrender.com',
+      '/places': 'https://delhi-heritage-api.onrender.com',
+      '/login': 'https://delhi-heritage-api.onrender.com',
+      '/recommend': 'https://delhi-heritage-api.onrender.com',
+      '/bookings': 'https://delhi-heritage-api.onrender.com',
+      '/payments': 'https://delhi-heritage-api.onrender.com',
     }
   },
   build: {

@@ -5,6 +5,7 @@ import { useStore } from './store/useStore'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ChatBot from './components/ChatBot'
+import { apiUrl } from './config/api'
 import './styles/main.css'
 
 
@@ -13,7 +14,7 @@ const Heritage = lazy(() => import('./pages/Heritage'))
 const Festivals = lazy(() => import('./pages/Festivals'))
 const ArtCrafts = lazy(() => import('./pages/ArtCrafts'))
 const Cuisine = lazy(() => import('./pages/Cuisine'))
-const Languages = lazy(() => import('./pages/Languages'))
+const Community = lazy(() => import('./pages/Community'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Explore = lazy(() => import('./pages/Explore'))
@@ -26,7 +27,7 @@ export default function App() {
   const dark = useStore(state => state.dark);
 
   useEffect(() => {
-    fetch("https://delhi-heritage-api.onrender.com/places")
+    fetch(apiUrl('/places'))
       .then((res) => res.json())
       .then((data) => {
         console.log("PLACES FROM BACKEND:", data);
@@ -87,7 +88,7 @@ export default function App() {
           <Route path="/festivals" element={<Festivals />} />
           <Route path="/arts" element={<ArtCrafts />} />
           <Route path="/cuisine" element={<Cuisine />} />
-          <Route path="/languages" element={<Languages />} />
+          <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/explore" element={<Explore currentUser={currentUser} />} />

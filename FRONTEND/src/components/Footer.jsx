@@ -15,7 +15,7 @@ export default function Footer(){
               <li><a href="heritage" className="text-gray-200 hover:text-gold transition-colors">Heritage Sites</a></li>
               <li><a href="festivals" className="text-gray-200 hover:text-gold transition-colors">Festivals</a></li>
               <li><a href="cuisine" className="text-gray-200 hover:text-gold transition-colors">Cuisine</a></li>
-              <li><a href="languages" className="text-gray-200 hover:text-gold transition-colors">Languages</a></li>
+              <li><a href="community" className="text-gray-200 hover:text-gold transition-colors">Community</a></li>
             </ul>
           </div>
           <div>

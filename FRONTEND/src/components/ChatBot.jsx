@@ -1,10 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-// Detect environment and set API base URL
-const API_BASE_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-  ? '/'
-  : 'https://delhi-heritage-api.onrender.com/'
+import { apiUrl } from '../config/api'
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false)
@@ -54,8 +50,7 @@ export default function ChatBot() {
     let cancelled = false
     const ping = async () => {
       try {
-        const url = API_BASE_URL === '/' ? '/' : `${API_BASE_URL}`
-        const res = await fetch(url)
+        const res = await fetch(apiUrl('/'))
         if (!cancelled) {
           setBackendAvailable(res.ok)
           setBackendError('')
@@ -88,8 +83,7 @@ export default function ChatBot() {
 
     try {
       // Send to backend API
-      const chatUrl = API_BASE_URL === '/' ? '/chat' : `${API_BASE_URL}chat`
-      const response = await fetch(chatUrl, {
+      const response = await fetch(apiUrl('/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

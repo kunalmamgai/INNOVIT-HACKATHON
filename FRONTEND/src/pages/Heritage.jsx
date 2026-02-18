@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import Modal from '../shared/Modal'
 import { motion } from 'framer-motion'
+import { apiUrl } from '../config/api'
 
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
@@ -76,7 +77,7 @@ export default function Heritage(){
   const fetchPlaces = async () => {
     try {
       setLoading(true)
-      const response = await fetch('https://delhi-heritage-api.onrender.com/places')
+      const response = await fetch(apiUrl('/places'))
       if (!response.ok) throw new Error('Failed to fetch places')
       const data = await response.json()
       setPlaces(Array.isArray(data) ? data : Object.values(data))

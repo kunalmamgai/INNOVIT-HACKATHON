@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion'
+import { apiUrl } from "../config/api";
 
 export default function Explore({ currentUser: propUser }) {
   const [places, setPlaces] = useState([]);
@@ -29,7 +30,7 @@ export default function Explore({ currentUser: propUser }) {
 
   useEffect(() => {
     // Load places
-    fetch("https://delhi-heritage-api.onrender.com/places")
+    fetch(apiUrl("/places"))
       .then((res) => res.json())
       .then((data) => {
         const placesArray = Array.isArray(data) ? data : Object.entries(data).map(([key, value]) => ({
@@ -69,7 +70,7 @@ export default function Explore({ currentUser: propUser }) {
     }
 
     try {
-      const response = await fetch("https://delhi-heritage-api.onrender.com/bookings", {
+      const response = await fetch(apiUrl("/bookings"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -134,7 +135,7 @@ export default function Explore({ currentUser: propUser }) {
       };
       if (method === "upi") body.upi_id = paymentData.upiId;
 
-      const response = await fetch("https://delhi-heritage-api.onrender.com/payments", {
+      const response = await fetch(apiUrl("/payments"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
