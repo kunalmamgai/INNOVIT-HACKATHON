@@ -19,10 +19,21 @@ export default function Home(){
         <h2 className="text-2xl font-semibold mb-4 text-blue">Featured Heritage Sites</h2>
         <Carousel />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-          <div className="p-6 bg-gray-800 rounded shadow hover:shadow-lg transition text-white border border-gold/30"> <h3 className="font-bold text-gold">50+ Sites</h3><p className="mt-2 text-sm text-gray-300">Mapped across India with detailed histories.</p></div>
-          <div className="p-6 bg-gray-800 rounded shadow hover:shadow-lg transition text-white border border-gold/30"> <h3 className="font-bold text-gold">100+ Festivals</h3><p className="mt-2 text-sm text-gray-300">Calendar with traditions and countdowns.</p></div>
-          <div className="p-6 bg-gray-800 rounded shadow hover:shadow-lg transition text-white border border-gold/30"> <h3 className="font-bold text-gold">Artisans</h3><p className="mt-2 text-sm text-gray-300">Stories from living craftspeople and galleries.</p></div>
+        <div className="md:grid md:grid-cols-3 md:gap-4 mt-8">
+          <div className="mobile-side-scroll no-scrollbar md:contents flex gap-4 pb-2">
+            <div className="min-w-[85%] md:min-w-0 p-6 bg-gray-800 rounded shadow hover:shadow-lg transition text-white border border-gold/30">
+              <h3 className="font-bold text-gold">50+ Sites</h3>
+              <p className="mt-2 text-sm text-gray-300">Mapped across India with detailed histories.</p>
+            </div>
+            <div className="min-w-[85%] md:min-w-0 p-6 bg-gray-800 rounded shadow hover:shadow-lg transition text-white border border-gold/30">
+              <h3 className="font-bold text-gold">100+ Festivals</h3>
+              <p className="mt-2 text-sm text-gray-300">Calendar with traditions and countdowns.</p>
+            </div>
+            <div className="min-w-[85%] md:min-w-0 p-6 bg-gray-800 rounded shadow hover:shadow-lg transition text-white border border-gold/30">
+              <h3 className="font-bold text-gold">Artisans</h3>
+              <p className="mt-2 text-sm text-gray-300">Stories from living craftspeople and galleries.</p>
+            </div>
+          </div>
         </div>
       </motion.div>
     </section>

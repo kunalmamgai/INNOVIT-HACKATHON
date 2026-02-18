@@ -13,14 +13,21 @@ export default function Languages(){
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-blue">Languages & Literature</h1>
-      <div className="grid md:grid-cols-3 gap-4 mt-6">
-        {languages.map(l=> (
-          <div key={l.id} className="bg-gray-800 rounded shadow p-4 cursor-pointer hover:shadow-lg transition text-white border border-gold/30" onClick={()=>setSelected(l)}>
-            <h3 className="font-bold text-lg text-gold">{l.name}</h3>
-            <p className="font-noto text-2xl mt-2 text-white">{l.script}</p>
-            <p className="text-sm text-gray-300 mt-2">{l.speakers} speakers</p>
-          </div>
-        ))}
+      <p className="text-gray-400 mt-2 text-sm">On mobile, swipe sideways to explore more language cards.</p>
+      <div className="md:grid md:grid-cols-3 md:gap-4 mt-6">
+        <div className="mobile-side-scroll no-scrollbar md:contents flex gap-4 pb-2">
+          {languages.map(l=> (
+            <div
+              key={l.id}
+              className="min-w-[80%] md:min-w-0 bg-gray-800 rounded shadow p-4 cursor-pointer hover:shadow-lg transition text-white border border-gold/30"
+              onClick={()=>setSelected(l)}
+            >
+              <h3 className="font-bold text-lg text-gold">{l.name}</h3>
+              <p className="font-noto text-2xl mt-2 text-white">{l.script}</p>
+              <p className="text-sm text-gray-300 mt-2">{l.speakers} speakers</p>
+            </div>
+          ))}
+        </div>
       </div>
       {selected && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={()=>setSelected(null)}>

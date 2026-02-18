@@ -24,12 +24,17 @@ html.dark {
 
 html,body,#root { height: 100%; }
 
+html, body {
+  overflow-x: hidden;
+}
+
 /* Light Mode (default) */
 body { 
   font-family: Poppins, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 50%, #f5f5f5 100%);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Dark Mode */
@@ -44,6 +49,26 @@ html.dark body {
 
 .motif { 
   background-image: radial-gradient(circle at 10% 10%, rgba(192,154,75,0.06), transparent 20%), radial-gradient(circle at 90% 90%, rgba(122,92,58,0.04), transparent 15%); 
+}
+
+.mobile-side-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
+.mobile-side-scroll > * {
+  scroll-snap-align: start;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Text Color Transitions */
