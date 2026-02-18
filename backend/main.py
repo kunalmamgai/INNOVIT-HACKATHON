@@ -204,17 +204,20 @@ def get_discussions():
 @app.post("/like")
 def like_endpoint(data: dict):
     discussion_id = data.get("discussion_id")
+    user_id = data.get("user_id")
     if not discussion_id:
         return {"error": "discussion_id is required"}
-    # increment stored delta
-    new_stored = increment_like(discussion_id)
+    if not user_id:
+        return {"error": "user_id is required to like"}
+    # increment stored likes by user id
+    new_stored_total = increment_like(discussion_id, str(user_id))
     # find baseline from discussions list
     baseline = 0
     for d in discussions:
         if int(d["id"]) == int(discussion_id):
             baseline = int(d.get("likes", 0))
             break
-    total = baseline + int(new_stored)
+    total = baseline + int(new_stored_total)
     return {"discussion_id": int(discussion_id), "likes": total}
 
 
