@@ -2,6 +2,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from data import HeritageStore
 from delhi_places import delhi_places
+from india_places import india_places
 from user import create_user, get_user
 from chatbot import get_ai_response
 from bookings import create_booking, get_user_bookings
@@ -34,6 +35,7 @@ store = HeritageStore()
 
 
 store.add_bulk(delhi_places)
+store.add_bulk(india_places)
 
 # Simple discussions data exposed to frontend
 discussions = [
