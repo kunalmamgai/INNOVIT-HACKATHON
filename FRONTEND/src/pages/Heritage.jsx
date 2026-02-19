@@ -18,9 +18,10 @@ const createImageIcon = (imageUrl) => {
   return L.icon({
     iconUrl: imageUrl,
     iconSize: [50, 50],
-    iconAnchor: [25, 50],
-    popupAnchor: [0, -50],
-    className: 'rounded-full border-gold',
+    // center the circular icon on the marker point and offset popup above
+    iconAnchor: [25, 25],
+    popupAnchor: [0, -25],
+    className: 'rounded-full border-2 border-gold',
   })
 }
 
@@ -57,7 +58,14 @@ export default function Heritage(){
             const blob = await resp.blob()
             const objUrl = URL.createObjectURL(blob)
             objectUrls.push(objUrl)
-            map[site.id || idx] = L.icon({ iconUrl: objUrl, iconSize: [50, 50], iconAnchor: [25, 50], popupAnchor: [0, -50] })
+            // build a circular icon from fetched blob URL
+            map[site.id || idx] = L.icon({
+              iconUrl: objUrl,
+              iconSize: [50, 50],
+              iconAnchor: [25, 25],
+              popupAnchor: [0, -25],
+              className: 'rounded-full border-2 border-gold'
+            })
           } catch (err) {
             map[site.id || idx] = undefined
           }
