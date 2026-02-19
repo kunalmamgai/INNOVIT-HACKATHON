@@ -18,10 +18,9 @@ const createImageIcon = (imageUrl) => {
   return L.icon({
     iconUrl: imageUrl,
     iconSize: [50, 50],
-    // center the circular icon on the marker point and offset popup above
-    iconAnchor: [25, 25],
-    popupAnchor: [0, -25],
-    className: 'rounded-full border-2 border-gold',
+    iconAnchor: [25, 50],
+    popupAnchor: [0, -50],
+    className: 'rounded-full border-gold',
   })
 }
 
@@ -58,14 +57,7 @@ export default function Heritage(){
             const blob = await resp.blob()
             const objUrl = URL.createObjectURL(blob)
             objectUrls.push(objUrl)
-            // build a circular icon from fetched blob URL
-            map[site.id || idx] = L.icon({
-              iconUrl: objUrl,
-              iconSize: [50, 50],
-              iconAnchor: [25, 25],
-              popupAnchor: [0, -25],
-              className: 'rounded-full border-2 border-gold'
-            })
+            map[site.id || idx] = L.icon({ iconUrl: objUrl, iconSize: [50, 50], iconAnchor: [25, 50], popupAnchor: [0, -50] })
           } catch (err) {
             map[site.id || idx] = undefined
           }
@@ -91,17 +83,8 @@ export default function Heritage(){
       setPlaces(Array.isArray(data) ? data : Object.values(data))
       setError(null)
     } catch (err) {
-      // If API fails (backend not running), fall back to local static data
-      console.warn('API fetch failed, falling back to local heritage.json:', err.message)
-      try {
-        const local = await import('../data/heritage.json')
-        const localData = local && local.default ? local.default : local
-        setPlaces(Array.isArray(localData) ? localData : Object.values(localData))
-        setError(null)
-      } catch (localErr) {
-        setError(err.message || 'Failed to load places')
-        console.error('Error loading local heritage data:', localErr)
-      }
+      setError(err.message)
+      console.error('Error fetching places:', err)
     } finally {
       setLoading(false)
     }

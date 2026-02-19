@@ -3,16 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { apiUrl } from "../config/api";
 
-export default function Login() {
+export default function AuthPage() {
+  const [isSignup, setIsSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
     user_type: "indian",
-    interests: [],
+    interests: []
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+
   const navigate = useNavigate();
 
   const interestOptions = [
@@ -25,38 +27,25 @@ export default function Login() {
     "Nature",
   ];
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
+  const handleChange = (e) => {
+    setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [e.target.name]: e.target.value
     }));
   };
 
-  const handleInterestToggle = (interest) => {
-    setFormData((prev) => ({
+  const toggleInterest = (interest) => {
+    setFormData(prev => ({
       ...prev,
       interests: prev.interests.includes(interest)
-        ? prev.interests.filter((i) => i !== interest)
-        : [...prev.interests, interest],
+        ? prev.interests.filter(i => i !== interest)
+        : [...prev.interests, interest]
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccessMessage("");
-
-    if (!formData.name.trim()) {
-      setError('Please enter your name');
-      return;
-    }
-
-    if (!formData.email.trim()) {
-      setError('Please enter your email');
-      return;
-    }
-
     setLoading(true);
 
     try {
@@ -68,154 +57,131 @@ export default function Login() {
 
       const result = await response.json();
 
-      if (result.error) {
-        setError(result.error);
-      } else {
-        // Save user to localStorage
-        localStorage.setItem("currentUser", JSON.stringify(result));
-        // Notify the app about the new login so UI updates immediately
-        try {
-          window.dispatchEvent(new CustomEvent('user-logged-in', { detail: result }));
-        } catch (e) {
-          // ignore
-        }
-        setSuccessMessage(`Welcome ${result.name}! Redirecting...`);
-        
-        setTimeout(() => {
-          navigate("/explore");
-        }, 2000);
+      // ✅ If backend returned error status
+      if (!response.ok) {
+        setError(result.detail || "Login failed");
+        return;
       }
+
+      // ✅ Successful login
+      localStorage.setItem("access_token", result.access_token);
+      localStorage.setItem("currentUser", JSON.stringify(result));
+
+      setSuccessMessage(`Welcome ${result.name}! Redirecting...`);
+
+      setTimeout(() => {
+        navigate("/explore");
+      }, 1500);
+
     } catch (err) {
       console.error("Login error:", err);
-      setError('Failed to log in. Please try again.');
+      setError("Server error. Please try again.");
     } finally {
       setLoading(false);
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center px-4 py-8">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="w-full max-w-md bg-gray-900 border border-gold/30 rounded-lg p-8 shadow-2xl"
       >
-        <div className="bg-gray-900 border border-gold/30 rounded-lg p-8 shadow-2xl">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-2">Delhi Heritage</h1>
-            <p className="text-gold text-lg">Explore & Book Tours</p>
+        <h2 className="text-3xl text-white font-bold text-center mb-6">
+          {isSignup ? "Create Account" : "Login"}
+        </h2>
+
+        {error && (
+          <div className="bg-red-500/20 text-red-300 p-3 rounded mb-4">
+            {error}
           </div>
+        )}
 
-          {error && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-red-500/20 border border-red-600 text-red-300 p-3 rounded mb-6"
-            >
-              {error}
-            </motion.div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+
+          {isSignup && (
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              onChange={handleChange}
+              className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600"
+            />
           )}
 
-          {successMessage && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-green-500/20 border border-green-600 text-green-300 p-3 rounded mb-6"
-            >
-              {successMessage}
-            </motion.div>
-          )}
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+            className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600"
+          />
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name Field */}
-            <div>
-              <label className="block text-white font-bold mb-2">Full Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder={'Your full name'}
-                className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600 focus:border-gold outline-none transition"
-              />
-            </div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+            className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600"
+          />
 
-            {/* Email Field */}
-            <div>
-              <label className="block text-white font-bold mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder={'your@email.com'}
-                className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600 focus:border-gold outline-none transition"
-              />
-            </div>
-
-            {/* User Type */}
-            <div>
-              <label className="block text-white font-bold mb-2">I am a</label>
+          {isSignup && (
+            <>
               <select
                 name="user_type"
-                value={formData.user_type}
-                onChange={handleInputChange}
-                className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600 focus:border-gold outline-none transition"
+                onChange={handleChange}
+                className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600"
               >
-                  <option value="indian">Indian National</option>
-                  <option value="foreigner">International Tourist</option>
-                  <option value="student">Student</option>
+                <option value="indian">Indian</option>
+                <option value="foreigner">Foreigner</option>
+                <option value="student">Student</option>
               </select>
-            </div>
 
-            {/* Interests */}
-            <div>
-              <label className="block text-white font-bold mb-3">
-                Interests (Optional)
-              </label>
               <div className="grid grid-cols-2 gap-2">
-                {interestOptions.map((interest) => (
-                  <motion.button
-                    key={interest}
+                {interestOptions.map(i => (
+                  <button
                     type="button"
-                    onClick={() => handleInterestToggle(interest)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`py-2 px-3 rounded text-sm font-medium transition ${
-                      formData.interests.includes(interest)
-                        ? "bg-gold text-gray-800"
-                        : "bg-gray-800 text-gray-300 border border-gray-600"
-                    }`}
+                    key={i}
+                    onClick={() => toggleInterest(i)}
+                    className={`py-2 rounded text-sm ${formData.interests.includes(i)
+                      ? "bg-gold text-black"
+                      : "bg-gray-800 text-gray-300 border border-gray-600"
+                      }`}
                   >
-                    {interest}
-                  </motion.button>
+                    {i}
+                  </button>
                 ))}
               </div>
-            </div>
+            </>
+          )}
 
-            {/* Submit Button */}
-            <motion.button
-              type="submit"
-              disabled={loading}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`w-full py-3 rounded font-bold text-lg transition ${
-                loading
-                  ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                  : "bg-gold text-gray-800 hover:bg-gold/90"
-              }`}
-            >
-              {loading ? 'Logging in...' : 'Login & Explore'}
-            </motion.button>
-          </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gold text-black py-3 rounded font-bold"
+          >
+            {loading
+              ? "Processing..."
+              : isSignup
+                ? "Create Account"
+                : "Login"}
+          </button>
+        </form>
 
-          {/* Info */}
-          <p className="text-center text-gray-400 text-sm mt-6">
-            Your login data is securely stored. You can book tours and manage your bookings.
-          </p>
-        </div>
+        <p className="text-center text-gray-400 mt-6">
+          {isSignup ? "Already have an account?" : "Don't have an account?"}
+          <button
+            onClick={() => setIsSignup(!isSignup)}
+            className="text-gold ml-2"
+          >
+            {isSignup ? "Login" : "Create Account"}
+          </button>
+        </p>
       </motion.div>
     </div>
   );

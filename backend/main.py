@@ -1,17 +1,40 @@
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+from typing import List, Optional
+from recommend import generate_recommendations
+
 from fastapi import FastAPI
 from data import HeritageStore
 from delhi_places import delhi_places
-from india_places import india_places
-from user import create_user, get_user
+from user import create_user, get_user , find_user_by_name
 from chatbot import get_ai_response
 from bookings import create_booking, get_user_bookings
 from payments import process_payment
 from comments import add_comment, get_comments, delete_comment
 from likes import increment_like, get_likes
+from auth import create_access_token, verify_password, get_current_user
 
 
 app = FastAPI(title="Delhi Heritage Backend")
+
+class RegisterRequest(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    password: str
+    user_type: Optional[str] = "indian"
+    interests: Optional[List[str]] = []
+
+
+class LoginRequest(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    password: str
+
+
+class RecommendRequest(BaseModel):
+    time: Optional[int] = 6
+
 
 
 app.add_middleware(
@@ -35,7 +58,6 @@ store = HeritageStore()
 
 
 store.add_bulk(delhi_places)
-store.add_bulk(india_places)
 
 # Simple discussions data exposed to frontend
 discussions = [
@@ -91,27 +113,76 @@ def get_place(place_key: str):
         return {"error": "Place not found"}
     return place
 
+@app.post("/register")
+async def register(data: RegisterRequest):
+    # Use provided name or fallback to email local-part
+    name = data.name
+    if not name and data.email:
+        name = data.email.split("@")[0]
+
+    # Check duplicates explicitly to give a helpful message
+    from user import find_user_by_email
+
+    if data.email:
+        existing_by_email = find_user_by_email(data.email)
+        if existing_by_email:
+            raise HTTPException(status_code=400, detail="Email already in use")
+
+    if name:
+        existing_by_name = find_user_by_name(name)
+        if existing_by_name:
+            raise HTTPException(status_code=400, detail="Name already in use")
+
+    user = create_user(
+        name=name,
+        password=data.password,
+        email=data.email,
+        user_type=data.user_type,
+        interests=data.interests
+    )
+
+    if user is None:
+        # fallback catch-all
+        raise HTTPException(status_code=400, detail="User already exists")
+
+    return {"message": "User registered successfully", "user": {"user_id": user["user_id"], "name": user["name"], "email": user.get("email")}}
+
 
 @app.post("/login")
-def login(data: dict):
-    user = create_user(
-        name=data["name"],
-        user_type=data.get("user_type", "indian"),
-        interests=data.get("interests", [])
-    )
-    return user
+async def login(data: LoginRequest):
+    identifier = data.name or data.email
 
+    if not identifier:
+        raise HTTPException(status_code=400, detail="Name or email required")
 
-@app.post("/recommend")
-def recommend(data: dict):
-    user_id = data.get("user_id")
-    time_limit = data.get("time", 6)
+    from user import find_user_by_email
 
-    user = get_user(user_id)
-    if not user:
-        return {"error": "User not logged in"}
+    # Prefer explicit email flow for clearer messages
+    user = None
+    if data.email:
+        user = find_user_by_email(data.email)
+        if not user:
+            raise HTTPException(status_code=401, detail="Account does not exist with this email")
+        # user exists by email; verify password
+        if not verify_password(data.password, user["password"]):
+            raise HTTPException(status_code=401, detail="Password is wrong")
+    else:
+        # fallback to name-based login
+        user = find_user_by_name(data.name)
+        if not user:
+            raise HTTPException(status_code=401, detail="Account does not exist with this name")
+        if not verify_password(data.password, user["password"]):
+            raise HTTPException(status_code=401, detail="Password is wrong")
 
-    return {"error": "Recommendation feature coming soon"}
+    token = create_access_token(user["user_id"])
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user_id": user["user_id"],
+        "name": user["name"],
+        "email": user.get("email")
+    }
 
 
 @app.post("/chat")
@@ -247,3 +318,23 @@ def comments_delete(comment_id: str | None = None):
     if not deleted:
         return {"error": "comment not found"}
     return {"deleted": comment_id}
+
+@app.post("/recommend")
+async def recommend(data: RecommendRequest, user_id: str = Depends(get_current_user)):
+    user = get_user(user_id)
+
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+
+    all_places = store.get_all()
+
+    recommended = generate_recommendations(
+        user=user,
+        places=all_places,
+        time_available=data.time
+    )
+
+    return {
+        "recommended_places": recommended
+    }
+

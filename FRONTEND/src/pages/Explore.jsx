@@ -5,7 +5,6 @@ import { apiUrl } from "../config/api";
 
 export default function Explore({ currentUser: propUser }) {
   const [places, setPlaces] = useState([]);
-  const [selectedState, setSelectedState] = useState('All India')
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
@@ -168,27 +167,18 @@ export default function Explore({ currentUser: propUser }) {
 
   // Allow exploring without login; booking will redirect to login if needed.
 
-    if (!places.length) {
+  if (!places.length) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 text-center">
-        <h1 className="text-4xl font-bold text-black mb-4">Explore India Heritage</h1>
+        <h1 className="text-4xl font-bold text-black mb-4">Explore Delhi Heritage</h1>
         <p className="text-gray-300">Loading monuments...</p>
       </div>
     );
   }
 
-  // compute filtered places based on selected state
-  const visiblePlaces = places.filter((p) => {
-    if (!selectedState || selectedState === 'All India') return true
-    // keep existing Delhi monuments unchanged: if selectedState is Delhi or All India, show them
-    if (selectedState === 'Delhi') return true
-    // otherwise filter by `state` property if present
-    return p.state && p.state.toLowerCase() === selectedState.toLowerCase()
-  })
-
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-2 ">{`Explore India Heritage`}</h1>
+      <h1 className="text-4xl font-bold mb-2 ">Explore Delhi Heritage</h1>
       <p className="text-gray-300 mb-8">{currentUser ? `Welcome, ${currentUser.name}! Click on any monument to learn more and book a tour.` : 'Explore monuments — login to book to reserve tours.'}</p>
       
       {message && (
@@ -203,57 +193,8 @@ export default function Explore({ currentUser: propUser }) {
         </motion.div>
       )}
       
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <label className="text-sm text-gray-300">Sort by:</label>
-          <select value={selectedState} onChange={(e) => setSelectedState(e.target.value)} className="bg-gray-800 text-white px-3 py-2 rounded">
-            {[
-              'All India',
-              'Andaman and Nicobar Islands',
-              'Andhra Pradesh',
-              'Arunachal Pradesh',
-              'Assam',
-              'Bihar',
-              'Chandigarh',
-              'Chhattisgarh',
-              'Dadra and Nagar Haveli and Daman and Diu',
-              'Delhi',
-              'Goa',
-              'Gujarat',
-              'Haryana',
-              'Himachal Pradesh',
-              'Jammu and Kashmir',
-              'Jharkhand',
-              'Karnataka',
-              'Kerala',
-              'Ladakh',
-              'Lakshadweep',
-              'Madhya Pradesh',
-              'Maharashtra',
-              'Manipur',
-              'Meghalaya',
-              'Mizoram',
-              'Nagaland',
-              'Odisha',
-              'Puducherry',
-              'Punjab',
-              'Rajasthan',
-              'Sikkim',
-              'Tamil Nadu',
-              'Telangana',
-              'Tripura',
-              'Uttar Pradesh',
-              'Uttarakhand',
-              'West Bengal',
-            ].map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
-        {visiblePlaces.map((p) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        {places.map((p) => (
           <motion.div
             key={p.key || p.name}
             whileHover={{ scale: 1.05 }}

@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react'
+import { apiUrl } from "../config/api"
 
 const communities = [
 	{
@@ -52,17 +53,17 @@ export default function Community() {
 	const [liking, setLiking] = useState({})
 
 	useEffect(() => {
-		fetch('http://127.0.0.1:8000/discussions')
+		fetch(apiUrl('/discussions'))
 			.then((r) => r.json())
 			.then((data) => setDiscussions(data))
-			.catch(() => {})
+			.catch(() => { })
 
 		// load logged-in user from localStorage (App stores it as "currentUser")
 		const saved = localStorage.getItem('currentUser')
 		if (saved) {
 			try {
 				setCurrentUser(JSON.parse(saved))
-			} catch (e) {}
+			} catch (e) { }
 		}
 
 		// ensure we have a persistent guest id for anonymous likes
@@ -85,7 +86,7 @@ export default function Community() {
 		setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: (d.likes || 0) + 1 } : d)))
 		try {
 			const identifier = (currentUser && currentUser.user_id) || localStorage.getItem('guestId')
-			const res = await fetch('http://127.0.0.1:8000/like', {
+			const res = await fetch(apiUrl('/like'), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ discussion_id: discussionId, user_id: identifier }),
@@ -95,7 +96,7 @@ export default function Community() {
 		} catch (e) {
 			console.error(e)
 			// rollback optimistic update on error
-			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: Math.max((d.likes||1)-1, 0) } : d)))
+			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, likes: Math.max((d.likes || 1) - 1, 0) } : d)))
 		} finally {
 			setLiking((s) => ({ ...s, [discussionId]: false }))
 		}
@@ -105,7 +106,7 @@ export default function Community() {
 		const isOpen = !!showComments[discussionId]
 		if (!isOpen) {
 			try {
-				const res = await fetch(`http://127.0.0.1:8000/comments?discussion_id=${discussionId}`)
+				const res = await fetch(apiUrl(`/comments?discussion_id=${discussionId}`))
 				const data = await res.json()
 				setCommentsByDiscussion((prev) => ({ ...prev, [discussionId]: data }))
 			} catch (e) {
@@ -120,7 +121,7 @@ export default function Community() {
 		const author = (currentUser && currentUser.user_id) || newCommentAuthor[discussionId] || 'anonymous'
 		if (!text) return
 		try {
-			const res = await fetch('http://127.0.0.1:8000/comments', {
+			const res = await fetch(apiUrl('/comments'), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ discussion_id: discussionId, author, text }),
@@ -141,7 +142,7 @@ export default function Community() {
 	async function deleteComment(commentId, discussionId) {
 		if (!confirm('Delete this comment?')) return
 		try {
-			await fetch(`http://127.0.0.1:8000/comments?comment_id=${encodeURIComponent(commentId)}`, {
+			await fetch(apiUrl(`/comments?comment_id=${encodeURIComponent(commentId)}`), {
 				method: 'DELETE',
 			})
 			// remove locally
@@ -149,7 +150,7 @@ export default function Community() {
 				...prev,
 				[discussionId]: (prev[discussionId] || []).filter((c) => c.comment_id !== commentId),
 			}))
-			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, comments: Math.max((d.comments||1)-1, 0) } : d)))
+			setDiscussions((prev) => prev.map((d) => (d.id === discussionId ? { ...d, comments: Math.max((d.comments || 1) - 1, 0) } : d)))
 		} catch (e) {
 			console.error(e)
 		}
@@ -164,11 +165,10 @@ export default function Community() {
 				<button
 					type="button"
 					onClick={() => setSelectedCommunityId(0)}
-					className={`px-4 py-2 rounded-full border whitespace-nowrap text-sm transition ${
-						selectedCommunityId === 0
+					className={`px-4 py-2 rounded-full border whitespace-nowrap text-sm transition ${selectedCommunityId === 0
 							? 'bg-gold text-gray-900 border-gold'
 							: 'bg-gray-800 text-gray-200 border-gold/30 hover:border-gold/60'
-					}`}
+						}`}
 				>
 					All Communities
 				</button>
@@ -177,11 +177,10 @@ export default function Community() {
 						key={community.id}
 						type="button"
 						onClick={() => setSelectedCommunityId(community.id)}
-						className={`px-4 py-2 rounded-full border whitespace-nowrap text-sm transition ${
-							selectedCommunityId === community.id
+						className={`px-4 py-2 rounded-full border whitespace-nowrap text-sm transition ${selectedCommunityId === community.id
 								? 'bg-gold text-gray-900 border-gold'
 								: 'bg-gray-800 text-gray-200 border-gold/30 hover:border-gold/60'
-						}`}
+							}`}
 					>
 						{community.name}
 					</button>
@@ -236,16 +235,16 @@ export default function Community() {
 										</div>
 
 										<div className="mt-3">
-										{!currentUser ? (
-											<input
-												className="w-full mb-2 p-2 rounded bg-gray-800 text-white text-sm"
-												placeholder="Your name (optional)"
-												value={newCommentAuthor[discussion.id] || ''}
-												onChange={(e) => setNewCommentAuthor((s) => ({ ...s, [discussion.id]: e.target.value }))}
-											/>
-										) : (
-											<p className="text-xs text-gray-400 mb-2">Posting as <span className="text-gold">{currentUser.user_id}</span></p>
-										)}
+											{!currentUser ? (
+												<input
+													className="w-full mb-2 p-2 rounded bg-gray-800 text-white text-sm"
+													placeholder="Your name (optional)"
+													value={newCommentAuthor[discussion.id] || ''}
+													onChange={(e) => setNewCommentAuthor((s) => ({ ...s, [discussion.id]: e.target.value }))}
+												/>
+											) : (
+												<p className="text-xs text-gray-400 mb-2">Posting as <span className="text-gold">{currentUser.user_id}</span></p>
+											)}
 											<textarea
 												className="w-full p-2 rounded bg-gray-800 text-white text-sm"
 												rows={3}
