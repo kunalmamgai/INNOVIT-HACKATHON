@@ -83,8 +83,17 @@ export default function Heritage(){
       setPlaces(Array.isArray(data) ? data : Object.values(data))
       setError(null)
     } catch (err) {
-      setError(err.message)
-      console.error('Error fetching places:', err)
+      // If API fails (backend not running), fall back to local static data
+      console.warn('API fetch failed, falling back to local heritage.json:', err.message)
+      try {
+        const local = await import('../data/heritage.json')
+        const localData = local && local.default ? local.default : local
+        setPlaces(Array.isArray(localData) ? localData : Object.values(localData))
+        setError(null)
+      } catch (localErr) {
+        setError(err.message || 'Failed to load places')
+        console.error('Error loading local heritage data:', localErr)
+      }
     } finally {
       setLoading(false)
     }
