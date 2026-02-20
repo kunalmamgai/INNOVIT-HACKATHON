@@ -14,7 +14,7 @@ const Heritage = lazy(() => import('./pages/Heritage'))
 const Festivals = lazy(() => import('./pages/Festivals'))
 const ArtCrafts = lazy(() => import('./pages/ArtCrafts'))
 const Cuisine = lazy(() => import('./pages/Cuisine'))
-const Community = lazy(() => import('./pages/Community'))
+const ARVRTour = lazy(() => import('./pages/ARVRTour'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Explore = lazy(() => import('./pages/Explore'))
@@ -88,7 +88,7 @@ export default function App() {
           <Route path="/festivals" element={<Festivals />} />
           <Route path="/arts" element={<ArtCrafts />} />
           <Route path="/cuisine" element={<Cuisine />} />
-          <Route path="/community" element={<Community />} />
+          <Route path="/ar-vr-tour" element={<ARVRTour />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/explore" element={<Explore currentUser={currentUser} />} />
