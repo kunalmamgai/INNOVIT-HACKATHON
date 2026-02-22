@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Carousel from '../shared/Carousel'
 
@@ -39,12 +40,12 @@ export default function Home(){
               </p>
 
               <div className="mt-6 md:mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
-                <a
-                  href="/heritage"
+                <Link
+                  to="/virtual-tour"
                   className="px-6 py-3 rounded-xl bg-earth text-white font-bold text-base hover:brightness-110 transition shadow-lg text-center w-full sm:w-auto"
                 >
                   Start AR/VR Tour
-                </a>
+                </Link>
                 <a
                   href="/explore"
                   className="px-6 py-3 rounded-xl border-2 border-earth/60 text-earth font-bold text-base hover:bg-earth/10 transition text-center w-full sm:w-auto"
