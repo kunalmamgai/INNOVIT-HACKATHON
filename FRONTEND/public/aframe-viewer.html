@@ -37,9 +37,20 @@
         showError('no image specified');
       } else {
         let triedProxy = false;
+        // read optional proxy base (absolute) passed by parent frame
+        // decode it because the parent may have encoded the URL
+        const proxyBase = (qs('proxy') && decodeURIComponent(qs('proxy'))) || '/proxy-image';
         function tryProxy(){
           triedProxy = true;
-          const proxyUrl = '/proxy-image?url=' + encodeURIComponent(img);
+          // if the provided img already points to the proxy endpoint,
+          // don't attempt to proxy again.
+          if (img.includes('/proxy-image')) {
+            showError('image load error (proxy failed)');
+            console.error('Panorama viewer: image already points to proxy, aborting proxy attempt', img);
+            return;
+          }
+          const proxyUrl = proxyBase + '?url=' + encodeURIComponent(img);
+          console.log('Panorama viewer: using proxy URL', proxyUrl);
           panorama.src = proxyUrl;
         }
 
