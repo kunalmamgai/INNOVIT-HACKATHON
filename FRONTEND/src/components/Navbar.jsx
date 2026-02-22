@@ -23,7 +23,7 @@ export default function Navbar({ currentUser, onLogout }){
             <NavLink to="/festivals" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">Festivals & Traditions</NavLink>
             <NavLink to="/arts" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Art & Crafts</NavLink>
             <NavLink to="/cuisine" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Cuisine</NavLink>
-            <NavLink to="/ar-vr-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">AR/VR Tour</NavLink>
+            <NavLink to="/virtual-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">Virtual Tour</NavLink>
             <NavLink to="/explore" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Explore</NavLink>
           </nav>
 
@@ -56,7 +56,7 @@ export default function Navbar({ currentUser, onLogout }){
             <NavLink to="/festivals" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Festivals</NavLink>
             <NavLink to="/arts" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Arts</NavLink>
             <NavLink to="/cuisine" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Cuisine</NavLink>
-            <NavLink to="/ar-vr-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">AR/VR Tour</NavLink>
+            <NavLink to="/virtual-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Virtual Tour</NavLink>
             <NavLink to="/explore" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Explore</NavLink>
             <NavLink to="/about" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">About</NavLink>
             <NavLink to="/contact" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Contact</NavLink>
