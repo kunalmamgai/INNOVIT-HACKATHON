@@ -2,17 +2,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi import Response
 import requests
-from .data import HeritageStore
-from .delhi_places import delhi_places
-from .india_places import india_places
-from .user import create_user, get_user
-from .chatbot import get_ai_response
-from .bookings import create_booking, get_user_bookings
-from .recommend import generate_itinerary
-from .payments import process_payment
-from .comments import add_comment, get_comments, delete_comment
-from .likes import increment_like, get_likes
-
+from data import HeritageStore
+from delhi_places import delhi_places
+from india_places import india_places
+from user import create_user, get_user
+from chatbot import get_ai_response
+from bookings import create_booking, get_user_bookings
+from recommend import generate_itinerary
+from payments import process_payment
 
 app = FastAPI(title="Delhi Heritage Backend")
 
@@ -274,3 +271,4 @@ def comments_delete(comment_id: str | None = None):
     if not deleted:
         return {"error": "comment not found"}
     return {"deleted": comment_id}
+
