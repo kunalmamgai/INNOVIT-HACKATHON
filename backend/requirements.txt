@@ -1,5 +1,8 @@
 fastapi
 uvicorn
-google-genai
-python-dotenv
 motor
+pymongo
+python-dotenv
+passlib[bcrypt]
+bcrypt
+python-jose
