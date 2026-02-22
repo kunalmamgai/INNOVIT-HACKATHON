@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panorama Viewer</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <style>html,body{height:100%;margin:0;background:#000;color:#fff}#wrap{height:100vh}</style>
+  </head>
+  <body>
+    <div id="wrap">
+      <a-scene embedded vr-mode-ui="enabled: true" renderer="logarithmicDepthBuffer: true">
+        <a-assets>
+          <img id="panorama" crossorigin="anonymous" />
+        </a-assets>
+
+        <a-sky id="sky" src="#panorama" rotation="0 -90 0"></a-sky>
+        <a-entity position="0 1.6 0"><a-camera wasd-controls-enabled="false"></a-camera></a-entity>
+      </a-scene>
+    </div>
+
+    <script>
+      // Try direct load first; if it fails, request via backend proxy /proxy-image
+      function qs(key){
+        const params = new URLSearchParams(location.search);
+        return params.get(key);
+      }
+      const img = qs('img') || '';
+      const title = qs('title') || '';
+      const panorama = document.getElementById('panorama');
+
+      function showError(msg){
+        document.body.innerHTML = '<div style="padding:20px;font-family:sans-serif;color:#fff">Failed to load panorama: '+String(msg)+'</div>';
+      }
+
+      if(!img){
+        showError('no image specified');
+      } else {
+        let triedProxy = false;
+        function tryProxy(){
+          triedProxy = true;
+          const proxyUrl = '/proxy-image?url=' + encodeURIComponent(img);
+          panorama.src = proxyUrl;
+        }
+
+        panorama.crossOrigin = 'anonymous';
+        panorama.onload = function(){
+          // success
+        }
+        panorama.onerror = function(e){
+          if (!triedProxy) {
+            tryProxy();
+            return;
+          }
+          showError('image load error (direct and proxy both failed)');
+        }
+
+        // initial attempt: direct URL
+        panorama.src = img;
+      }
+    </script>
+  </body>
+</html>
