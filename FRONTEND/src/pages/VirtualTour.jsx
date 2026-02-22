@@ -199,7 +199,11 @@ export default function VirtualTour() {
 
                       <iframe
                         title="aframe-scene"
-                        src={`/aframe-viewer.html?img=${encodeURIComponent(proxiedImg)}&title=${encodeURIComponent(selected?.name||'')}`}
+                        // pass the original image URL (not already proxied) so the
+                        // viewer can try direct load and only then ask the backend
+                        // proxy. Also pass the backend proxy base so the iframe can
+                        // call it directly (avoids double-proxying issues).
+                        src={`/aframe-viewer.html?img=${encodeURIComponent(src)}&proxy=${encodeURIComponent(apiUrl('/proxy-image'))}&title=${encodeURIComponent(selected?.name||'')}`}
                         style={{ width: '100%', height: '100%', border: 'none' }}
                       />
 
