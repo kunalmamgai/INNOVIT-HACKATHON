@@ -1,53 +1,31 @@
-import json
-import os
-import uuid
+from bson import ObjectId
 from datetime import datetime
+import uuid
+
 from auth import hash_password
+from mongo import users_collection
 
-USERS_FILE = "user.json"
-
-# ----------------------------
-# Load Users Safely
-# ----------------------------
-
-
-def load_users():
-    if not os.path.exists(USERS_FILE):
-        return {}
-
-    try:
-        with open(USERS_FILE, "r") as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        return {}
-
-
-users = load_users()
-
-# ----------------------------
-# Save Users
-# ----------------------------
-
-
-def save_users():
-    with open(USERS_FILE, "w") as f:
-        json.dump(users, f, indent=2)
 
 # ----------------------------
 # Create User
 # ----------------------------
 
+async def create_user(name: str, password: str, email: str = None,
+                      user_type="indian", interests=None):
 
-def create_user(name: str, password: str, email: str = None, user_type="indian", interests=None):
     if interests is None:
         interests = []
 
-    # Check if user already exists by name or email
-    for user in users.values():
-        if user.get("name") == name:
-            return None  # user already exists by name
-        if email and user.get("email") == email:
-            return None  # user already exists by email
+    # Check if name exists
+    existing_name = await users_collection.find_one({"name": name})
+    if existing_name:
+        return None
+
+    # Check if email exists
+    if email:
+        existing_email = await users_collection.find_one({"email": email})
+        if existing_email:
+            return None
 
     user_id = str(uuid.uuid4())
     hashed_password = hash_password(password)
@@ -59,36 +37,33 @@ def create_user(name: str, password: str, email: str = None, user_type="indian",
         "password": hashed_password,
         "user_type": user_type,
         "interests": interests,
-        "created_at": datetime.utcnow().isoformat()
+        "created_at": datetime.utcnow()
     }
 
-    users[user_id] = user_data
-    save_users()
+    await users_collection.insert_one(user_data)
 
     return user_data
 
+
 # ----------------------------
-# Get User
+# Get User by ID
 # ----------------------------
 
+async def get_user(user_id: str):
+    return await users_collection.find_one({"user_id": user_id})
 
-def get_user(user_id: str):
-    return users.get(user_id)
 
 # ----------------------------
 # Find User by Name
 # ----------------------------
 
-
-def find_user_by_name(name: str):
-    for user in users.values():
-        if user["name"] == name:
-            return user
-    return None
+async def find_user_by_name(name: str):
+    return await users_collection.find_one({"name": name})
 
 
-def find_user_by_email(email: str):
-    for user in users.values():
-        if user.get("email") == email:
-            return user
-    return None
+# ----------------------------
+# Find User by Email
+# ----------------------------
+
+async def find_user_by_email(email: str):
+    return await users_collection.find_one({"email": email})
