@@ -8,7 +8,7 @@ from india_places import india_places
 from user import create_user, get_user
 from chatbot import get_ai_response
 from bookings import create_booking, get_user_bookings
-from recommend import generate_itinerary
+from recommend import generate_recommendations
 from payments import process_payment
 
 app = FastAPI(title="Delhi Heritage Backend")
@@ -271,4 +271,5 @@ def comments_delete(comment_id: str | None = None):
     if not deleted:
         return {"error": "comment not found"}
     return {"deleted": comment_id}
+
 
