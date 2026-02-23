@@ -6,3 +6,5 @@ python-dotenv
 passlib[bcrypt]
 bcrypt
 python-jose
+google-genai
+google
