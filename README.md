@@ -1,361 +1,253 @@
-# �️ Heritage & Culture Portal
+# Heritage & Culture Portal
 
-**Status:** ✅ **Production Ready**
-
-A full-stack platform showcasing Delhi's rich cultural heritage, including sites, festivals, art & crafts, cuisine, and languages. Built with FastAPI backend and React frontend.
+Full-stack heritage discovery platform with a React + Vite frontend and a FastAPI backend.
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
-The Delhi Heritage & Culture Portal is a comprehensive platform dedicated to exploring and promoting Delhi's cultural treasures. Users can discover heritage sites, learn about festivals, explore traditional art & crafts, discover regional cuisine, and connect with indigenous languages.
+This project helps users explore heritage places, view map-based monument details, start virtual tours, chat with an AI guide, and create bookings/payments.
 
-**Key Features:**
-- 📍 **Interactive Heritage Sites Map** - Explore 50+ heritage locations
-- 🎭 **Cultural Collections** - Festivals, Art & Crafts, Cuisine, Languages
-- 👤 **User Auth System** - Login with preferences and interests
-- 🎟️ **Booking & Payments** - Reserve tickets and process payments
-- 🔍 **Smart Recommendations** - AI-powered place suggestions based on interests
-- 🌙 **Dark Mode** - Eye-friendly interface option
-- 🌐 **Bilingual** - English and Hindi support
-- 📱 **Fully Responsive** - Mobile, tablet, and desktop compatible
-- ⚡ **PWA Support** - Progressive Web App capabilities
+### Current Feature Set
+- Interactive heritage map with monument details
+- Explore page with booking and payment flow
+- Virtual tour experience with image proxy support
+- AI chatbot for heritage/culture Q&A
+- Community endpoints for discussions, likes, and comments
+- Dark mode preference persistence
+- PWA assets and service-worker setup in frontend public folder
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
-```
-React 18.2          - UI Framework
-Vite 5.0            - Build tool & dev server
-React Router 6      - Client-side routing
-Leaflet 1.9 + React Leaflet - Interactive maps
-TailwindCSS 3.3     - Utility-first CSS
-Framer Motion       - Animations & transitions
-React Hook Form     - Form validation
-i18next             - Internationalization (EN/HI)
-Zustand             - Global state management
-React Helmet        - Document head management
-```
+- React 18
+- Vite 5
+- React Router 6
+- TailwindCSS 3
+- React Leaflet + Leaflet
+- Framer Motion
+- Zustand
+- i18next
 
 ### Backend
-```
-FastAPI             - Python web framework
-Uvicorn             - ASGI server
-Python 3.x          - Runtime
-JSON                - Data persistence
-```
+- FastAPI
+- Uvicorn
+- Python 3.11+
+- Motor + PyMongo (MongoDB)
+- python-dotenv
+- google-genai (Gemini API integration)
 
 ---
 
-## 📁 Project Structure
+## Workspace Structure
 
-```
+```text
 INNOVIT-HACKATHON/
-│
-├── 📄 README.md                     (This file)
-├── 📄 user.json                     (User data)
-│
-├── 📁 FRONTEND/                     (React + Vite Application)
-│   ├── 📄 package.json              (Dependencies & scripts)
-│   ├── 📄 vite.config.js            (Build configuration)
-│   ├── 📄 tailwind.config.cjs       (TailwindCSS config)
-│   ├── 📄 postcss.config.cjs        (PostCSS config)
-│   │
-│   ├── 📁 public/                   (Static assets)
-│   │   ├── 📄 index.html
-│   │   ├── 📄 manifest.json         (PWA manifest)
-│   │   ├── 📄 sw.js                 (Service Worker)
-│   │   └── 📁 assets/               (Images, icons, etc.)
-│   │
-│   └── 📁 src/                      (Source code)
-│       ├── 📄 main.jsx              (Entry point)
-│       ├── 📄 App.jsx               (Root component)
-│       ├── 📄 i18n.js               (i18n configuration)
-│       ├── 📄 registerServiceWorker.js
-│       │
-│       ├── 📁 components/           (Reusable components)
-│       │   ├── 📄 Navbar.jsx
-│       │   ├── 📄 Footer.jsx
-│       │   ├── 📄 DarkModeToggle.jsx
-│       │
-│       ├── 📁 shared/               (Shared UI components)
-│       │   ├── 📄 Carousel.jsx
-│       │   └── 📄 Modal.jsx
-│       │
-│       ├── 📁 pages/                (Page components - lazy loaded)
-│       │   ├── 📄 Home.jsx          (Landing page)
-│       │   ├── 📄 Heritage.jsx      (Interactive map of heritage sites)
-│       │   ├── 📄 Festivals.jsx     (Cultural festivals)
-│       │   ├── 📄 ArtCrafts.jsx     (Traditional art & crafts)
-│       │   ├── 📄 Cuisine.jsx       (Regional cuisine)
-│       │   ├── 📄 Languages.jsx     (Indigenous languages)
-│       │   ├── 📄 About.jsx         (About Delhi & culture)
-│       │   ├── 📄 Contact.jsx       (Contact form)
-│       │   ├── 📄 Explore.jsx       (Exploration/discovery)
-│       │   ├── 📄 Login.jsx         (User authentication)
-│       │   └── 📄 NotFound.jsx      (404 page)
-│       │
-│       ├── 📁 store/                (State management)
-│       │   └── 📄 useStore.js       (Zustand store)
-│       │
-│       ├── 📁 data/                 (Data files)
-│       │   └── 📄 heritage.json     (Heritage sites data)
-│       │
-│       ├── 📁 assests/              (Local assets)
-│       │
-│       └── 📁 styles/               (Global styles)
-│           └── 📄 main.css          (TailwindCSS + custom styles)
-│
-├── 📁 backend/                      (FastAPI Backend)
-│   ├── 📄 main.py                   (FastAPI app & routes)
-│   ├── 📄 data.py                   (Heritage data store)
-│   ├── 📄 delhi_places.py           (Delhi heritage sites)
-│   ├── 📄 user.py                   (User management)
-│   ├── 📄 bookings.py               (Ticket booking system)
-│   ├── 📄 payments.py               (Payment processing)
-│   ├── 📄 recommend.py              (Recommendation engine)
-│   ├── 📄 requirements.txt          (Python dependencies)
-│   ├── 📄 Procfile                  (Deployment configuration)
-│   ├── 📄 user.json                 (User data)
-│   ├── 📄 bookings.json             (Booking records)
-│   └── 📄 payments.json             (Payment records)
+├── backend/
+│   ├── main.py
+│   ├── mongo.py
+│   ├── chatbot.py
+│   ├── recommend.py
+│   ├── user.py
+│   ├── bookings.py
+│   ├── payments.py
+│   ├── data.py
+│   ├── delhi_places.py
+│   ├── india_places.py
+│   └── requirements.txt
+├── FRONTEND/
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── config/api.js
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── shared/
+│   │   ├── store/
+│   │   └── styles/
+│   └── package.json
+├── likes.json
+├── comments.json
+├── user.json
+└── README.md
 ```
 
 ---
 
-## 🚀 Quick Start
+## Prerequisites
 
-### Prerequisites
-- **Node.js** 16+ and **npm**
-- **Python** 3.8+ and **pip**
-- **Git** (optional)
+- Node.js 18+
+- npm
+- Python 3.11+
+- pip
 
-### Frontend Setup (30 seconds)
-```bash
-cd FRONTEND
-npm install
-npm run dev
+---
+
+## Environment Variables
+
+Create a `.env` file in `backend/` (or provide variables in your runtime environment):
+
+```env
+MONGO_URL=your_mongodb_connection_string
+GEMINI_API_KEY=your_gemini_api_key
 ```
-Frontend will be available at `http://localhost:5173`
 
-### Backend Setup (30 seconds)
+---
+
+## Local Development
+
+### 1) Backend
+
 ```bash
 cd backend
 pip install -r requirements.txt
-uvicorn main:app --reload
-```
-Backend API will be available at `http://localhost:8000`
-
----
-
-## 🔌 Backend API Endpoints
-
-### Heritage Sites
-```
-GET  /                      - Health check
-GET  /places                - Get all heritage places
-GET  /places/{place_key}    - Get specific place details
+uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-### User Management
-```
-POST /login                 - Create/authenticate user
-  Body: {
-    "name": "string",
-    "user_type": "indian|foreigner|student",
-    "interests": ["array", "of", "interests"]
-  }
-```
+Backend runs at: `http://127.0.0.1:8000`
 
-### Recommendations
-```
-POST /recommend             - Get recommended places
-  Body: {
-    "user_id": "string",
-    "time": 6  // hours available
-  }
-```
+### 2) Frontend
 
-### Bookings
-```
-POST /bookings              - Create a booking
-GET  /bookings/{booking_id} - Get booking details
-GET  /user/{user_id}/bookings - Get user bookings
-```
-
-### Payments
-```
-POST /payments              - Process payment
-GET  /payments/{payment_id} - Get payment details
-```
-
----
-
-## 🎨 Frontend Pages
-
-| Page | Route | Description |
-|------|-------|-------------|
-| Home | `/` | Landing page with featured sites |
-| Heritage | `/heritage` | Interactive Leaflet map with 50+ heritage sites |
-| Festivals | `/festivals` | Delhi's cultural festivals |
-| Art & Crafts | `/artcrafts` | Traditional art forms and crafts |
-| Cuisine | `/cuisine` | Regional cuisine and specialties |
-| Languages | `/languages` | Indigenous languages spoken in Delhi |
-| About | `/about` | Information about Delhi's culture |
-| Contact | `/contact` | Contact form |
-| Explore | `/explore` | Discovery/exploration section |
-| Login | `/login` | User authentication |
-| 404 | `*` | Not found page |
-
----
-
-## 📦 Available Scripts
-
-### Frontend
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
-npm run format       # Format code with Prettier
+cd FRONTEND
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
-### Backend
+Frontend runs at: `http://127.0.0.1:5173`
+
+The frontend API base is handled in `FRONTEND/src/config/api.js` and points to local backend in dev mode.
+
+---
+
+## Frontend Routes (Current)
+
+| Route | Page |
+|---|---|
+| `/` | Home |
+| `/login` | Login / Signup UI |
+| `/heritage` | Heritage map |
+| `/festivals` | Festivals |
+| `/arts` | Art & Crafts |
+| `/cuisine` | Cuisine |
+| `/explore` | Explore + booking/payment flow |
+| `/virtual-tour` | Virtual tour |
+| `/community` | Currently mapped to Virtual Tour |
+| `/about` | About |
+| `/contact` | Contact |
+| `*` | NotFound |
+
+---
+
+## Backend API (Current)
+
+### Core
+- `GET /` - health message
+- `GET /places` - list all places
+- `GET /places/{place_key}` - single place details
+- `GET /proxy-image?url=...` - image proxy for virtual tour / CORS handling
+
+### User & Recommendations
+- `POST /login`
+- `POST /recommend`
+- `POST /chat`
+
+### Bookings & Payments
+- `POST /bookings`
+- `GET /bookings?user_id=...`
+- `POST /payments`
+
+### Community
+- `GET /discussions`
+- `POST /like`
+- `GET /comments`
+- `POST /comments`
+- `DELETE /comments?comment_id=...`
+
+---
+
+## API Payload Examples
+
+### POST /bookings
+```json
+{
+  "user_id": "user-id",
+  "place_key": "qutub_minar",
+  "visit_date": "2026-03-01",
+  "num_tickets": 2,
+  "ticket_type": "indian"
+}
+```
+
+### POST /payments
+```json
+{
+  "booking_id": "booking-id",
+  "user_id": "user-id",
+  "amount": 500,
+  "payment_method": "upi",
+  "upi_id": "name@bank"
+}
+```
+
+### POST /chat
+```json
+{
+  "message": "Tell me about Humayun's Tomb",
+  "conversation_history": []
+}
+```
+
+---
+
+## CORS (Backend)
+
+Configured origins include:
+- `http://localhost:5173`
+- `http://127.0.0.1:5173`
+- `http://localhost:5174`
+- `http://127.0.0.1:5174`
+- `https://heritage-and-culture-portal.vercel.app`
+- `http://127.0.0.1:8000`
+
+---
+
+## Frontend Scripts
+
+From `FRONTEND/`:
+
 ```bash
-uvicorn main:app --reload              # Run with auto-reload
-uvicorn main:app --host 0.0.0.0        # Run on all interfaces
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm run format
 ```
 
 ---
 
-## 🌐 Features
+## Deployment Notes
 
-### Interactive Map
-- **Technology**: React Leaflet + Leaflet.js
-- **Functionality**: Click markers to view place details, search locations
-- **Data**: 50+ heritage sites in Delhi with coordinates
-
-### Smart Recommendations
-- **Personalization**: Based on user interests and available time
-- **Algorithm**: Matches user preferences with site categories and visiting duration
-- **API**: `/recommend` endpoint for intelligent suggestions
-
-### Booking System
-- **Ticket Types**: Indian (₹100), Foreigner ($5), Student (₹50)
-- **Data Storage**: JSON file persistence
-- **Status Tracking**: Confirmed bookings with unique IDs
-
-### Payment Processing
-- **Methods**: Card, UPI
-- **Simulation**: Marks payments as completed
-- **Integration**: Links payments to bookings
-
-### User Authentication
-- **Types**: Indian, Foreigner, Student
-- **Interests**: Custom interest tags for personalization
-- **Storage**: localStorage + JSON persistence
-
-### Internationalization (i18n)
-- **Languages**: English and Hindi
-- **Management**: i18next library
-- **Toggle**: Language switcher in Navbar
-
-### Dark Mode
-- **UI**: TailwindCSS dark mode classes
-- **Persistence**: Saved in localStorage
-- **Toggle**: DarkModeToggle component
+- Frontend: Vercel-ready (`FRONTEND/vercel.json`)
+- Backend: compatible with Uvicorn platforms (Render/Railway/Heroku-style)
+- Ensure `MONGO_URL` and `GEMINI_API_KEY` are configured in deployment environment
 
 ---
 
-## 🔐 CORS Configuration
+## Additional Frontend Docs
 
-Backend allows requests from:
-- `http://localhost:5173` (local frontend)
-- `https://heritage-and-culture-portal.vercel.app/` (production frontend)
-
----
-
-## 📋 Data Files
-
-### heritage.json
-Contains heritage site data including:
-- Site name, key, category
-- Latitude/longitude coordinates
-- Description, opening hours
-- Entry fees by visitor type
-
-### delhi_places.py
-Python list of 50+ heritage sites ready for database insertion
-
-### user.json
-Stores user profiles with preferences
-
-### bookings.json
-Records of all ticket bookings
-
-### payments.json
-Records of all payment transactions
+Inside `FRONTEND/`:
+- `QUICK_START.md`
+- `SETUP_GUIDE.md`
+- `INSTALLATION.md`
+- `FILE_STRUCTURE.md`
+- `EXAMPLES.md`
+- `COMPONENTS.md`
+- `INDEX.md`
 
 ---
 
-## 🚀 Deployment
+## License
 
-### Frontend (Vercel)
-1. Push code to GitHub
-2. Connect Vercel to repository
-3. Deploy (auto-deployed on push)
-
-### Backend (Render/Railway/Heroku)
-1. Use `Procfile` for deployment configuration
-2. Ensure Python and pip are installed
-3. Set environment variables if needed
-
----
-
-## 🤝 Contributing
-
-Feel free to submit issues and enhancement requests!
-
-### Development Workflow
-1. Create a feature branch
-2. Make your changes
-3. Test thoroughly
-4. Submit a pull request
-
----
-
-## 📝 Documentation
-
-Additional documentation files are available in the FRONTEND folder:
-- `QUICK_START.md` - Quick setup guide
-- `SETUP_GUIDE.md` - Detailed setup instructions
-- `INSTALLATION.md` - Installation steps
-- `FILE_STRUCTURE.md` - Detailed file structure reference
-- `EXAMPLES.md` - Code examples and patterns
-- `COMPONENTS.md` - Component documentation
-- `INDEX.md` - Documentation index
-
----
-
-## 🌍 Live Deployment
-
-- **Frontend**: [Heritage Portal](https://heritage-and-culture-portal.vercel.app/)
-- **Backend API**: [Delhi Heritage Backend](https://delhi-heritage-api.onrender.com)
-
----
-
-## 📧 Support & Contact
-
-For questions, issues, or contributions, please check the Contact page or open an issue on GitHub.
-
----
-
-## 📄 License
-
-This project is part of the INNOVIT Hackathon.
-
----
-
-**Happy exploring Delhi's rich heritage! 🏛️**
+Project created for the INNOVIT Hackathon.
