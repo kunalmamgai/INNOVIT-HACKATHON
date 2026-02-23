@@ -23,28 +23,23 @@ MODEL_NAME = "gemini-flash-lite-latest"
 
 
 def get_ai_response(user_message: str, conversation_history: list = None) -> str:
-    try:
-        system_prompt = """
+    system_prompt = """
 You are an expert AI guide about Delhi's heritage, culture, history, and tourism.
-Keep responses engaging, concise (2–3 sentences), and unique.
+Keep responses engaging, concise (2-3 sentences), and unique.
 """
 
-        full_prompt = system_prompt + "\n\nUser: " + user_message
+    full_prompt = system_prompt + "\nUser: " + user_message
 
-        # Retry up to 3 times if server overloaded
-        for attempt in range(3):
-            try:
-                response = client.models.generate_content(
-                    model=MODEL_NAME,
-                    contents=full_prompt,
-                )
-                return response.text
-            except ServerError as e:
-                if attempt < 2:
-                    time.sleep(2)  # wait 2 seconds
-                else:
-                    raise e
+    try:
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",   # use stable model
+            contents=full_prompt,
+        )
+
+        return response.text
 
     except Exception as e:
-        print("FULL GEMINI ERROR:\n", traceback.format_exc())
-        return "The AI service is currently busy. Please try again in a few seconds."
+        import traceback
+        print("🔥🔥🔥 FULL GEMINI ERROR 🔥🔥🔥")
+        traceback.print_exc()
+        return f"DEBUG ERROR: {str(e)}"
