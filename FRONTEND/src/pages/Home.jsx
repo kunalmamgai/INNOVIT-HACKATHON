@@ -11,8 +11,14 @@ export default function Home(){
           <source src="/assets/hero.mp4" type="video/mp4" />
         </video>
         <div className="z-10 text-center text-white px-4">
-          <h1 className="text-4xl md:text-6xl font-bold">Explore India's Living Heritage</h1>
-          <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto">Discover sites, festivals, crafts and cuisines that shaped culture.</p>
+          <h1 className="text-4xl md:text-6xl font-bold">Experience Heritage in AR/VR First</h1>
+          <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto">Start immersive cultural tours instantly, then plan physical visits with data-backed insights.</p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/virtual-tour" className="px-6 py-3 rounded-xl bg-gold text-gray-900 font-bold hover:bg-gold/90 transition">
+              Start Virtual Tour
+            </Link>
+            
+          </div>
         </div>
       </div>
 
@@ -107,6 +113,19 @@ export default function Home(){
               <h3 className="font-bold text-gold">Artisans</h3>
               <p className="mt-2 text-sm text-gray-300">Stories from living craftspeople and galleries.</p>
             </div>
+          </div>
+        </div>
+
+        <div className="mt-10 p-6 rounded-2xl border border-gold/25 bg-gray-900 text-white">
+          <h3 className="text-2xl font-bold text-gold">Tourism Event Co-Publishing</h3>
+          <p className="mt-3 text-gray-300 max-w-4xl">
+            Co-publish verified cultural events with tourism departments and showcase each event through AR/VR previews,
+            festival context, and destination storytelling.
+          </p>
+          <div className="mt-4">
+            <Link to="/tourism-event-co-publishing" className="inline-block px-5 py-2.5 bg-gold text-gray-900 rounded font-semibold hover:bg-gold/90 transition">
+              Open Tourism Events
+            </Link>
           </div>
         </div>
       </motion.div>

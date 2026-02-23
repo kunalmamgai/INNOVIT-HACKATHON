@@ -2,6 +2,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi import Response
 import requests
+import json
+from pathlib import Path
+from datetime import datetime
 from data import HeritageStore
 from delhi_places import delhi_places
 from india_places import india_places
@@ -12,6 +15,120 @@ from recommend import generate_recommendations
 from payments import process_payment
 
 app = FastAPI(title="Delhi Heritage Backend")
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+LIKES_FILE = ROOT_DIR / "likes.json"
+COMMENTS_FILE = ROOT_DIR / "comments.json"
+GOV_REPORTS_FILE = ROOT_DIR / "gov_reports.json"
+
+
+def _read_json_file(file_path: Path, default):
+    try:
+        if not file_path.exists():
+            return default
+        with file_path.open("r", encoding="utf-8") as handle:
+            return json.load(handle)
+    except Exception:
+        return default
+
+
+def _write_json_file(file_path: Path, payload):
+    with file_path.open("w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2, ensure_ascii=False)
+
+
+def get_likes(discussion_id: int):
+    likes_map = _read_json_file(LIKES_FILE, {})
+    return len(likes_map.get(str(discussion_id), []))
+
+
+def increment_like(discussion_id: int, user_id: str):
+    likes_map = _read_json_file(LIKES_FILE, {})
+    key = str(discussion_id)
+    users = likes_map.get(key, [])
+    if user_id not in users:
+        users.append(user_id)
+    likes_map[key] = users
+    _write_json_file(LIKES_FILE, likes_map)
+    return len(users)
+
+
+def get_comments(discussion_id: int | None = None):
+    comments = _read_json_file(COMMENTS_FILE, [])
+    if discussion_id is None:
+        return comments
+    return [c for c in comments if int(c.get("discussion_id", 0)) == int(discussion_id)]
+
+
+def add_comment(discussion_id: int, author: str, text: str):
+    comments = _read_json_file(COMMENTS_FILE, [])
+    comment = {
+        "comment_id": f"CMT_{int(datetime.utcnow().timestamp() * 1000)}_{len(comments)}",
+        "discussion_id": int(discussion_id),
+        "author": author,
+        "text": text,
+        "created_at": datetime.utcnow().isoformat(),
+    }
+    comments.append(comment)
+    _write_json_file(COMMENTS_FILE, comments)
+    return comment
+
+
+def delete_comment(comment_id: str):
+    comments = _read_json_file(COMMENTS_FILE, [])
+    updated = [c for c in comments if str(c.get("comment_id")) != str(comment_id)]
+    if len(updated) == len(comments):
+        return False
+    _write_json_file(COMMENTS_FILE, updated)
+    return True
+
+
+def get_gov_reports(status: str | None = None):
+    reports = _read_json_file(GOV_REPORTS_FILE, [])
+    if status:
+        return [r for r in reports if str(r.get("status", "")).lower() == status.lower()]
+    return reports
+
+
+def add_gov_report(payload: dict):
+    reports = _read_json_file(GOV_REPORTS_FILE, [])
+    report = {
+        "report_id": f"RPT_{int(datetime.utcnow().timestamp() * 1000)}",
+        "site_name": payload.get("site_name"),
+        "issue_type": payload.get("issue_type", "other"),
+        "description": payload.get("description", ""),
+        "reported_by": payload.get("reported_by", "anonymous"),
+        "status": "open",
+        "priority": payload.get("priority", "medium"),
+        "created_at": datetime.utcnow().isoformat(),
+    }
+    reports.append(report)
+    _write_json_file(GOV_REPORTS_FILE, reports)
+    return report
+
+
+def update_gov_report_status(report_id: str, status: str, reviewed_by: str | None = None):
+    reports = _read_json_file(GOV_REPORTS_FILE, [])
+    allowed = {"open", "closed"}
+    normalized_status = str(status or "").strip().lower()
+    if normalized_status not in allowed:
+        return None
+
+    updated_report = None
+    for report in reports:
+        if str(report.get("report_id")) == str(report_id):
+            report["status"] = normalized_status
+            report["updated_at"] = datetime.utcnow().isoformat()
+            if reviewed_by:
+                report["reviewed_by"] = reviewed_by
+            updated_report = report
+            break
+
+    if not updated_report:
+        return False
+
+    _write_json_file(GOV_REPORTS_FILE, reports)
+    return updated_report
 
 
 app.add_middleware(
@@ -134,7 +251,7 @@ def recommend(data: dict):
         return {"error": "User not logged in"}
     # use store's places to generate a lightweight itinerary
     places = store.get_all()
-    itinerary = generate_itinerary(user=user, places=places, time_hours=float(time_limit))
+    itinerary = generate_recommendations(user=user, places=places, time_available=int(float(time_limit)))
     return itinerary
 
 
@@ -271,5 +388,56 @@ def comments_delete(comment_id: str | None = None):
     if not deleted:
         return {"error": "comment not found"}
     return {"deleted": comment_id}
+
+
+@app.get("/gov/metrics")
+def gov_metrics():
+    places = store.get_all()
+    reports = get_gov_reports()
+    open_reports = [r for r in reports if r.get("status") == "open"]
+    closed_reports = [r for r in reports if r.get("status") == "closed"]
+    comments = get_comments()
+    likes_map = _read_json_file(LIKES_FILE, {})
+    total_likes = sum(len(v) for v in likes_map.values())
+
+    return {
+        "total_places": len(places),
+        "total_discussions": len(discussions),
+        "total_comments": len(comments),
+        "total_likes": total_likes,
+        "total_reports": len(reports),
+        "open_reports": len(open_reports),
+        "closed_reports": len(closed_reports),
+        "updated_at": datetime.utcnow().isoformat(),
+    }
+
+
+@app.get("/gov/reports")
+def gov_reports(status: str | None = None):
+    return get_gov_reports(status=status)
+
+
+@app.post("/gov/reports")
+def gov_reports_create(data: dict):
+    site_name = data.get("site_name")
+    description = data.get("description")
+    if not site_name or not description:
+        return {"error": "site_name and description are required"}
+    return add_gov_report(data)
+
+
+@app.patch("/gov/reports/{report_id}/status")
+def gov_reports_update_status(report_id: str, data: dict):
+    status = data.get("status")
+    reviewed_by = data.get("reviewed_by")
+    if not status:
+        return {"error": "status is required"}
+
+    updated = update_gov_report_status(report_id=report_id, status=status, reviewed_by=reviewed_by)
+    if updated is None:
+        return {"error": "status must be open or closed"}
+    if updated is False:
+        return {"error": "report not found"}
+    return updated
 
 
