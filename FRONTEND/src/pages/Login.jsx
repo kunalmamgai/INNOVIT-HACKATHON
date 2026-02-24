@@ -7,6 +7,8 @@ export default function AuthPage() {
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -46,6 +48,7 @@ export default function AuthPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccessMessage("");
     setLoading(true);
 
     try {
@@ -57,13 +60,13 @@ export default function AuthPage() {
 
       const result = await response.json();
 
-      // ✅ If backend returned error status
-      if (!response.ok) {
-        setError(result.detail || "Login failed");
+      // Handle backend errors
+      if (!response.ok || result.error) {
+        setError(result.error || result.detail || "Login failed");
         return;
       }
 
-      // ✅ Successful login
+      // Success
       localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("currentUser", JSON.stringify(result));
 
@@ -79,8 +82,6 @@ export default function AuthPage() {
     } finally {
       setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -94,9 +95,17 @@ export default function AuthPage() {
           {isSignup ? "Create Account" : "Login"}
         </h2>
 
+        {/* Error Message */}
         {error && (
           <div className="bg-red-500/20 text-red-300 p-3 rounded mb-4">
             {error}
+          </div>
+        )}
+
+        {/* Success Message */}
+        {successMessage && (
+          <div className="bg-green-500/20 text-green-300 p-3 rounded mb-4">
+            {successMessage}
           </div>
         )}
 
@@ -148,10 +157,11 @@ export default function AuthPage() {
                     type="button"
                     key={i}
                     onClick={() => toggleInterest(i)}
-                    className={`py-2 rounded text-sm ${formData.interests.includes(i)
-                      ? "bg-gold text-black"
-                      : "bg-gray-800 text-gray-300 border border-gray-600"
-                      }`}
+                    className={`py-2 rounded text-sm ${
+                      formData.interests.includes(i)
+                        ? "bg-gold text-black"
+                        : "bg-gray-800 text-gray-300 border border-gray-600"
+                    }`}
                   >
                     {i}
                   </button>
