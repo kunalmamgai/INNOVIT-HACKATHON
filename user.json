@@ -6,5 +6,27 @@
     "interests": [
       "History"
     ]
+  },
+  "cfde58fa-1e56-4fe9-b303-660c38217af1": {
+    "user_id": "cfde58fa-1e56-4fe9-b303-660c38217af1",
+    "name": "Kunal 20260224232051",
+    "email": "kunal.test.20260224232051@gmail.com",
+    "password": "$pbkdf2-sha256$29000$FSLk/B/DOAcgZMxZq/Ueww$39omN7HD49ojdUakl7l/TDaJ7BY9pT5MHt6NTfs.p7o",
+    "user_type": "indian",
+    "interests": [
+      "History"
+    ],
+    "created_at": "2026-02-24T17:50:51.087401"
+  },
+  "72b5b460-c921-49c0-a9e0-e6f3d8cf9f20": {
+    "user_id": "72b5b460-c921-49c0-a9e0-e6f3d8cf9f20",
+    "name": "Kunal Mamgai",
+    "email": "kunalmamgai@gmail.com",
+    "password": "$pbkdf2-sha256$29000$AaBUyvm/1/o/Rwjh3Lt37g$AbvX06WdEwahP56jP8KOabdvOaAVTrODZukfyq/sIYU",
+    "user_type": "indian",
+    "interests": [
+      "Religion"
+    ],
+    "created_at": "2026-02-24T17:51:42.371501"
   }
 }

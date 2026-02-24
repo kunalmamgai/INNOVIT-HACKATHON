@@ -138,3 +138,33 @@ html.dark button {
     display: none;
   }
 }
+
+/* Keep browser autofill consistent with dark form blocks */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f0f0f0 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #1f2937 inset !important;
+  box-shadow: 0 0 0px 1000px #1f2937 inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.dark-form-field {
+  background-color: #1f2937 !important;
+  color: #f0f0f0 !important;
+  border-color: rgba(192, 154, 75, 0.25) !important;
+}
+
+.dark-form-field:-webkit-autofill,
+.dark-form-field:-webkit-autofill:hover,
+.dark-form-field:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f0f0f0 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #1f2937 inset !important;
+  box-shadow: 0 0 0px 1000px #1f2937 inset !important;
+}
