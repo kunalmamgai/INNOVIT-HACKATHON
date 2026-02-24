@@ -99,7 +99,7 @@ export default function Heritage(){
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold mb-2">🏛️ Heritage Monuments Map</h1>
-          <p className="text-gray-400">Explore {validPlaces.length} historic monuments across Delhi</p>
+          <p className="text-gray-400">Explore {validPlaces.length} historic monuments across India</p>
         </div>
         <div className="flex gap-3">
           <motion.button
