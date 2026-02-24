@@ -26,28 +26,31 @@ export default function Explore({ currentUser: propUser }) {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("info");
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     // Load places
     fetch(apiUrl("/places"))
       .then((res) => res.json())
       .then((data) => {
-        const placesArray = Array.isArray(data) ? data : Object.entries(data).map(([key, value]) => ({
-          ...value,
-          key: key
-        }));
+        const placesArray = Array.isArray(data)
+          ? data
+          : Object.entries(data).map(([key, value]) => ({ ...value, key }));
         setPlaces(placesArray);
       })
       .catch((err) => console.error(err));
 
-    // Check if user is logged in
-    const savedUser = localStorage.getItem("currentUser") || propUser;
-    if (savedUser) {
-      if (typeof savedUser === 'string') {
-        setCurrentUser(JSON.parse(savedUser));
-      } else {
-        setCurrentUser(savedUser);
+    // FIX: propUser from App.jsx is the parsed object, localStorage value is a JSON string
+    // Prefer propUser (already parsed) then fall back to localStorage
+    if (propUser && typeof propUser === 'object') {
+      setCurrentUser(propUser);
+    } else {
+      const savedUser = localStorage.getItem("currentUser");
+      if (savedUser) {
+        try {
+          setCurrentUser(JSON.parse(savedUser));
+        } catch {
+          localStorage.removeItem("currentUser");
+        }
       }
     }
   }, [propUser]);
@@ -70,9 +73,14 @@ export default function Explore({ currentUser: propUser }) {
     }
 
     try {
+      // FIX: include Authorization header using access_token (matches api.js / backend auth)
+      const token = localStorage.getItem("access_token");
       const response = await fetch(apiUrl("/bookings"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
         body: JSON.stringify({
           user_id: currentUser.user_id,
           place_key: selectedPlace.key || selectedPlace.name.toLowerCase().replace(/\s+/g, "_"),
@@ -83,9 +91,9 @@ export default function Explore({ currentUser: propUser }) {
       });
 
       const result = await response.json();
-      
+
       if (result.error) {
-        showMessage(`Payment Error: ${result.error}`, "error");
+        showMessage(`Booking Error: ${result.error}`, "error");
       } else {
         setPendingBooking(result);
         setShowBookingForm(false);
@@ -103,10 +111,10 @@ export default function Explore({ currentUser: propUser }) {
       showMessage('No pending booking found', "error");
       return;
     }
-    // Validate based on payment method
+
     const method = paymentData.payment_method || "card";
 
-      if (method === "card") {
+    if (method === "card") {
       if (!paymentData.cardNumber || !paymentData.expiryDate || !paymentData.cvv || !paymentData.cardholder) {
         showMessage('Please fill in all card details', "error");
         return;
@@ -127,6 +135,7 @@ export default function Explore({ currentUser: propUser }) {
     }
 
     try {
+      const token = localStorage.getItem("access_token");
       const body = {
         booking_id: pendingBooking.booking_id,
         user_id: currentUser.user_id,
@@ -137,7 +146,10 @@ export default function Explore({ currentUser: propUser }) {
 
       const response = await fetch(apiUrl("/payments"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
         body: JSON.stringify(body),
       });
 
@@ -147,25 +159,17 @@ export default function Explore({ currentUser: propUser }) {
         showMessage(`Payment Error: ${result.error}`, "error");
       } else {
         showMessage(`✓ Payment Successful! Payment ID: ${result.payment_id}`, "success");
-
-        // Reset forms
         setShowPaymentForm(false);
         setPendingBooking(null);
         setBookingData({ visit_date: "", num_tickets: 1, ticket_type: "indian" });
         setPaymentData({ cardNumber: "", expiryDate: "", cvv: "", cardholder: "", payment_method: "card", upiId: "" });
         setSelectedPlace(null);
-
-        setTimeout(() => {
-          showMessage('Booking created! Now proceed to payment.', "success");
-        }, 1000);
       }
     } catch (err) {
       console.error("Payment error:", err);
-      showMessage('Failed to create booking. Please try again.', "error");
+      showMessage('Failed to process payment. Please try again.', "error");
     }
   };
-
-  // Allow exploring without login; booking will redirect to login if needed.
 
   if (!places.length) {
     return (
@@ -178,21 +182,24 @@ export default function Explore({ currentUser: propUser }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-2 ">Explore Delhi Heritage</h1>
-      <p className="text-gray-300 mb-8">{currentUser ? `Welcome, ${currentUser.name}! Click on any monument to learn more and book a tour.` : 'Explore monuments — login to book to reserve tours.'}</p>
-      
+      <h1 className="text-4xl font-bold mb-2">Explore Delhi Heritage</h1>
+      <p className="text-gray-300 mb-8">
+        {currentUser
+          ? `Welcome, ${currentUser.name}! Click on any monument to learn more and book a tour.`
+          : 'Explore monuments — login to book and reserve tours.'}
+      </p>
+
       {message && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`mb-6 p-4 rounded text-white ${
-            messageType === "error" ? "bg-red-600" : messageType === "success" ? "bg-green-600" : "bg-blue-600"
-          }`}
+          className={`mb-6 p-4 rounded text-white ${messageType === "error" ? "bg-red-600" : messageType === "success" ? "bg-green-600" : "bg-blue-600"
+            }`}
         >
           {message}
         </motion.div>
       )}
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         {places.map((p) => (
           <motion.div
@@ -205,9 +212,7 @@ export default function Explore({ currentUser: propUser }) {
               src={p.image || "/assets/placeholder-image.svg"}
               alt={p.name}
               className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
-              onError={(e) => {
-                e.target.src = "/assets/placeholder-image.svg";
-              }}
+              onError={(e) => { e.target.src = "/assets/placeholder-image.svg"; }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70 group-hover:opacity-50 transition" />
             <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
@@ -221,6 +226,7 @@ export default function Explore({ currentUser: propUser }) {
         ))}
       </div>
 
+      {/* Place Detail Modal */}
       {selectedPlace && !showBookingForm && !showPaymentForm && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -235,19 +241,12 @@ export default function Explore({ currentUser: propUser }) {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={selectedPlace.image || "https://via.placeholder.com/400x300"}
+              src={selectedPlace.image || "/assets/placeholder-image.svg"}
               alt={selectedPlace.name}
               className="w-full h-64 object-cover"
             />
-
             <div className="p-6">
-              <button
-                onClick={() => setSelectedPlace(null)}
-                className="float-right text-gray-400 hover:text-white text-2xl mb-4"
-              >
-                ✕
-              </button>
-
+              <button onClick={() => setSelectedPlace(null)} className="float-right text-gray-400 hover:text-white text-2xl mb-4">✕</button>
               <h2 className="text-4xl font-bold text-white mb-2 clear-both">{selectedPlace.name}</h2>
               <p className="text-gold text-lg mb-4">{selectedPlace.cluster}</p>
 
@@ -286,7 +285,7 @@ export default function Explore({ currentUser: propUser }) {
               )}
 
               <div className="flex gap-3">
-                  <button
+                <button
                   onClick={() => setShowBookingForm(true)}
                   className="flex-1 bg-gold text-gray-800 px-4 py-3 rounded font-bold text-lg hover:bg-gold/90 transition"
                 >
@@ -304,6 +303,7 @@ export default function Explore({ currentUser: propUser }) {
         </motion.div>
       )}
 
+      {/* Booking Form Modal */}
       {showBookingForm && selectedPlace && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -317,14 +317,8 @@ export default function Explore({ currentUser: propUser }) {
             className="bg-gray-900 rounded-lg max-w-md w-full p-6"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setShowBookingForm(false)}
-              className="float-right text-gray-400 hover:text-white text-2xl mb-4"
-            >
-              ✕
-            </button>
-
-            <h2 className="text-3xl font-bold text-white mb-6 clear-both">Book Tour {selectedPlace.name}</h2>
+            <button onClick={() => setShowBookingForm(false)} className="float-right text-gray-400 hover:text-white text-2xl mb-4">✕</button>
+            <h2 className="text-3xl font-bold text-white mb-6 clear-both">Book Tour — {selectedPlace.name}</h2>
 
             <div className="space-y-4">
               <div>
@@ -347,7 +341,7 @@ export default function Explore({ currentUser: propUser }) {
                 >
                   {selectedPlace.tickets && Object.keys(selectedPlace.tickets).map((type) => (
                     <option key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1)} - ₹{selectedPlace.tickets[type]}
+                      {type.charAt(0).toUpperCase() + type.slice(1)} — ₹{selectedPlace.tickets[type]}
                     </option>
                   ))}
                 </select>
@@ -374,17 +368,10 @@ export default function Explore({ currentUser: propUser }) {
                 </div>
               )}
 
-              <button
-                onClick={handleBookingSubmit}
-                className="w-full bg-gold text-gray-800 px-4 py-3 rounded font-bold text-lg hover:bg-gold/90 transition"
-              >
+              <button onClick={handleBookingSubmit} className="w-full bg-gold text-gray-800 px-4 py-3 rounded font-bold text-lg hover:bg-gold/90 transition">
                 ✓ Continue to Payment
               </button>
-
-              <button
-                onClick={() => setShowBookingForm(false)}
-                className="w-full bg-gray-700 text-white px-4 py-3 rounded font-bold text-lg hover:bg-gray-600 transition"
-              >
+              <button onClick={() => setShowBookingForm(false)} className="w-full bg-gray-700 text-white px-4 py-3 rounded font-bold text-lg hover:bg-gray-600 transition">
                 Cancel
               </button>
             </div>
@@ -406,20 +393,14 @@ export default function Explore({ currentUser: propUser }) {
             className="bg-gray-900 rounded-lg max-w-md w-full p-6"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setShowPaymentForm(false)}
-              className="float-right text-gray-400 hover:text-white text-2xl mb-4"
-            >
-              ✕
-            </button>
-
+            <button onClick={() => setShowPaymentForm(false)} className="float-right text-gray-400 hover:text-white text-2xl mb-4">✕</button>
             <h2 className="text-3xl font-bold text-white mb-2 clear-both">Payment</h2>
             <p className="text-gray-400 mb-6">Booking ID: {pendingBooking.booking_id}</p>
 
             <div className="bg-gray-800 p-4 rounded mb-6 border border-gold">
               <p className="text-gray-300 text-sm mb-1">Amount to Pay:</p>
               <p className="text-3xl font-bold text-gold">₹{pendingBooking.total_price}</p>
-              <p className="text-gray-400 text-xs mt-2">{pendingBooking.place_name} - {pendingBooking.num_tickets} ticket(s)</p>
+              <p className="text-gray-400 text-xs mt-2">{pendingBooking.place_name} — {pendingBooking.num_tickets} ticket(s)</p>
             </div>
 
             <div className="space-y-4">
@@ -438,47 +419,45 @@ export default function Explore({ currentUser: propUser }) {
               {paymentData.payment_method === "card" && (
                 <>
                   <div>
-                    <label className="block text-white mb-2 font-bold text-sm">Full name on card</label>
+                    <label className="block text-white mb-2 font-bold text-sm">Full Name on Card</label>
                     <input
                       type="text"
                       value={paymentData.cardholder}
                       onChange={(e) => setPaymentData({ ...paymentData, cardholder: e.target.value })}
-                      placeholder={'Full name on card'}
+                      placeholder="Full name on card"
                       className="w-full bg-gray-800 text-white px-4 py-2 rounded border border-gray-600 focus:border-gold outline-none text-sm"
                     />
                   </div>
-
                   <div>
-                      <label className="block text-white mb-2 font-bold text-sm">1234 5678 9012 3456</label>
+                    <label className="block text-white mb-2 font-bold text-sm">Card Number</label>
                     <input
                       type="text"
                       value={paymentData.cardNumber}
                       onChange={(e) => setPaymentData({ ...paymentData, cardNumber: e.target.value })}
-                      placeholder={'1234 5678 9012 3456'}
+                      placeholder="1234 5678 9012 3456"
                       maxLength="19"
                       className="w-full bg-gray-800 text-white px-4 py-2 rounded border border-gray-600 focus:border-gold outline-none text-sm"
                     />
                   </div>
-
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-white mb-2 font-bold text-sm">12/25</label>
+                      <label className="block text-white mb-2 font-bold text-sm">Expiry Date</label>
                       <input
                         type="text"
                         value={paymentData.expiryDate}
                         onChange={(e) => setPaymentData({ ...paymentData, expiryDate: e.target.value })}
-                        placeholder={'12/25'}
+                        placeholder="12/25"
                         maxLength="5"
                         className="w-full bg-gray-800 text-white px-4 py-2 rounded border border-gray-600 focus:border-gold outline-none text-sm"
                       />
                     </div>
                     <div>
-                      <label className="block text-white mb-2 font-bold text-sm">123</label>
+                      <label className="block text-white mb-2 font-bold text-sm">CVV</label>
                       <input
                         type="text"
                         value={paymentData.cvv}
                         onChange={(e) => setPaymentData({ ...paymentData, cvv: e.target.value })}
-                        placeholder={'123'}
+                        placeholder="123"
                         maxLength="3"
                         className="w-full bg-gray-800 text-white px-4 py-2 rounded border border-gray-600 focus:border-gold outline-none text-sm"
                       />
@@ -494,33 +473,24 @@ export default function Explore({ currentUser: propUser }) {
                     type="text"
                     value={paymentData.upiId}
                     onChange={(e) => setPaymentData({ ...paymentData, upiId: e.target.value })}
-                    placeholder={'example@bank'}
+                    placeholder="example@bank"
                     className="w-full bg-gray-800 text-white px-4 py-2 rounded border border-gray-600 focus:border-gold outline-none text-sm"
                   />
                 </div>
               )}
 
-              <button
-                onClick={handlePaymentSubmit}
-                className="w-full bg-green-600 text-white px-4 py-3 rounded font-bold hover:bg-green-700 transition mb-2"
-              >
+              <button onClick={handlePaymentSubmit} className="w-full bg-green-600 text-white px-4 py-3 rounded font-bold hover:bg-green-700 transition mb-2">
                 💳 Pay ₹{pendingBooking.total_price}
               </button>
-
               <button
-                onClick={() => {
-                  setShowPaymentForm(false);
-                  setShowBookingForm(true);
-                }}
+                onClick={() => { setShowPaymentForm(false); setShowBookingForm(true); }}
                 className="w-full bg-gray-700 text-white px-4 py-3 rounded font-bold hover:bg-gray-600 transition"
               >
                 Back to Booking
               </button>
             </div>
 
-            <p className="text-gray-400 text-xs mt-4 text-center">
-              🔒 Payment is secure and processed safely
-            </p>
+            <p className="text-gray-400 text-xs mt-4 text-center">🔒 Payment is secure and processed safely</p>
           </motion.div>
         </motion.div>
       )}

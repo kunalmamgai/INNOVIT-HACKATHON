@@ -1,13 +1,16 @@
-from bson import ObjectId
 from datetime import datetime
 import uuid
 
 from auth import hash_password
 from mongo import users_collection
 
+# NOTE: removed unused `from bson import ObjectId`
+
 
 # ----------------------------
 # Create User
+# FIX: returns (user_data, None) on success, (None, "name"|"email") on conflict
+# so the caller can give a specific error message to the user
 # ----------------------------
 
 async def create_user(name: str, password: str, email: str = None,
@@ -16,16 +19,13 @@ async def create_user(name: str, password: str, email: str = None,
     if interests is None:
         interests = []
 
-    # Check if name exists
-    existing_name = await users_collection.find_one({"name": name})
-    if existing_name:
-        return None
+    # Check if name is taken
+    if await users_collection.find_one({"name": name}):
+        return None, "name"
 
-    # Check if email exists
-    if email:
-        existing_email = await users_collection.find_one({"email": email})
-        if existing_email:
-            return None
+    # Check if email is taken
+    if email and await users_collection.find_one({"email": email}):
+        return None, "email"
 
     user_id = str(uuid.uuid4())
     hashed_password = hash_password(password)
@@ -37,12 +37,12 @@ async def create_user(name: str, password: str, email: str = None,
         "password": hashed_password,
         "user_type": user_type,
         "interests": interests,
-        "created_at": datetime.utcnow()
+        "created_at": datetime.utcnow(),
     }
 
     await users_collection.insert_one(user_data)
 
-    return user_data
+    return user_data, None
 
 
 # ----------------------------
