@@ -52,32 +52,45 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(apiUrl("/login"), {
+      const endpoint = isSignup ? "/signup" : "/login";
+
+      const payload = isSignup
+        ? formData
+        : {
+            email: formData.email,
+            password: formData.password
+          };
+
+      const response = await fetch(apiUrl(endpoint), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
 
-      // Handle backend errors
       if (!response.ok || result.error) {
-        setError(result.error || result.detail || "Login failed");
+        setError(result.error || result.detail || "Authentication failed");
         return;
       }
 
-      // Success
-      localStorage.setItem("access_token", result.access_token);
-      localStorage.setItem("currentUser", JSON.stringify(result));
+      // Only store token on login
+      if (!isSignup) {
+        localStorage.setItem("access_token", result.access_token);
+        localStorage.setItem("currentUser", JSON.stringify(result));
 
-      setSuccessMessage(`Welcome ${result.name}! Redirecting...`);
+        setSuccessMessage(`Welcome ${result.name}! Redirecting...`);
 
-      setTimeout(() => {
-        navigate("/explore");
-      }, 1500);
+        setTimeout(() => {
+          navigate("/explore");
+        }, 1500);
+      } else {
+        setSuccessMessage("Account created successfully! Please login.");
+        setIsSignup(false);
+      }
 
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Auth error:", err);
       setError("Server error. Please try again.");
     } finally {
       setLoading(false);
@@ -95,14 +108,12 @@ export default function AuthPage() {
           {isSignup ? "Create Account" : "Login"}
         </h2>
 
-        {/* Error Message */}
         {error && (
           <div className="bg-red-500/20 text-red-300 p-3 rounded mb-4">
             {error}
           </div>
         )}
 
-        {/* Success Message */}
         {successMessage && (
           <div className="bg-green-500/20 text-green-300 p-3 rounded mb-4">
             {successMessage}
@@ -111,16 +122,19 @@ export default function AuthPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
+          {/* Name only in signup */}
           {isSignup && (
             <input
               type="text"
               name="name"
               placeholder="Full Name"
               onChange={handleChange}
+              required
               className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600"
             />
           )}
 
+          {/* Email always required */}
           <input
             type="email"
             name="email"
@@ -130,6 +144,7 @@ export default function AuthPage() {
             className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600"
           />
 
+          {/* Password always required */}
           <input
             type="password"
             name="password"
@@ -139,6 +154,7 @@ export default function AuthPage() {
             className="w-full bg-gray-800 text-white px-4 py-3 rounded border border-gray-600"
           />
 
+          {/* Extra fields only in signup */}
           {isSignup && (
             <>
               <select
