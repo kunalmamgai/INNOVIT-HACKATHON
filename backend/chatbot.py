@@ -24,7 +24,7 @@ MODEL_NAME = "gemini-flash-lite-latest"
 
 def get_ai_response(user_message: str, conversation_history: list = None) -> str:
     system_prompt = """
-You are an expert AI guide about Delhi's heritage, culture, history, and tourism.
+You are an expert AI guide about India's heritage, culture, history, and tourism.
 Keep responses engaging, concise (2-3 sentences), and unique.
 """
 
@@ -43,4 +43,5 @@ Keep responses engaging, concise (2-3 sentences), and unique.
         print("🔥🔥🔥 FULL GEMINI ERROR 🔥🔥🔥")
         traceback.print_exc()
         return f"DEBUG ERROR: {str(e)}"
+
 
