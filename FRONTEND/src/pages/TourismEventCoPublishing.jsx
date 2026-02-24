@@ -73,6 +73,24 @@ const publishingFlow = [
   },
 ]
 
+const topicImageSlots = [
+  {
+    id: 'img-1',
+    title: 'Event Highlight Visual',
+    imageUrl: 'https://miro.medium.com/1*T7Ay86Z_Wlj3rlLHodVb_w.jpeg',
+  },
+  {
+    id: 'img-2',
+    title: 'Government Partnership Banner',
+    imageUrl: 'https://studywrap.com/wp-content/uploads/2020/02/Ministry-of-Tourism.jpg',
+  },
+  {
+    id: 'img-3',
+    title: 'AR/VR Preview Snapshot',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwtpCgKCPL8m4MGqMIWK10S2VxeSlHTm9bPA&s',
+  },
+]
+
 export default function TourismEventCoPublishing() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -94,7 +112,30 @@ export default function TourismEventCoPublishing() {
         </div>
       </section>
 
-      <section className="mb-8">
+      <section className="mt-8 bg-gray-900 border-2 border-gold/30 rounded-xl p-5">
+        <h2 className="text-xl font-semibold text-gold mb-4">Topic Relevant Images</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {topicImageSlots.map((slot) => (
+            <div key={slot.id} className="rounded-xl border border-dashed border-gold/40 bg-gray-800/70 p-3">
+              <div className="aspect-video rounded-lg border border-gold/20 bg-gray-800 flex items-center justify-center">
+                {slot.imageUrl ? (
+                  <img
+                    src={slot.imageUrl}
+                    alt={slot.title}
+                    className="h-full w-full object-cover rounded-lg"
+                    loading="lazy"
+                  />
+                ) : (
+                  <p className="text-xs text-gray-400 uppercase tracking-wide">Image Space</p>
+                )}
+              </div>
+              <p className="text-sm text-gray-300 mt-3">{slot.title}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-8 mb-8">
         <h2 className="text-2xl font-bold text-gold mb-4">Key Points</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {eventPillars.map((pillar) => (
