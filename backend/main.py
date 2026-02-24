@@ -238,9 +238,26 @@ async def login(data: dict):
 
 @app.post("/signup")
 async def signup(data: dict):
-    name = data.get("name")
-    password = data.get("password")
-    email = data.get("email")
+    user = await create_user(
+        name=data["name"],
+        password=data["password"],
+        email=data["email"],
+        user_type=data.get("user_type", "indian"),
+        interests=data.get("interests", [])
+    )
+
+    if not user:
+        return {"error": "User already exists"}
+
+    return {"message": "User created successfully"}
+
+
+@app.post("/recommend")
+async def recommend(
+    data: dict,
+    user_id: str = Depends(get_current_user)
+):
+    time_limit = data.get("time", 6)
 
     if not name or not email or not password:
         return JSONResponse(status_code=400, content={"error": "Name, email, and password are all required"})
