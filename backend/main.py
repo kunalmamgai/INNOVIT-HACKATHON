@@ -1,6 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi import Response
+from fastapi import Depends
 import requests
 import json
 from pathlib import Path
@@ -8,11 +9,13 @@ from datetime import datetime
 from data import HeritageStore
 from delhi_places import delhi_places
 from india_places import india_places
-from user import create_user, get_user
 from chatbot import get_ai_response
 from bookings import create_booking, get_user_bookings
 from recommend import generate_recommendations
 from payments import process_payment
+from user import create_user, get_user, find_user_by_name, find_user_by_email
+from auth import verify_password, create_access_token, get_current_user
+
 
 app = FastAPI(title="Delhi Heritage Backend")
 
@@ -76,7 +79,8 @@ def add_comment(discussion_id: int, author: str, text: str):
 
 def delete_comment(comment_id: str):
     comments = _read_json_file(COMMENTS_FILE, [])
-    updated = [c for c in comments if str(c.get("comment_id")) != str(comment_id)]
+    updated = [c for c in comments if str(
+        c.get("comment_id")) != str(comment_id)]
     if len(updated) == len(comments):
         return False
     _write_json_file(COMMENTS_FILE, updated)
@@ -230,43 +234,65 @@ def proxy_image(url: str):
     except requests.exceptions.RequestException as e:
         return Response(status_code=502, content=str(e).encode('utf-8'))
 
+
 @app.post("/login")
-def login(data: dict):
+async def login(data: dict):
     name = data.get("name")
+    email = data.get("email")
     password = data.get("password")
 
-    if not name or not password:
-        return {"error": "name and password are required"}
+    if not password:
+        return {"error": "Password is required"}
 
-    user = get_user(name)
+    if not name and not email:
+        return {"error": "Name or email is required"}
+
+    # Find user
+    if email:
+        user = await find_user_by_email(email)
+    else:
+        user = await find_user_by_name(name)
 
     if not user:
         return {"error": "User not found"}
 
-    # If your user object stores password
-    if user.get("password") != password:
+    # Verify hashed password
+    if not verify_password(password, user["password"]):
         return {"error": "Invalid password"}
+
+    # Create JWT
+    token = create_access_token(user["user_id"])
 
     return {
         "message": "Login successful",
-        "user_id": user.get("user_id"),
-        "name": user.get("name"),
-        "user_type": user.get("user_type"),
-        "interests": user.get("interests", [])
+        "access_token": token,
+        "token_type": "bearer",
+        "user_id": user["user_id"],
+        "name": user["name"],
+        "email": user.get("email")
     }
 
 
 @app.post("/recommend")
-def recommend(data: dict):
-    user_id = data.get("user_id")
+async def recommend(
+    data: dict,
+    user_id: str = Depends(get_current_user)
+):
     time_limit = data.get("time", 6)
 
-    user = get_user(user_id)
+    user = await get_user(user_id)
+
     if not user:
-        return {"error": "User not logged in"}
-    # use store's places to generate a lightweight itinerary
+        return {"error": "User not found"}
+
     places = store.get_all()
-    itinerary = generate_recommendations(user=user, places=places, time_available=int(float(time_limit)))
+
+    itinerary = generate_recommendations(
+        user=user,
+        places=places,
+        time_available=int(float(time_limit))
+    )
+
     return itinerary
 
 
@@ -391,7 +417,8 @@ def comments_post(data: dict):
     text = data.get("text", "")
     if not discussion_id or not text:
         return {"error": "discussion_id and text are required"}
-    comment = add_comment(discussion_id=discussion_id, author=author, text=text)
+    comment = add_comment(discussion_id=discussion_id,
+                          author=author, text=text)
     return comment
 
 
@@ -448,12 +475,10 @@ def gov_reports_update_status(report_id: str, data: dict):
     if not status:
         return {"error": "status is required"}
 
-    updated = update_gov_report_status(report_id=report_id, status=status, reviewed_by=reviewed_by)
+    updated = update_gov_report_status(
+        report_id=report_id, status=status, reviewed_by=reviewed_by)
     if updated is None:
         return {"error": "status must be open or closed"}
     if updated is False:
         return {"error": "report not found"}
     return updated
-
-
-
