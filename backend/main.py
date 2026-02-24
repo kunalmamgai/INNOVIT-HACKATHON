@@ -238,45 +238,29 @@ async def login(data: dict):
 
 @app.post("/signup")
 async def signup(data: dict):
-    user = await create_user(
-        name=data["name"],
-        password=data["password"],
-        email=data["email"],
-        user_type=data.get("user_type", "indian"),
-        interests=data.get("interests", [])
-    )
-
-    if not user:
-        return {"error": "User already exists"}
-
-    return {"message": "User created successfully"}
-
-
-@app.post("/recommend")
-async def recommend(
-    data: dict,
-    user_id: str = Depends(get_current_user)
-):
-    time_limit = data.get("time", 6)
+    name = data.get("name")
+    email = data.get("email")
+    password = data.get("password")
 
     if not name or not email or not password:
-        return JSONResponse(status_code=400, content={"error": "Name, email, and password are all required"})
+        return JSONResponse(status_code=400, content={"error": "Name, email, and password are required"})
 
-    # create_user now returns a (user, conflict) tuple — see user.py
     user, conflict = await create_user(
         name=name,
         password=password,
         email=email,
         user_type=data.get("user_type", "indian"),
-        interests=data.get("interests", []),
+        interests=data.get("interests", [])
     )
 
     if not user:
         if conflict == "email":
             return JSONResponse(status_code=409, content={"error": "An account with that email already exists"})
-        return JSONResponse(status_code=409, content={"error": "That username is already taken"})
+        if conflict == "name":
+            return JSONResponse(status_code=409, content={"error": "That username is already taken"})
+        return JSONResponse(status_code=500, content={"error": "Unable to create account"})
 
-    return {"message": "Account created successfully! Please log in."}
+    return {"message": "User created successfully"}
 
 
 @app.post("/recommend")
