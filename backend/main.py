@@ -1,6 +1,8 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi import Response
+from fastapi import Depends
+from fastapi.responses import JSONResponse
 import requests
 import json
 from pathlib import Path
@@ -8,11 +10,13 @@ from datetime import datetime
 from data import HeritageStore
 from delhi_places import delhi_places
 from india_places import india_places
-from user import create_user, get_user
 from chatbot import get_ai_response
 from bookings import create_booking, get_user_bookings
 from recommend import generate_recommendations
 from payments import process_payment
+from user import create_user, get_user, find_user_by_name, find_user_by_email
+from auth import verify_password, create_access_token, get_current_user
+
 
 app = FastAPI(title="Delhi Heritage Backend")
 
@@ -76,7 +80,8 @@ def add_comment(discussion_id: int, author: str, text: str):
 
 def delete_comment(comment_id: str):
     comments = _read_json_file(COMMENTS_FILE, [])
-    updated = [c for c in comments if str(c.get("comment_id")) != str(comment_id)]
+    updated = [c for c in comments if str(
+        c.get("comment_id")) != str(comment_id)]
     if len(updated) == len(comments):
         return False
     _write_json_file(COMMENTS_FILE, updated)
@@ -139,7 +144,8 @@ app.add_middleware(
         "http://localhost:5174",
         "http://127.0.0.1:5174",
         "https://heritage-and-culture-portal.vercel.app",
-        "http://127.0.0.1:8000"
+        "https://innovit-hackathon.vercel.app",
+        "http://127.0.0.1:8000",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -149,45 +155,18 @@ app.add_middleware(
 
 
 store = HeritageStore()
-
-
 store.add_bulk(delhi_places)
 store.add_bulk(india_places)
 
-# Simple discussions data exposed to frontend
 discussions = [
-    {
-        "id": 1,
-        "communityId": 2,
-        "author": "Ananya",
-        "text": "What are your favorite cultural events to attend in winter?",
-        "likes": 32,
-        "comments": 11,
-    },
-    {
-        "id": 2,
-        "communityId": 4,
-        "author": "Rahul",
-        "text": "Looking for authentic food routes during upcoming festivals. Suggestions?",
-        "likes": 21,
-        "comments": 8,
-    },
-    {
-        "id": 3,
-        "communityId": 5,
-        "author": "Sanya",
-        "text": "Which apps are best for documenting local heritage sites with photos?",
-        "likes": 18,
-        "comments": 6,
-    },
-    {
-        "id": 4,
-        "communityId": 1,
-        "author": "Vivek",
-        "text": "Any ideas for a health awareness campaign at the neighborhood level?",
-        "likes": 26,
-        "comments": 13,
-    },
+    {"id": 1, "communityId": 2, "author": "Ananya",
+        "text": "What are your favorite cultural events to attend in winter?", "likes": 32, "comments": 11},
+    {"id": 2, "communityId": 4, "author": "Rahul",
+        "text": "Looking for authentic food routes during upcoming festivals. Suggestions?", "likes": 21, "comments": 8},
+    {"id": 3, "communityId": 5, "author": "Sanya",
+        "text": "Which apps are best for documenting local heritage sites with photos?", "likes": 18, "comments": 6},
+    {"id": 4, "communityId": 1, "author": "Vivek",
+        "text": "Any ideas for a health awareness campaign at the neighborhood level?", "likes": 26, "comments": 13},
 ]
 
 
@@ -211,61 +190,102 @@ def get_place(place_key: str):
 
 @app.get("/proxy-image")
 def proxy_image(url: str):
-    """Simple proxy to fetch remote images and return them from this origin to avoid CORS issues
-    Used by the frontend virtual tour to load textures that would otherwise be blocked.
-    """
     if not url:
-        return Response(status_code=400, content=b'url query param is required')
+        return Response(status_code=400, content=b"url query param is required")
     try:
-        # use requests for more robust redirect and header handling
-        parsed_host = url.split('//')[-1].split('/')[0].lower()
+        parsed_host = url.split("//")[-1].split("/")[0].lower()
         headers = {"User-Agent": "Mozilla/5.0", "Accept": "image/*,*/*;q=0.8"}
-        if 'unsplash.com' in parsed_host or 'images.unsplash.com' in parsed_host:
-            headers['Referer'] = 'https://unsplash.com'
+        if "unsplash.com" in parsed_host or "images.unsplash.com" in parsed_host:
+            headers["Referer"] = "https://unsplash.com"
         resp = requests.get(url, headers=headers, timeout=20, stream=True)
         resp.raise_for_status()
         content = resp.content
-        ctype = resp.headers.get('Content-Type', 'image/jpeg')
+        ctype = resp.headers.get("Content-Type", "image/jpeg")
         return Response(content=content, media_type=ctype, headers={"Access-Control-Allow-Origin": "*"})
     except requests.exceptions.RequestException as e:
-        return Response(status_code=502, content=str(e).encode('utf-8'))
+        return Response(status_code=502, content=str(e).encode("utf-8"))
 
 
 @app.post("/login")
-def login(data: dict):
-    user = create_user(
-        name=data["name"],
+async def login(data: dict):
+    name = data.get("name")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not password:
+        return JSONResponse(status_code=400, content={"error": "Password is required"})
+    if not name and not email:
+        return JSONResponse(status_code=400, content={"error": "Email is required"})
+
+    user = await find_user_by_email(email) if email else await find_user_by_name(name)
+
+    if not user:
+        return JSONResponse(status_code=404, content={"error": "No account found with that email"})
+    if not verify_password(password, user["password"]):
+        return JSONResponse(status_code=401, content={"error": "Incorrect password"})
+
+    token = create_access_token(user["user_id"])
+
+    return {
+        "message": "Login successful",
+        "access_token": token,
+        "token_type": "bearer",
+        "user_id": user["user_id"],
+        "name": user["name"],
+        "email": user.get("email"),
+    }
+
+
+@app.post("/signup")
+async def signup(data: dict):
+    name = data.get("name")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not name or not email or not password:
+        return JSONResponse(status_code=400, content={"error": "Name, email, and password are required"})
+
+    user, conflict = await create_user(
+        name=name,
+        password=password,
+        email=email,
         user_type=data.get("user_type", "indian"),
         interests=data.get("interests", [])
     )
-    return user
+
+    if not user:
+        if conflict == "email":
+            return JSONResponse(status_code=409, content={"error": "An account with that email already exists"})
+        if conflict == "name":
+            return JSONResponse(status_code=409, content={"error": "That username is already taken"})
+        return JSONResponse(status_code=500, content={"error": "Unable to create account"})
+
+    return {"message": "User created successfully"}
 
 
 @app.post("/recommend")
-def recommend(data: dict):
-    user_id = data.get("user_id")
+async def recommend(data: dict, user_id: str = Depends(get_current_user)):
     time_limit = data.get("time", 6)
-
-    user = get_user(user_id)
+    user = await get_user(user_id)
     if not user:
-        return {"error": "User not logged in"}
-    # use store's places to generate a lightweight itinerary
+        return {"error": "User not found"}
     places = store.get_all()
-    itinerary = generate_recommendations(user=user, places=places, time_available=int(float(time_limit)))
+    itinerary = generate_recommendations(
+        user=user, places=places, time_available=int(float(time_limit)))
     return itinerary
 
 
 @app.post("/chat")
 def chat_endpoint(data: dict):
-    """Chat endpoint that forwards to the chatbot helper."""
     message = data.get("message", "")
     history = data.get("conversation_history", [])
     resp = get_ai_response(message, conversation_history=history)
     return {"response": resp}
 
 
+# FIX: changed from `def` to `async def` and added `await` — create_booking is async (uses Motor/MongoDB)
 @app.post("/bookings")
-def create_booking_endpoint(data: dict):
+async def create_booking_endpoint(data: dict):
     user_id = data.get("user_id")
     place_key = data.get("place_key")
     visit_date = data.get("visit_date")
@@ -289,7 +309,7 @@ def create_booking_endpoint(data: dict):
     tickets = place.get("tickets", {}) if isinstance(place, dict) else {}
     price = float(tickets.get(ticket_type, 0))
 
-    booking = create_booking(
+    booking = await create_booking(
         user_id=user_id,
         place_name=place.get("name", place_key),
         place_key=place_key,
@@ -301,15 +321,17 @@ def create_booking_endpoint(data: dict):
     return booking
 
 
+# FIX: changed from `def` to `async def` and added `await` — get_user_bookings is async
 @app.get("/bookings")
-def get_bookings(user_id: str | None = None):
+async def get_bookings(user_id: str | None = None):
     if user_id:
-        return get_user_bookings(user_id)
+        return await get_user_bookings(user_id)
     return {"error": "user_id query param is required"}
 
 
+# FIX: changed from `def` to `async def` and added `await` — process_payment is async
 @app.post("/payments")
-def process_payment_endpoint(data: dict):
+async def process_payment_endpoint(data: dict):
     booking_id = data.get("booking_id")
     user_id = data.get("user_id")
     amount = data.get("amount")
@@ -319,7 +341,7 @@ def process_payment_endpoint(data: dict):
     if not booking_id or not user_id or amount is None:
         return {"error": "booking_id, user_id and amount are required"}
 
-    payment = process_payment(
+    payment = await process_payment(
         booking_id=booking_id,
         user_id=user_id,
         amount=float(amount),
@@ -331,14 +353,12 @@ def process_payment_endpoint(data: dict):
 
 @app.get("/discussions")
 def get_discussions():
-    # merge persisted likes (stored as deltas) and compute comment counts from storage
     merged = []
     for d in discussions:
         d_copy = d.copy()
         stored_likes = get_likes(d["id"]) or 0
         baseline_likes = int(d_copy.get("likes", 0))
         d_copy["likes"] = baseline_likes + int(stored_likes)
-        # compute comments count from persisted comments
         d_copy["comments"] = len(get_comments(d["id"]))
         merged.append(d_copy)
     return merged
@@ -352,9 +372,7 @@ def like_endpoint(data: dict):
         return {"error": "discussion_id is required"}
     if not user_id:
         return {"error": "user_id is required to like"}
-    # increment stored likes by user id
     new_stored_total = increment_like(discussion_id, str(user_id))
-    # find baseline from discussions list
     baseline = 0
     for d in discussions:
         if int(d["id"]) == int(discussion_id):
@@ -376,7 +394,8 @@ def comments_post(data: dict):
     text = data.get("text", "")
     if not discussion_id or not text:
         return {"error": "discussion_id and text are required"}
-    comment = add_comment(discussion_id=discussion_id, author=author, text=text)
+    comment = add_comment(discussion_id=discussion_id,
+                          author=author, text=text)
     return comment
 
 
@@ -399,7 +418,6 @@ def gov_metrics():
     comments = get_comments()
     likes_map = _read_json_file(LIKES_FILE, {})
     total_likes = sum(len(v) for v in likes_map.values())
-
     return {
         "total_places": len(places),
         "total_discussions": len(discussions),
@@ -432,12 +450,10 @@ def gov_reports_update_status(report_id: str, data: dict):
     reviewed_by = data.get("reviewed_by")
     if not status:
         return {"error": "status is required"}
-
-    updated = update_gov_report_status(report_id=report_id, status=status, reviewed_by=reviewed_by)
+    updated = update_gov_report_status(
+        report_id=report_id, status=status, reviewed_by=reviewed_by)
     if updated is None:
         return {"error": "status must be open or closed"}
     if updated is False:
         return {"error": "report not found"}
     return updated
-
-
