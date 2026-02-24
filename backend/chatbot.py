@@ -32,7 +32,7 @@ Keep responses engaging, concise (2-3 sentences), and unique.
 
     try:
         response = client.models.generate_content(
-            model="gemini-1.5-flash",   # use stable model
+            model="gemini-flash-lite-latest",   # use stable model
             contents=full_prompt,
         )
 
@@ -43,3 +43,4 @@ Keep responses engaging, concise (2-3 sentences), and unique.
         print("🔥🔥🔥 FULL GEMINI ERROR 🔥🔥🔥")
         traceback.print_exc()
         return f"DEBUG ERROR: {str(e)}"
+
