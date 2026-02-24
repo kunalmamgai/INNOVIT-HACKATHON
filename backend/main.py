@@ -230,15 +230,30 @@ def proxy_image(url: str):
     except requests.exceptions.RequestException as e:
         return Response(status_code=502, content=str(e).encode('utf-8'))
 
-
 @app.post("/login")
 def login(data: dict):
-    user = create_user(
-        name=data["name"],
-        user_type=data.get("user_type", "indian"),
-        interests=data.get("interests", [])
-    )
-    return user
+    name = data.get("name")
+    password = data.get("password")
+
+    if not name or not password:
+        return {"error": "name and password are required"}
+
+    user = get_user(name)
+
+    if not user:
+        return {"error": "User not found"}
+
+    # If your user object stores password
+    if user.get("password") != password:
+        return {"error": "Invalid password"}
+
+    return {
+        "message": "Login successful",
+        "user_id": user.get("user_id"),
+        "name": user.get("name"),
+        "user_type": user.get("user_type"),
+        "interests": user.get("interests", [])
+    }
 
 
 @app.post("/recommend")
@@ -439,5 +454,6 @@ def gov_reports_update_status(report_id: str, data: dict):
     if updated is False:
         return {"error": "report not found"}
     return updated
+
 
 
