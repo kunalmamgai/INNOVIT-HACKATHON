@@ -113,7 +113,7 @@ export default function TourismEventCoPublishing() {
       </section>
 
       <section className="mt-8 bg-gray-900 border-2 border-gold/30 rounded-xl p-5">
-        <h2 className="text-xl font-semibold text-gold mb-4">Topic Relevant Images</h2>
+        <h2 className="text-xl font-semibold text-gold mb-4">Together with Government</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {topicImageSlots.map((slot) => (
             <div key={slot.id} className="rounded-xl border border-dashed border-gold/40 bg-gray-800/70 p-3">
@@ -208,6 +208,83 @@ export default function TourismEventCoPublishing() {
           You get a clear government collaboration narrative, users get trusted event information, and tourism teams get measurable digital reach.
         </p>
       </div>
+
+      <section className="mt-8 bg-gradient-to-r from-gold/10 to-earth/10 border-2 border-gold/40 rounded-xl p-6">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gold mb-3">Partner With Us</h2>
+          <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+            Join India's leading heritage technology platform. Whether you're a government tourism department,
+            cultural institution, or event organizer, let's create immersive experiences together.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-gray-900/80 border border-gold/30 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-gold mb-2">Government Partners</h3>
+              <p className="text-sm text-gray-300 mb-3">Tourism departments, cultural ministries, and heritage boards</p>
+              <div className="text-xs text-gray-400">
+                ✓ Official co-publishing<br/>
+                ✓ AR/VR event previews<br/>
+                ✓ Performance analytics
+              </div>
+            </div>
+
+            <div className="bg-gray-900/80 border border-gold/30 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-gold mb-2">Event Organizers</h3>
+              <p className="text-sm text-gray-300 mb-3">Festivals, exhibitions, and cultural events</p>
+              <div className="text-xs text-gray-400">
+                ✓ Digital event hosting<br/>
+                ✓ Virtual attendance tracking<br/>
+                ✓ Multi-platform promotion
+              </div>
+            </div>
+
+            <div className="bg-gray-900/80 border border-gold/30 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-gold mb-2">Educational Institutions</h3>
+              <p className="text-sm text-gray-300 mb-3">Schools, universities, and learning centers</p>
+              <div className="text-xs text-gray-400">
+                ✓ Curriculum integration<br/>
+                ✓ AR/VR classroom tools<br/>
+                ✓ Heritage education programs
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gray-900/60 border border-gold/30 rounded-lg p-4 mb-6">
+            <h3 className="text-lg font-semibold text-gold mb-2">Contact Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-gray-300"><strong>Email:</strong> partnerships@heritageportal.in</p>
+                <p className="text-gray-300"><strong>Phone:</strong> +91-11-2345-6789</p>
+              </div>
+              <div>
+                <p className="text-gray-300"><strong>Address:</strong> Ministry of Tourism Building, New Delhi</p>
+                <p className="text-gray-300"><strong>Website:</strong> www.heritageportal.in/partners</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="mailto:partnerships@heritageportal.in?subject=Partnership%20Inquiry"
+              className="px-6 py-3 bg-gold text-gray-900 font-semibold rounded-lg hover:bg-gold/90 transition-all duration-300 shadow-lg hover:shadow-gold/30"
+            >
+              📧 Send Partnership Proposal
+            </a>
+            <a
+              href="tel:+91-11-2345-6789"
+              className="px-6 py-3 border-2 border-gold/60 text-gold font-semibold rounded-lg hover:bg-gold/10 transition-all duration-300"
+            >
+              📞 Schedule a Call
+            </a>
+            <Link
+              to="/contact"
+              className="px-6 py-3 border-2 border-earth/60 text-earth font-semibold rounded-lg hover:bg-earth/10 transition-all duration-300"
+            >
+              📝 Contact Form
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
