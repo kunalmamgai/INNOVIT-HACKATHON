@@ -16,6 +16,7 @@ const Contact = lazy(() => import('./pages/Contact'))
 const Explore = lazy(() => import('./pages/Explore'))
 const VirtualTour = lazy(() => import('./pages/VirtualTour'))
 const TourismEventCoPublishing = lazy(() => import('./pages/TourismEventCoPublishing'))
+const Headset = lazy(() => import('./pages/Headset'))
 const Login = lazy(() => import('./pages/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -79,6 +80,7 @@ export default function App() {
             <Route path="/community" element={<VirtualTour />} />
             <Route path="/virtual-tour" element={<VirtualTour />} />
             <Route path="/tourism-event-co-publishing" element={<TourismEventCoPublishing />} />
+            <Route path="/headset" element={<Headset />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             {/* Pass currentUser so Explore can use it without re-reading localStorage */}
