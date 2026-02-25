@@ -31,7 +31,8 @@ export default function Heritage(){
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showList, setShowList] = useState(false)
-  const center = [28.6139, 77.2090] // Delhi center
+  const center = [20.5937, 78.9629] // India center
+  const initialZoom = 4
 
   useEffect(() => {
     fetchPlaces()
@@ -137,7 +138,7 @@ export default function Heritage(){
             </div>
           ) : (
             <div className="h-[60vh] rounded overflow-hidden shadow">
-              <MapContainer center={center} zoom={11} style={{ height: '100%', width: '100%' }}>
+              <MapContainer center={center} zoom={initialZoom} style={{ height: '100%', width: '100%' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {validPlaces.map((site, idx) => {
                   const lat = site.lat || site.latitude

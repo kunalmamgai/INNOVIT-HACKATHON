@@ -25,6 +25,7 @@ export default function Explore({ currentUser: propUser }) {
   });
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("info");
+  const [recommendations, setRecommendations] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,6 +60,36 @@ export default function Explore({ currentUser: propUser }) {
     setMessage(msg);
     setMessageType(type);
     setTimeout(() => setMessage(""), 5000);
+  };
+
+  const fetchRecommendations = async () => {
+    if (!currentUser) {
+      showMessage("You need to login first", "error");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch(apiUrl("/recommend"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+        body: JSON.stringify({ time: 6 }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        showMessage(data.error, "error");
+      } else {
+        setRecommendations(data);
+      }
+    } catch (err) {
+      console.error(err);
+      showMessage("Failed to fetch recommendations", "error");
+    }
   };
 
   const handleBookingSubmit = async () => {
@@ -198,6 +229,49 @@ export default function Explore({ currentUser: propUser }) {
         >
           {message}
         </motion.div>
+      )}
+
+      {currentUser ? (
+        <div className="mb-8">
+          <button
+            onClick={fetchRecommendations}
+            className="bg-gold text-gray-800 px-6 py-3 rounded font-bold hover:bg-gold/90 transition"
+          >
+            Recommended for You
+          </button>
+          {recommendations.length > 0 && (
+            <div className="mt-4">
+              <h2 className="text-2xl font-bold mb-4">Your Personalized Recommendations</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {recommendations.map((p) => (
+                  <motion.div
+                    key={p.key || p.name}
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setSelectedPlace(p)}
+                    className="relative group h-64 rounded-lg overflow-hidden shadow-lg cursor-pointer border border-gold/30 hover:shadow-2xl transition"
+                  >
+                    <img
+                      src={p.image || "/assets/placeholder-image.svg"}
+                      alt={p.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+                      onError={(e) => { e.target.src = "/assets/placeholder-image.svg"; }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70 group-hover:opacity-50 transition" />
+                    <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
+                      <h3 className="text-xl font-bold mb-1">{p.name}</h3>
+                      <p className="text-sm text-gray-300 mb-3">{p.cluster}</p>
+                      <button className="w-full bg-gold text-gray-800 px-4 py-2 rounded font-medium hover:bg-gold/90 transition text-sm">
+                        View Details
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <p className="text-gray-300 mb-8">For personalized recommendations. Please Login!</p>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">

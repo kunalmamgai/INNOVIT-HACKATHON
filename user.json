@@ -28,5 +28,16 @@
       "Religion"
     ],
     "created_at": "2026-02-24T17:51:42.371501"
+  },
+  "dead50f9-c6f6-4aa5-b4c5-e6a6214cb5ce": {
+    "user_id": "dead50f9-c6f6-4aa5-b4c5-e6a6214cb5ce",
+    "name": "Nitin Chahar",
+    "email": "nitin@gmail.com",
+    "password": "$pbkdf2-sha256$29000$O0eotXbOWYsRIuR8TwkBYA$p6fONjVeRIjJJFjAJ40N/0Ko42CjuJDl18vrgeO8oas",
+    "user_type": "indian",
+    "interests": [
+      "Religion"
+    ],
+    "created_at": "2026-02-25T18:02:59.772915"
   }
 }
