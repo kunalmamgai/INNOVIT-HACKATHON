@@ -90,7 +90,6 @@ npm run format
 /heritage (Interactive Map)
 /festivals (Calendar with Countdowns)
 /arts (Gallery with Lightbox)
-/cuisine (Recipe Explorer)
 /languages (Interactive Scripts)
 /about (Mission & Stats)
 /contact (Form with Validation)

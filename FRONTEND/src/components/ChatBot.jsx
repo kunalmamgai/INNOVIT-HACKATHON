@@ -7,7 +7,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your AI guide to India's heritage and culture. Ask me anything about monuments, festivals, cuisine, or local traditions!",
+      text: "Hello! I'm your AI guide to India's heritage and culture. Ask me anything about monuments, festivals, crafts, or local traditions!",
       sender: 'assistant',
       timestamp: new Date(),
     },

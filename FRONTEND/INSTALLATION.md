@@ -4,17 +4,16 @@
 
 You now have a **production-ready React 18 + Vite** Heritage & Culture website with:
 
-### 📄 9 Complete Pages
+### 📄 8 Complete Pages
 1. **Home** - Hero video, featured carousel, quick stats
 2. **Heritage Sites** - Interactive Leaflet map with 50+ locations
 3. **Festivals & Traditions** - Calendar view with countdown timers
 4. **Art & Crafts** - Gallery with lightbox viewer
-5. **Cuisine** - Recipe explorer with search & filters
-6. **Languages & Literature** - Interactive script display
-7. **About** - Mission statement & preservation statistics
-8. **Contact** - React Hook Form with validation
-9. **Explore** - Virtual tours & AR preview placeholders
-10. **404** - Custom not found page
+5. **Languages & Literature** - Interactive script display
+6. **About** - Mission statement & preservation statistics
+7. **Contact** - React Hook Form with validation
+8. **Explore** - Virtual tours & AR preview placeholders
+9. **404** - Custom not found page
 
 ### ⚙️ Technical Stack
 - ✅ React 18 with Suspense & lazy loading

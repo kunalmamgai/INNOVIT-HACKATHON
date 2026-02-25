@@ -23,17 +23,16 @@ Your complete Heritage & Culture website is **fully built and ready to use**!
 
 ## 🚀 What You Have
 
-### ✨ 9 Complete Pages
+### ✨ 8 Complete Pages
 1. ✅ **Home** - Hero video, carousel, stats
 2. ✅ **Heritage Sites** - Interactive Leaflet map with modals
 3. ✅ **Festivals** - Calendar with countdown timers
 4. ✅ **Art & Crafts** - Gallery with lightbox
-5. ✅ **Cuisine** - Recipe explorer with search
-6. ✅ **Languages** - Interactive scripts display
-7. ✅ **About** - Mission & preservation stats
-8. ✅ **Contact** - Form with validation
-9. ✅ **Explore** - Virtual tours placeholder
-10. ✅ **404** - Custom not found page
+5. ✅ **Languages** - Interactive scripts display
+6. ✅ **About** - Mission & preservation stats
+7. ✅ **Contact** - Form with validation
+8. ✅ **Explore** - Virtual tours placeholder
+9. ✅ **404** - Custom not found page
 
 ### 🛠️ Key Features
 - ✅ Multi-page routing (React Router v6)

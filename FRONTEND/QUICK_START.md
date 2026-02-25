@@ -19,7 +19,6 @@ Open **http://localhost:5173** → Ready to explore!
 - Heritage Sites (interactive map + modals)
 - Festivals & Traditions (calendar with countdowns)
 - Art & Crafts (gallery with lightbox)
-- Cuisine (recipe explorer with search)
 - Languages & Literature (interactive scripts)
 - About (mission, preservation stats)
 - Contact (validated form + map placeholder)

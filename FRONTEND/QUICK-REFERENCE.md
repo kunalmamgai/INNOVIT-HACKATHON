@@ -17,7 +17,6 @@ npm run dev
 - ✅ Heritage.jsx - Interactive map
 - ✅ Festivals.jsx - Calendar with countdowns
 - ✅ ArtCrafts.jsx - Gallery with lightbox
-- ✅ Cuisine.jsx - Recipe explorer
 - ✅ Languages.jsx - Language scripts
 - ✅ About.jsx - Mission & stats
 - ✅ Contact.jsx - Form with validation

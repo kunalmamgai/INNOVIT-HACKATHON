@@ -130,7 +130,6 @@ The frontend API base is handled in `FRONTEND/src/config/api.js` and points to l
 | `/heritage` | Heritage map |
 | `/festivals` | Festivals |
 | `/arts` | Art & Crafts |
-| `/cuisine` | Cuisine |
 | `/explore` | Explore + booking/payment flow |
 | `/virtual-tour` | Virtual tour |
 | `/community` | Currently mapped to Virtual Tour |

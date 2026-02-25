@@ -16,12 +16,11 @@ heritage-culture-portal/
 │
 ├── src/
 │   │
-│   ├── pages/                 # 9 Lazy-loaded page components
+│   ├── pages/                 # 8 Lazy-loaded page components
 │   │   ├── Home.jsx           # Hero, carousel, stats (/)
 │   │   ├── Heritage.jsx       # Map with modals (/heritage)
 │   │   ├── Festivals.jsx      # Calendar with countdowns (/festivals)
 │   │   ├── ArtCrafts.jsx      # Gallery with lightbox (/arts)
-│   │   ├── Cuisine.jsx        # Recipe explorer (/cuisine)
 │   │   ├── Languages.jsx      # Interactive scripts (/languages)
 │   │   ├── About.jsx          # Mission & stats (/about)
 │   │   ├── Contact.jsx        # Form + map placeholder (/contact)

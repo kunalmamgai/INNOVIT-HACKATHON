@@ -41,14 +41,13 @@ Open **http://localhost:5173** in your browser.
 | Carousel | `src/shared/Carousel.jsx` | Featured sites carousel |
 | Modal | `src/shared/Modal.jsx` | Reusable modal dialog |
 
-### Pages (9 Pages)
+### Pages (8 Pages)
 | Page | Route | File |
 |------|-------|------|
 | Home | `/` | `src/pages/Home.jsx` |
 | Heritage Sites | `/heritage` | `src/pages/Heritage.jsx` |
 | Festivals | `/festivals` | `src/pages/Festivals.jsx` |
 | Art & Crafts | `/arts` | `src/pages/ArtCrafts.jsx` |
-| Cuisine | `/cuisine` | `src/pages/Cuisine.jsx` |
 | Languages | `/languages` | `src/pages/Languages.jsx` |
 | About | `/about` | `src/pages/About.jsx` |
 | Contact | `/contact` | `src/pages/Contact.jsx` |

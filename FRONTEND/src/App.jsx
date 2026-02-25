@@ -11,7 +11,6 @@ const Home = lazy(() => import('./pages/Home'))
 const Heritage = lazy(() => import('./pages/Heritage'))
 const Festivals = lazy(() => import('./pages/Festivals'))
 const ArtCrafts = lazy(() => import('./pages/ArtCrafts'))
-const Cuisine = lazy(() => import('./pages/Cuisine'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Explore = lazy(() => import('./pages/Explore'))
@@ -77,7 +76,6 @@ export default function App() {
             <Route path="/heritage" element={<Heritage />} />
             <Route path="/festivals" element={<Festivals />} />
             <Route path="/arts" element={<ArtCrafts />} />
-            <Route path="/cuisine" element={<Cuisine />} />
             <Route path="/community" element={<VirtualTour />} />
             <Route path="/virtual-tour" element={<VirtualTour />} />
             <Route path="/tourism-event-co-publishing" element={<TourismEventCoPublishing />} />
