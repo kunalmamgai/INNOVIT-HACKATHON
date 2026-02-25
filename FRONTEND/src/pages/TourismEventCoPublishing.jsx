@@ -87,7 +87,7 @@ const topicImageSlots = [
   {
     id: 'img-3',
     title: 'AR/VR Preview Snapshot',
-    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwtpCgKCPL8m4MGqMIWK10S2VxeSlHTm9bPA&s',
+    imageUrl: 'https://cdn.mos.cms.futurecdn.net/Bdd9TqytLkJoqePAYNzxgc.jpg',
   },
 ]
 
