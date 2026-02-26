@@ -11,7 +11,7 @@ const products = [
     tier: 'Ultra',
     tagline: 'Micro-OLED | Eye + Hand Tracking | 120Hz | Spatial audio',
     badges: ['Ships in 3-5 days', 'VIP onboarding'],
-    image: 'https://media.wired.com/photos/6738ffc6674ce2c794000dac/191:100/w_1280,c_limit/HTC-Vive-Focus-Vision-Abstract-Background-112024-SOURCE-Amazon.jpg',
+    image: 'https://about.fb.com/wp-content/uploads/2022/12/EOY-VR-Roundup_Header.gif',
   },
   {
     id: 'vr-pro',
@@ -20,7 +20,7 @@ const products = [
     tier: 'Pro',
     tagline: 'OLED XR | Eye + Hand Tracking | 120Hz',
     badges: ['Ships in 3-5 days', 'Free setup concierge'],
-    image: 'https://twinreality.in/wp-content/uploads/2024/08/apple-vision-pro-features.jpg',
+    image: 'https://static.wixstatic.com/media/d476dc_15c0d36e9748479fba781d19503ec898~mv2.gif',
   },
   {
     id: 'vr-premium',
@@ -47,7 +47,7 @@ const products = [
     tier: 'Starter',
     tagline: '90Hz | Lightweight comfort | Great for first-time VR',
     badges: ['Ships in 7-9 days', 'Includes tutorial module'],
-    image: 'https://about.fb.com/wp-content/uploads/2022/12/EOY-VR-Roundup_Header.gif',
+    image: 'https://media.wired.com/photos/6738ffc6674ce2c794000dac/191:100/w_1280,c_limit/HTC-Vive-Focus-Vision-Abstract-Background-112024-SOURCE-Amazon.jpg',
   },
   {
     id: 'vr-budget',
@@ -56,7 +56,7 @@ const products = [
     tier: 'Budget',
     tagline: 'Mobile-powered VR | Clip-in optics',
     badges: ['Ships in 4-6 days', 'Great for classrooms'],
-    image: 'https://static.wixstatic.com/media/d476dc_15c0d36e9748479fba781d19503ec898~mv2.gif',
+    image: 'https://twinreality.in/wp-content/uploads/2024/08/apple-vision-pro-features.jpg',
   },
   {
     id: 'vr-entry',
