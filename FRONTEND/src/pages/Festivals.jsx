@@ -55,6 +55,85 @@ const festivals = [
     date: "2026-01-15",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzxQzS0X0WdDz6hpRJ52Eh5xR8NJ_jQzmmBw&s",
     description: "Pongal is a Tamil harvest festival thanking nature, the sun, and cattle for a bountiful season. Families cook the traditional Pongal dish, decorate homes, and celebrate with cultural events.",
+  },
+  {
+  id: 6,
+  name: "Raksha Bandhan",
+  date: "2026-08-19",
+  image: "https://images.unsplash.com/photo-1693473812472-a9f1887a6b2d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmFrc2hhJTIwYmFuZGhhbnxlbnwwfHwwfHx8MA%3D%3D",
+  description: "Raksha Bandhan celebrates the bond between brothers and sisters. Sisters tie a sacred thread (rakhi) on their brothers' wrists, symbolizing protection, love, and lifelong support."
+  },
+  
+  {
+    id: 7,
+    name: "Ganesh Chaturthi",
+    date: "2026-09-10",
+    image: "https://plus.unsplash.com/premium_photo-1674898516505-e8913fb7f40c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z2FuZXNoJTIwY2hhdHVydGhpfGVufDB8fDB8fHww",
+    description: "Ganesh Chaturthi honors Lord Ganesha, the remover of obstacles. Devotees install clay idols, perform prayers, sing devotional songs, and immerse the idols in water after celebrations."
+  },
+  
+  {
+    id: 8,
+    name: "Durga Puja",
+    date: "2026-10-20",
+    image: "https://images.unsplash.com/photo-1616074385287-67f6fb9e9eb8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHVyZ2ElMjBwdWphfGVufDB8fDB8fHww",
+    description: "Durga Puja celebrates Goddess Durga’s victory over evil. Beautifully decorated pandals, artistic idols, cultural performances, and community gatherings are central to the festivities."
+  },
+  
+  {
+    id: 9,
+    name: "Baisakhi",
+    date: "2026-04-13",
+    image: "https://st3.depositphotos.com/33041278/36262/i/450/depositphotos_362628318-stock-photo-sikh-people-performing-punjabi-bhangra.jpg",
+    description: "Baisakhi marks the harvest season in Punjab and the Sikh New Year. It is celebrated with bhangra dances, community feasts, and visits to gurudwaras."
+  },
+  
+  {
+    id: 10,
+    name: "Onam",
+    date: "2026-08-28",
+    image: "https://chardhambooking.com/wp-content/uploads/2021/01/Celebration.jpg",
+    description: "Onam is Kerala’s harvest festival celebrating the legendary King Mahabali. It features floral decorations (Pookalam), traditional feasts (Onam Sadya), and boat races."
+  },
+  
+  {
+    id: 11,
+    name: "Janmashtami",
+    date: "2026-09-02",
+    image: "https://www.iskconbangalore.org/blog/wp-content/uploads/2015/04/sri-krishna-janmashtami-festival-recipe.jpg",
+    description: "Janmashtami celebrates the birth of Lord Krishna. Devotees fast, sing devotional songs, decorate temples, and participate in Dahi Handi events."
+  },
+  
+  {
+    id: 12,
+    name: "Mahashivratri",
+    date: "2026-02-15",
+    image: "https://blog.cdn.level.game/2024/02/what-to-do-on-Mahashivratri.webp",
+    description: "Mahashivratri is dedicated to Lord Shiva. Devotees observe fasting, night vigils, and special prayers seeking spiritual growth and blessings."
+  },
+  
+  {
+    id: 14,
+    name: "Karva Chauth",
+    date: "2026-10-24",
+    image: "https://s7ap1.scene7.com/is/image/incredibleindia/Karva-Chauth-1-fes-hero?qlt=82&ts=1726639240658",
+    description: "Karva Chauth is observed by married women who fast from sunrise to moonrise for the well-being and longevity of their husbands."
+  },
+  
+  {
+    id: 15,
+    name: "Chhath Puja",
+    date: "2026-11-17",
+    image: "https://drishtiias.com/images/uploads/1667468445_image1.png",
+    description: "Chhath Puja is dedicated to the Sun God. Devotees offer prayers at riverbanks during sunrise and sunset, expressing gratitude for life and prosperity."
+  },
+  
+  {
+    id: 16,
+    name: "Lohri",
+    date: "2026-01-13",
+    image: "https://www.theindianpanorama.news/wp-content/uploads/2021/01/lori-648x381.jpg",
+    description: "Lohri marks the end of winter and celebrates the harvest season in North India. Bonfires, folk songs, and dancing are central to the festivities."
   }
 ];
 
