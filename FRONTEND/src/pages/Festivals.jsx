@@ -162,37 +162,48 @@ export default function Festivals() {
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-blue">
-        Festivals & Traditions
-      </h1>
+    <div className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.18),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(251,113,133,0.22),_transparent_60%)]" />
+      <div className="absolute -top-32 right-[-10%] h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+      <div className="absolute -bottom-40 left-[-5%] h-80 w-80 rounded-full bg-rose-400/20 blur-3xl" />
 
-      <div className="mt-4">
-        <input
-          {...register("search")}
-          placeholder="Search festivals"
-          className="border px-3 py-2 w-full md:w-1/2 rounded"
-        />
-      </div>
+      <div className="relative max-w-6xl mx-auto px-4 py-10 sm:py-14">
+        <div className="bg-[#0b1020]/70 border border-cyan-400/20 rounded-2xl p-6 sm:p-8 shadow-2xl">
+          <p className="text-cyan-300 text-xs font-semibold tracking-[0.3em] uppercase">Live Calendar</p>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
+            Festivals & Traditions
+          </h1>
+          <p className="text-gray-300 mt-3 max-w-2xl">
+            A vibrant map of India’s living heritage — explore dates, countdowns, and stories in a high-energy festival view.
+          </p>
 
-      <div className="grid md:grid-cols-3 gap-4 mt-6">
+          <div className="mt-6">
+            <input
+              {...register("search")}
+              placeholder="Search festivals"
+              className="w-full md:w-1/2 rounded-full bg-black/40 border border-cyan-300/30 px-4 py-2 text-white placeholder:text-cyan-200/60 focus:outline-none focus:border-cyan-300"
+            />
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-4 mt-8">
         {list.map((f) => (
           <button
             type="button"
             key={f.id}
             onClick={() => setSelectedFestival(f)}
-            className="relative overflow-hidden min-h-[140px] bg-gradient-to-r from-gray-900 via-gray-800 to-transparent rounded shadow p-4 text-white border border-gold/30"
+            className="relative overflow-hidden min-h-[160px] rounded-2xl p-4 text-white border border-cyan-300/20 bg-gradient-to-r from-[#0b1020] via-[#14233a] to-transparent shadow-[0_15px_35px_rgba(2,6,23,0.55)] hover:shadow-[0_20px_45px_rgba(15,23,42,0.75)] transition"
           >
             {/* TEXT CONTENT */}
             <div className="relative z-10 max-w-[60%] text-left">
-              <h3 className="font-bold text-gold">{f.name}</h3>
+              <h3 className="font-bold text-cyan-200">{f.name}</h3>
 
               <p className="text-sm mt-1 text-gray-300">
                 Date: {getNextOccurrence(f.date).toISOString().slice(0, 10)}
               </p>
 
               <Countdown date={f.date} />
-              <p className="text-[11px] mt-2 text-cyan-400">Click to view details</p>
+              <p className="text-[11px] mt-2 text-rose-200">Click to view details</p>
             </div>
 
             {/* IMAGE */}
@@ -204,32 +215,33 @@ export default function Festivals() {
           </button>
         ))}
 
+        </div>
+
+        {selectedFestival && (
+          <Modal onClose={() => setSelectedFestival(null)}>
+            <div className="text-white">
+              <img
+                src={selectedFestival.image || "/assets/placeholder-image.svg"}
+                alt={selectedFestival.name}
+                className="w-full h-64 object-cover rounded-lg mb-5"
+              />
+
+              <h2 className="text-2xl font-bold text-cyan-200">{selectedFestival.name}</h2>
+              <p className="text-sm text-gray-400 mt-1">
+                Date: {getNextOccurrence(selectedFestival.date).toISOString().slice(0, 10)}
+              </p>
+              <div className="mt-1">
+                <Countdown date={selectedFestival.date} />
+              </div>
+
+              <div className="mt-5 p-4 rounded-lg bg-black/60 border border-cyan-300/20">
+                <h3 className="text-cyan-200 font-semibold mb-2">Description</h3>
+                <p className="text-gray-300 leading-relaxed">{selectedFestival.description}</p>
+              </div>
+            </div>
+          </Modal>
+        )}
       </div>
-
-      {selectedFestival && (
-        <Modal onClose={() => setSelectedFestival(null)}>
-          <div className="text-white">
-            <img
-              src={selectedFestival.image || "/assets/placeholder-image.svg"}
-              alt={selectedFestival.name}
-              className="w-full h-64 object-cover rounded-lg mb-5"
-            />
-
-            <h2 className="text-2xl font-bold text-gold">{selectedFestival.name}</h2>
-            <p className="text-sm text-gray-400 mt-1">
-              Date: {getNextOccurrence(selectedFestival.date).toISOString().slice(0, 10)}
-            </p>
-            <div className="mt-1">
-              <Countdown date={selectedFestival.date} />
-            </div>
-
-            <div className="mt-5 p-4 rounded-lg bg-gray-800 border border-gold/20">
-              <h3 className="text-gold font-semibold mb-2">Description</h3>
-              <p className="text-gray-300 leading-relaxed">{selectedFestival.description}</p>
-            </div>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }
