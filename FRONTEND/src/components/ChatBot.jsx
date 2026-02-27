@@ -124,7 +124,7 @@ export default function ChatBot() {
             <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-t-2xl flex justify-between items-center">
               <div>
                 <h3 className="font-bold text-lg">Heritage Guide AI</h3>
-                <p className="text-xs opacity-90">Ask about Delhi's culture</p>
+                <p className="text-xs opacity-90">Ask about India's culture</p>
               </div>
               <button onClick={() => setIsOpen(false)} className="text-2xl">
                 ✕
