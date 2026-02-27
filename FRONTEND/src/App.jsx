@@ -15,6 +15,7 @@ const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Explore = lazy(() => import('./pages/Explore'))
 const VirtualTour = lazy(() => import('./pages/VirtualTour'))
+const ARVRTour = lazy(() => import('./pages/ARVRTour'))
 const TourismEventCoPublishing = lazy(() => import('./pages/TourismEventCoPublishing'))
 const Headset = lazy(() => import('./pages/Headset'))
 const Login = lazy(() => import('./pages/Login'))
@@ -79,6 +80,7 @@ export default function App() {
             <Route path="/arts" element={<ArtCrafts />} />
             <Route path="/community" element={<VirtualTour />} />
             <Route path="/virtual-tour" element={<VirtualTour />} />
+            <Route path="/ar-vr-tour" element={<ARVRTour />} />
             <Route path="/tourism-event-co-publishing" element={<TourismEventCoPublishing />} />
             <Route path="/headset" element={<Headset />} />
             <Route path="/about" element={<About />} />

@@ -132,7 +132,7 @@ export default function VirtualTour() {
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Virtual Tour</h1>
           <div className="flex gap-2">
-            <button onClick={startTour} className="px-3 py-1 rounded bg-gold text-gray-900">▶️ Start Virtual Tour</button>
+            <button onClick={startTour} className="px-3 py-1 rounded bg-gold text-gray-900">▶️ Start Demo Virtual Tour</button>
             <Link to="/heritage" className="px-3 py-1 rounded bg-gray-700">← Back to Map</Link>
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function VirtualTour() {
                     <h2 className="text-2xl font-bold text-gold">{selected?.name}</h2>
                     <p className="text-gray-300 mt-2">{selected?.description}</p>
                     <div className="mt-4 flex gap-3">
-                      <button onClick={startTour} className="px-4 py-2 bg-gold text-gray-900 rounded font-medium">▶️ Start Virtual Tour</button>
+                      <button onClick={startTour} className="px-4 py-2 bg-gold text-gray-900 rounded font-medium">▶️ Start Demo Virtual Tour</button>
                       <Link to={`/heritage`} className="px-4 py-2 bg-gray-700 text-white rounded">View on Map</Link>
                     </div>
                   </div>
@@ -219,7 +219,7 @@ export default function VirtualTour() {
                   ) : (
                     <div className="w-full h-[60vh] rounded bg-gray-900 flex items-center justify-center">
                       <div className="text-center">
-                        <p className="text-gray-400 mb-3">Click "Start Virtual Tour" to load the immersive viewer for this monument.</p>
+                        <p className="text-gray-400 mb-3">Click "Start Demo Virtual Tour" to load the immersive viewer for this monument.</p>
                         <button onClick={startTour} className="px-4 py-2 bg-gold text-gray-900 rounded">Start Tour</button>
                       </div>
                     </div>

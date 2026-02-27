@@ -13,7 +13,8 @@ export default function Explore({ currentUser: propUser }) {
   const [bookingData, setBookingData] = useState({
     visit_date: "",
     num_tickets: 1,
-    ticket_type: "indian"
+    ticket_type: "indian",
+    tour_type: ""
   });
   const [paymentData, setPaymentData] = useState({
     cardNumber: "",
@@ -192,7 +193,7 @@ export default function Explore({ currentUser: propUser }) {
         showMessage(`✓ Payment Successful! Payment ID: ${result.payment_id}`, "success");
         setShowPaymentForm(false);
         setPendingBooking(null);
-        setBookingData({ visit_date: "", num_tickets: 1, ticket_type: "indian" });
+        setBookingData({ visit_date: "", num_tickets: 1, ticket_type: "indian", tour_type: "" });
         setPaymentData({ cardNumber: "", expiryDate: "", cvv: "", cardholder: "", payment_method: "card", upiId: "" });
         setSelectedPlace(null);
       }
@@ -358,20 +359,32 @@ export default function Explore({ currentUser: propUser }) {
                 </div>
               )}
 
-              <div className="flex gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
-                  onClick={() => setShowBookingForm(true)}
-                  className="flex-1 bg-gold text-gray-800 px-4 py-3 rounded font-bold text-lg hover:bg-gold/90 transition"
+                  onClick={() => {
+                    setBookingData((prev) => ({ ...prev, tour_type: "AR/VR" }));
+                    setShowBookingForm(true);
+                  }}
+                  className="bg-gold text-gray-800 px-4 py-3 rounded font-bold text-lg hover:bg-gold/90 transition"
                 >
-                  📅 Book Tour
+                  Book AR/VR Tour
                 </button>
                 <button
-                  onClick={() => setSelectedPlace(null)}
-                  className="flex-1 bg-gray-700 text-white px-4 py-3 rounded font-bold text-lg hover:bg-gray-600 transition"
+                  onClick={() => {
+                    setBookingData((prev) => ({ ...prev, tour_type: "Virtual" }));
+                    setShowBookingForm(true);
+                  }}
+                  className="bg-gold text-gray-800 px-4 py-3 rounded font-bold text-lg hover:bg-gold/90 transition"
                 >
-                  Close
+                  Book Virtual Tour
                 </button>
               </div>
+              <button
+                onClick={() => setSelectedPlace(null)}
+                className="mt-3 w-full bg-gray-700 text-white px-4 py-3 rounded font-bold text-lg hover:bg-gray-600 transition"
+              >
+                Close
+              </button>
             </div>
           </motion.div>
         </motion.div>
@@ -392,7 +405,10 @@ export default function Explore({ currentUser: propUser }) {
             onClick={(e) => e.stopPropagation()}
           >
             <button onClick={() => setShowBookingForm(false)} className="float-right text-gray-400 hover:text-white text-2xl mb-4">✕</button>
-            <h2 className="text-3xl font-bold text-white mb-6 clear-both">Book Tour — {selectedPlace.name}</h2>
+            <h2 className="text-3xl font-bold text-white mb-2 clear-both">Book Tour — {selectedPlace.name}</h2>
+            {bookingData.tour_type && (
+              <p className="text-gold font-semibold mb-6">Tour Type: {bookingData.tour_type}</p>
+            )}
 
             <div className="space-y-4">
               <div>

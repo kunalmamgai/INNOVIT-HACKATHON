@@ -18,10 +18,11 @@ export default function Navbar({ currentUser, onLogout }){
             </div>
           </NavLink>
 
-          <nav className="hidden xl:flex items-center gap-1.5 flex-1 justify-center">
+          <nav className="hidden xl:flex items-center gap-1.5 flex-1 justify-center overflow-x-auto no-scrollbar whitespace-nowrap">
             <NavLink to="/explore" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Explore</NavLink>
             <NavLink to="/heritage" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10">Heritage Sites</NavLink>
             <NavLink to="/virtual-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">Virtual Tour</NavLink>
+            <NavLink to="/ar-vr-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">AR/VR Tour</NavLink>
             <NavLink to="/headset" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">VR Headset</NavLink>
             <NavLink to="/tourism-event-co-publishing" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">Tourism Events</NavLink>
             <NavLink to="/festivals" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold transition-colors duration-200 font-semibold text-xs px-2.5 py-1 rounded hover:bg-gold/10 dark:hover:bg-gold/10 whitespace-nowrap">Festivals & Traditions</NavLink>
@@ -57,6 +58,7 @@ export default function Navbar({ currentUser, onLogout }){
             <NavLink to="/festivals" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Festivals</NavLink>
             <NavLink to="/arts" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Arts</NavLink>
             <NavLink to="/virtual-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Virtual Tour</NavLink>
+            <NavLink to="/ar-vr-tour" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">AR/VR Tour</NavLink>
             <NavLink to="/headset" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">VR Headset</NavLink>
             <NavLink to="/tourism-event-co-publishing" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Tourism Events</NavLink>
             <NavLink to="/explore" className="text-gray-700 dark:text-gray-200 hover:text-gold dark:hover:text-gold text-xs px-3 py-1.5 rounded-full border border-gold/25 bg-gold/5">Explore</NavLink>

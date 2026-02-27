@@ -5,11 +5,21 @@ class HeritageStore:
         self.places = {}
 
     def enrich_place(self, place):
-        place.setdefault("tickets", {
+        default_tickets = {
             "indian": 40,
             "student": 20,
             "foreigner": 600
-        })
+        }
+        tickets = place.get("tickets")
+        if not tickets:
+            place["tickets"] = default_tickets
+        else:
+            normalized = dict(tickets)
+            for ticket_type, default_price in default_tickets.items():
+                price = tickets.get(ticket_type)
+                if price is None or price <= 0:
+                    normalized[ticket_type] = default_price
+            place["tickets"] = normalized
         place.setdefault("avg_time", 2)
         place.setdefault("best_season", "Oct–Mar")
         place.setdefault("crowd_level", "medium")
