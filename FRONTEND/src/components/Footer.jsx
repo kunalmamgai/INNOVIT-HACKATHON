@@ -7,7 +7,7 @@ export default function Footer(){
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8 mb-6">
           <div>
-            <h3 className="text-gold font-bold text-lg mb-2 drop-shadow">Heritage Portal</h3>
+            <h3 className="text-gold font-bold text-lg mb-2 drop-shadow">AR-Chaelogist</h3>
             <p className="text-gray-200 text-sm">Preserving and celebrating cultural heritage.</p>
           </div>
           <div>
@@ -30,7 +30,7 @@ export default function Footer(){
           </div>
         </div>
         <div className="border-t border-gold/30 pt-4 text-center text-gray-300 text-sm">
-          <p>&copy; {new Date().getFullYear()} Heritage & Culture Portal — Built for preservation and education.</p>
+          <p>&copy; {new Date().getFullYear()} AR-Chaelogist — Built for preservation and education.</p>
         </div>
       </div>
     </footer>

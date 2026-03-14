@@ -23,7 +23,7 @@ export default function About(){
         <div className="absolute -bottom-16 -left-16 h-44 w-44 rounded-full bg-earth/15 blur-3xl" />
         <div className="relative">
           <p className="text-xs tracking-[0.2em] uppercase text-gold/90 font-semibold mb-2">About</p>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white">Heritage & Culture Portal</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white">AR-Chaelogist</h1>
           <p className="mt-3 text-sm md:text-base text-gray-300 max-w-3xl">
             A full-stack platform for discovering heritage, planning visits, and learning through immersive cultural experiences.
           </p>

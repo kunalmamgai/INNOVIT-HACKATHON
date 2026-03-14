@@ -11,7 +11,7 @@ dotenv_path = find_dotenv()
 if dotenv_path:
     load_dotenv(dotenv_path)
 
-GEMINI_API_KEY = os.getenv("my_api_key")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("my_api_key")
 
 if not GEMINI_API_KEY:
     raise RuntimeError("GEMINI_API_KEY not set")

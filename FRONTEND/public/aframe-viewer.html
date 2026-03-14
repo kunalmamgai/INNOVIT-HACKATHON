@@ -5,17 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Panorama Viewer</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <style>html,body{height:100%;margin:0;background:#000;color:#fff}#wrap{height:100vh}</style>
+    <style>
+      html,body{height:100%;margin:0;background:#000;color:#fff;font-family:system-ui,Segoe UI,Arial,sans-serif}
+      #wrap{height:100vh}
+      #overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+      .overlay-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,0))}
+      .overlay-title{font-size:14px;font-weight:600;letter-spacing:.02em}
+      .overlay-actions{display:flex;gap:8px}
+      .overlay-actions button{pointer-events:auto;border:1px solid rgba(255,255,255,.2);background:#111;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;cursor:pointer}
+      .overlay-actions button:disabled{opacity:.5;cursor:not-allowed}
+      .overlay-hint{pointer-events:auto;margin:0 auto 16px auto;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:999px;font-size:12px}
+      .overlay-status{pointer-events:none;text-align:center;font-size:12px;color:#bbb;margin-bottom:12px}
+      body[data-mode="vr"] .mode-ar{display:none}
+      body[data-mode="ar"] .mode-vr{display:none}
+    </style>
   </head>
   <body>
+    <div id="overlay">
+      <div class="overlay-bar">
+        <div class="overlay-title" id="titleText">Panorama Viewer</div>
+        <div class="overlay-actions">
+          <button id="enter-vr" class="mode-vr">Enter VR</button>
+          <button id="enter-ar" class="mode-ar">Enter AR</button>
+        </div>
+      </div>
+      <div class="overlay-hint mode-ar" id="arHint">Move your phone to detect a surface, then tap to place the monument.</div>
+      <div class="overlay-status" id="statusText"></div>
+    </div>
     <div id="wrap">
-      <a-scene embedded vr-mode-ui="enabled: true" renderer="logarithmicDepthBuffer: true">
+      <a-scene
+        embedded
+        renderer="logarithmicDepthBuffer: true"
+        webxr="optionalFeatures: hit-test, dom-overlay; overlayElement: #overlay"
+        vr-mode-ui="enabled: true; enterVRButton: #enter-vr; enterARButton: #enter-ar"
+        ar-hit-test="target: #ar-target"
+      >
         <a-assets>
           <img id="panorama" crossorigin="anonymous" />
+          <img id="photo" crossorigin="anonymous" />
         </a-assets>
 
-        <a-sky id="sky" src="#panorama" rotation="0 -90 0"></a-sky>
+        <a-sky id="sky" src="#panorama" rotation="0 -90 0" hide-on-enter-ar></a-sky>
         <a-entity position="0 1.6 0"><a-camera wasd-controls-enabled="false"></a-camera></a-entity>
+
+        <a-entity light="type: ambient; intensity: 0.8"></a-entity>
+        <a-entity light="type: directional; intensity: 0.6" position="0 4 2"></a-entity>
+
+        <a-entity id="ar-target" visible="false">
+          <a-cylinder color="#c09a4b" radius="0.18" height="0.08" position="0 0.04 0"></a-cylinder>
+          <a-cylinder color="#d9b56b" radius="0.12" height="0.22" position="0 0.19 0"></a-cylinder>
+          <a-cone color="#c9a25c" radius-bottom="0.1" radius-top="0.02" height="0.2" position="0 0.38 0"></a-cone>
+          <a-plane material="src: #photo; color: #ffffff; side: double" width="0.55" height="0.35" position="0 0.3 -0.3"></a-plane>
+          <a-entity id="ar-label" text="value: ; align: center; width: 1.4; color: #ffffff" position="0 0.6 0"></a-entity>
+        </a-entity>
       </a-scene>
     </div>
 
@@ -25,9 +67,30 @@
         const params = new URLSearchParams(location.search);
         return params.get(key);
       }
+      const mode = (qs('mode') || 'vr').toLowerCase();
+      const isAr = mode === 'ar';
+      document.body.dataset.mode = isAr ? 'ar' : 'vr';
+
       const img = qs('img') || '';
       const title = qs('title') || '';
       const panorama = document.getElementById('panorama');
+      const photo = document.getElementById('photo');
+      const titleText = document.getElementById('titleText');
+      const statusText = document.getElementById('statusText');
+      const arLabel = document.getElementById('ar-label');
+      const arHint = document.getElementById('arHint');
+      if (titleText) titleText.textContent = title || 'Panorama Viewer';
+      if (arLabel) arLabel.setAttribute('text', `value: ${title || 'Monument'}; align: center; width: 1.4; color: #ffffff`);
+
+      if (isAr && navigator.xr && navigator.xr.isSessionSupported) {
+        navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
+          if (!supported) {
+            if (statusText) statusText.textContent = 'AR not supported on this device/browser.';
+          }
+        }).catch(() => {
+          if (statusText) statusText.textContent = 'AR availability check failed.';
+        });
+      }
 
       function showError(msg){
         document.body.innerHTML = '<div style="padding:20px;font-family:sans-serif;color:#fff">Failed to load panorama: '+String(msg)+'</div>';
@@ -52,11 +115,12 @@
           const proxyUrl = proxyBase + '?url=' + encodeURIComponent(img);
           console.log('Panorama viewer: using proxy URL', proxyUrl);
           panorama.src = proxyUrl;
+          if (photo) photo.src = proxyUrl;
         }
 
         panorama.crossOrigin = 'anonymous';
         panorama.onload = function(){
-          // success
+          if (statusText && isAr) statusText.textContent = 'AR ready. Tap the screen to place.';
         }
         panorama.onerror = function(e){
           if (!triedProxy) {
@@ -68,6 +132,23 @@
 
         // initial attempt: direct URL
         panorama.src = img;
+        if (photo) photo.src = img;
+      }
+
+      const sceneEl = document.querySelector('a-scene');
+      const arTarget = document.getElementById('ar-target');
+      if (sceneEl) {
+        sceneEl.addEventListener('ar-hit-test-achieved', () => {
+          if (statusText && isAr) statusText.textContent = 'Surface found. Tap to place the monument.';
+        });
+        sceneEl.addEventListener('ar-hit-test-select', () => {
+          if (statusText && isAr) statusText.textContent = 'Placed. Move around to explore.';
+          if (arHint) arHint.style.display = 'none';
+        });
+        sceneEl.addEventListener('exit-vr', () => {
+          if (arTarget) arTarget.setAttribute('visible', 'false');
+          if (arHint) arHint.style.display = '';
+        });
       }
     </script>
   </body>

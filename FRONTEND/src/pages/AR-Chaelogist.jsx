@@ -12,7 +12,7 @@ const cardRise = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-export default function ARVRTour() {
+export default function ARChaelogist() {
   return (
     <div className="relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(192,154,75,0.18),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(12,26,45,0.35),_transparent_60%)]" />

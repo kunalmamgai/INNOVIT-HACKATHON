@@ -4,7 +4,7 @@ import { initReactI18next } from 'react-i18next'
 const resources = {
   en: {
     translation: {
-      siteTitle: 'Heritage & Culture Portal',
+      siteTitle: 'AR-Chaelogist',
       home: 'Home',
       heritage: 'Heritage Sites',
       festivals: 'Festivals & Traditions',
@@ -17,7 +17,7 @@ const resources = {
   },
   hi: {
     translation: {
-      siteTitle: 'धरोहर और संस्कृति पोर्टल',
+      siteTitle: 'AR-Chaelogist',
       home: 'मुख पृष्ठ',
       heritage: 'धरोहर स्थल',
       festivals: 'त्योहार और परंपराएँ',

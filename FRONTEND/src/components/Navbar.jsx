@@ -10,10 +10,10 @@ export default function Navbar({ currentUser, onLogout }){
         <div className="w-full px-3 md:px-6 lg:px-10 py-2 flex items-center justify-between gap-3">
           <NavLink to="/" className="flex items-center gap-2 md:gap-4 no-underline hover:opacity-90 transition-opacity min-w-0">
             <div className="w-16 h-20 flex-shrink-0 bg-gradient-to-br from-gold/10 to-gold/5 dark:from-gold/10 dark:to-gold/5 rounded-lg border border-gold/30 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
-              <img src="/assets/logo.svg" alt="Heritage & Culture Portal Logo" className="w-full h-full object-cover" />
+              <img src="/assets/logo.svg" alt="AR-Chaelogist Logo" className="w-full h-full object-cover" />
             </div>
             <div className="hidden sm:flex flex-col gap-0">
-              <div className="text-gold font-extrabold text-base md:text-lg leading-tight">Heritage & Culture</div>
+              <div className="text-gold font-extrabold text-base md:text-lg leading-tight">AR-Chaelogist</div>
               <div className="text-gold/80 text-xs md:text-sm font-semibold tracking-wider">PORTAL</div>
             </div>
           </NavLink>

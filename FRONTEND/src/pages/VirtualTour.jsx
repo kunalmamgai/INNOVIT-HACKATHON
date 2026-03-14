@@ -14,6 +14,7 @@ export default function VirtualTour() {
   const [error, setError] = useState(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isTourActive, setIsTourActive] = useState(false)
+  const [tourMode, setTourMode] = useState('vr')
 
   const [panoramaLoaded, setPanoramaLoaded] = useState(false)
   const [isPanorama, setIsPanorama] = useState(false)
@@ -119,7 +120,8 @@ export default function VirtualTour() {
     }
   }, [panoramaLoaded])
 
-  const startTour = () => {
+  const startTour = (mode = 'vr') => {
+    setTourMode(mode)
     setIsTourActive(true)
     setForceShow(false)
     const t = setTimeout(() => setForceShow(true), 6000)
@@ -132,7 +134,8 @@ export default function VirtualTour() {
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Virtual Tour</h1>
           <div className="flex gap-2">
-            <button onClick={startTour} className="px-3 py-1 rounded bg-gold text-gray-900">▶️ Start Demo Virtual Tour</button>
+            <button onClick={() => startTour('vr')} className="px-3 py-1 rounded bg-gold text-gray-900">▶️ Start VR Tour</button>
+            <button onClick={() => startTour('ar')} className="px-3 py-1 rounded bg-gray-700 text-white">Start AR Tour</button>
             <Link to="/heritage" className="px-3 py-1 rounded bg-gray-700">← Back to Map</Link>
           </div>
         </div>
@@ -171,7 +174,8 @@ export default function VirtualTour() {
                     <h2 className="text-2xl font-bold text-gold">{selected?.name}</h2>
                     <p className="text-gray-300 mt-2">{selected?.description}</p>
                     <div className="mt-4 flex gap-3">
-                      <button onClick={startTour} className="px-4 py-2 bg-gold text-gray-900 rounded font-medium">▶️ Start Demo Virtual Tour</button>
+                      <button onClick={() => startTour('vr')} className="px-4 py-2 bg-gold text-gray-900 rounded font-medium">▶️ Start VR Tour</button>
+                      <button onClick={() => startTour('ar')} className="px-4 py-2 bg-gray-700 text-white rounded">Start AR Tour</button>
                       <Link to={`/heritage`} className="px-4 py-2 bg-gray-700 text-white rounded">View on Map</Link>
                     </div>
                   </div>
@@ -203,7 +207,7 @@ export default function VirtualTour() {
                         // viewer can try direct load and only then ask the backend
                         // proxy. Also pass the backend proxy base so the iframe can
                         // call it directly (avoids double-proxying issues).
-                        src={`/aframe-viewer.html?img=${encodeURIComponent(src)}&proxy=${encodeURIComponent(apiUrl('/proxy-image'))}&title=${encodeURIComponent(selected?.name||'')}`}
+                        src={`/aframe-viewer.html?img=${encodeURIComponent(src)}&proxy=${encodeURIComponent(apiUrl('/proxy-image'))}&title=${encodeURIComponent(selected?.name||'')}&mode=${encodeURIComponent(tourMode)}`}
                         style={{ width: '100%', height: '100%', border: 'none' }}
                       />
 
@@ -219,8 +223,11 @@ export default function VirtualTour() {
                   ) : (
                     <div className="w-full h-[60vh] rounded bg-gray-900 flex items-center justify-center">
                       <div className="text-center">
-                        <p className="text-gray-400 mb-3">Click "Start Demo Virtual Tour" to load the immersive viewer for this monument.</p>
-                        <button onClick={startTour} className="px-4 py-2 bg-gold text-gray-900 rounded">Start Tour</button>
+                        <p className="text-gray-400 mb-3">Choose "Start VR Tour" or "Start AR Tour" to load the immersive viewer for this monument.</p>
+                        <div className="flex gap-3 justify-center">
+                          <button onClick={() => startTour('vr')} className="px-4 py-2 bg-gold text-gray-900 rounded">Start VR Tour</button>
+                          <button onClick={() => startTour('ar')} className="px-4 py-2 bg-gray-700 text-white rounded">Start AR Tour</button>
+                        </div>
                       </div>
                     </div>
                   )}
