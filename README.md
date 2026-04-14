@@ -207,7 +207,7 @@ Configured origins include:
 - `http://127.0.0.1:5173`
 - `http://localhost:5174`
 - `http://127.0.0.1:5174`
-- `https://heritage-and-culture-portal.vercel.app`
+- `https://ar-vr-explore.vercel.app`
 - `http://127.0.0.1:8000`
 
 ---
