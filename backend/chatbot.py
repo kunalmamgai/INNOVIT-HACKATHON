@@ -102,19 +102,22 @@ async def get_ai_response(user_message: str, conversation_history: list = None) 
     fut = asyncio.get_event_loop().create_future()
     _inflight[key] = fut
 
+    result = "I'm sorry, I couldn't reach the AI service right now. Please try again in a moment."
     try:
         response = await client.aio.models.generate_content(
             model=MODEL_NAME,
             contents=_build_prompt(user_message, history),
         )
         text = (response.text or "").strip()
-        result = text or "Sorry, I couldn't generate a response."
         if text:
+            result = text
             _set_cached(key, text)
     except Exception:
-        print("🔥🔥🔥 FULL GEMINI ERROR 🔥🔥🔥")
+        # ASCII-only logging: emoji/unicode in tracebacks can crash the
+        # handler on consoles using cp1252 (e.g. Windows), which would leave
+        # `result` unbound and turn a graceful error into a 500.
+        print("Gemini API error (see traceback):")
         traceback.print_exc()
-        result = "I'm sorry, I couldn't reach the AI service right now. Please try again in a moment."
     finally:
         # Resolve any concurrent waiters with the same result, then drop the
         # inflight marker so the next request can fetch again.
