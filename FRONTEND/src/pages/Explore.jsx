@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion'
-import { apiUrl } from "../config/api";
+import { apiUrl, proxyImageUrl } from "../config/api";
 import { exportTicketPdf, exportItineraryPdf } from "../utils/pdfExport";
 
 export default function Explore({ currentUser: propUser }) {
@@ -282,7 +282,7 @@ export default function Explore({ currentUser: propUser }) {
                     className="relative group h-64 rounded-lg overflow-hidden shadow-lg cursor-pointer border border-gold/30 hover:shadow-2xl transition"
                   >
                     <img
-                      src={p.image || "/assets/placeholder-image.svg"}
+                      src={proxyImageUrl(p.image)}
                       alt={p.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
                       onError={(e) => { e.target.src = "/assets/placeholder-image.svg"; }}
@@ -314,7 +314,7 @@ export default function Explore({ currentUser: propUser }) {
             className="relative group h-64 rounded-lg overflow-hidden shadow-lg cursor-pointer border border-gold/30 hover:shadow-2xl transition"
           >
             <img
-              src={p.image || "/assets/placeholder-image.svg"}
+              src={proxyImageUrl(p.image)}
               alt={p.name}
               className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
               onError={(e) => { e.target.src = "/assets/placeholder-image.svg"; }}
@@ -346,7 +346,7 @@ export default function Explore({ currentUser: propUser }) {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={selectedPlace.image || "/assets/placeholder-image.svg"}
+              src={proxyImageUrl(selectedPlace.image)}
               alt={selectedPlace.name}
               className="w-full h-64 object-cover"
             />

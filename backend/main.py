@@ -5,6 +5,8 @@ from fastapi import Depends
 from fastapi.responses import JSONResponse
 import requests
 import json
+import threading
+import time
 from pathlib import Path
 from datetime import datetime
 from data import HeritageStore
@@ -189,22 +191,62 @@ def get_place(place_key: str):
     return place
 
 
+# ---------------------------------------------------------------------------
+# Image proxy with an in-memory TTL cache.
+#
+# Unsplash serves its signed image URLs only when a Referer header is present,
+# so place images are routed through this endpoint (which adds the header) and
+# the results are cached to keep repeated page loads instant and to avoid
+# hammering Unsplash during demos. Only successful responses are cached.
+# ---------------------------------------------------------------------------
+_IMAGE_CACHE_TTL_SECONDS = 24 * 60 * 60  # 24 hours
+_IMAGE_CACHE_MAX_ENTRIES = 256
+_image_cache = {}  # url -> (expires_at: float, content_type: str, content: bytes)
+_image_cache_lock = threading.Lock()
+_http_session = requests.Session()
+
+
 @app.get("/proxy-image")
 def proxy_image(url: str):
     if not url:
         return Response(status_code=400, content=b"url query param is required")
+    if not (url.startswith("http://") or url.startswith("https://")):
+        return Response(status_code=400, content=b"only http(s) URLs are allowed")
+
+    now = time.monotonic()
+    with _image_cache_lock:
+        entry = _image_cache.get(url)
+        if entry is not None and entry[0] > now:
+            _, ctype, content = entry
+            return Response(
+                content=content,
+                media_type=ctype,
+                headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=86400"},
+            )
+
     try:
         parsed_host = url.split("//")[-1].split("/")[0].lower()
         headers = {"User-Agent": "Mozilla/5.0", "Accept": "image/*,*/*;q=0.8"}
-        if "unsplash.com" in parsed_host or "images.unsplash.com" in parsed_host:
+        if "unsplash.com" in parsed_host:
             headers["Referer"] = "https://unsplash.com"
-        resp = requests.get(url, headers=headers, timeout=20, stream=True)
+        resp = _http_session.get(url, headers=headers, timeout=20, stream=True)
         resp.raise_for_status()
         content = resp.content
         ctype = resp.headers.get("Content-Type", "image/jpeg")
-        return Response(content=content, media_type=ctype, headers={"Access-Control-Allow-Origin": "*"})
     except requests.exceptions.RequestException as e:
         return Response(status_code=502, content=str(e).encode("utf-8"))
+
+    with _image_cache_lock:
+        if len(_image_cache) >= _IMAGE_CACHE_MAX_ENTRIES:
+            # Evict the oldest entry (dicts preserve insertion order).
+            _image_cache.pop(next(iter(_image_cache)), None)
+        _image_cache[url] = (now + _IMAGE_CACHE_TTL_SECONDS, ctype, content)
+
+    return Response(
+        content=content,
+        media_type=ctype,
+        headers={"Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=86400"},
+    )
 
 
 @app.post("/login")

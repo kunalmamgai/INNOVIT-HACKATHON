@@ -19,6 +19,17 @@ export const apiUrl = (path = "/") => {
   return `${API_BASE_URL}${normalizedPath}`
 }
 
+// Route remote image hosts through the backend /proxy-image endpoint, which
+// sets the Referer header Unsplash requires for hotlinked images and caches
+// the response. Local assets, data: URIs, and Wikimedia Commons images pass
+// through unchanged — Wikimedia is hotlink-friendly and CORS-enabled, so
+// proxying it would only add a hop and risk rate-limit bursts.
+export const proxyImageUrl = (src, fallback = "/assets/placeholder-image.svg") => {
+  if (!src) return fallback
+  if (src.startsWith("/") || src.startsWith("data:") || src.includes("upload.wikimedia.org")) return src
+  return `${apiUrl("/proxy-image")}?url=${encodeURIComponent(src)}`
+}
+
 export const apiFetch = async (path, options = {}) => {
   // FIX: was "token", must match what Login.jsx saves as "access_token"
   const token = localStorage.getItem("access_token")

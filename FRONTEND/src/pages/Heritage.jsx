@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import Modal from '../shared/Modal'
 import { motion } from 'framer-motion'
-import { apiUrl } from '../config/api'
+import { apiUrl, proxyImageUrl } from '../config/api'
 
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
@@ -27,7 +27,6 @@ const createImageIcon = (imageUrl) => {
 export default function Heritage(){
   const [selected, setSelected] = useState(null)
   const [places, setPlaces] = useState([])
-  const [icons, setIcons] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showList, setShowList] = useState(false)
@@ -37,43 +36,6 @@ export default function Heritage(){
   useEffect(() => {
     fetchPlaces()
   }, [])
-
-  // Build Leaflet icons for each place after places load
-  useEffect(() => {
-    let active = true
-    const objectUrls = []
-
-    const buildIcons = async () => {
-      const map = {}
-      await Promise.all(
-        places.map(async (site, idx) => {
-          const name = site.name || site.title || 'monument'
-          // Always use local asset if path starts with /assets/
-          const imageUrl = (site.image && site.image.startsWith('/assets/'))
-            ? site.image
-            : (site.image || `https://source.unsplash.com/80x80/?${name.split(' ').join('%20')}`)
-          try {
-            const resp = await fetch(imageUrl, { mode: 'cors' })
-            if (!resp.ok) throw new Error('fetch failed')
-            const blob = await resp.blob()
-            const objUrl = URL.createObjectURL(blob)
-            objectUrls.push(objUrl)
-            map[site.id || idx] = L.icon({ iconUrl: objUrl, iconSize: [50, 50], iconAnchor: [25, 50], popupAnchor: [0, -50] })
-          } catch (err) {
-            map[site.id || idx] = undefined
-          }
-        })
-      )
-      if (active) setIcons(map)
-    }
-
-    if (places && places.length) buildIcons()
-
-    return () => {
-      active = false
-      objectUrls.forEach(u => URL.revokeObjectURL(u))
-    }
-  }, [places])
 
   const fetchPlaces = async () => {
     try {
@@ -144,8 +106,7 @@ export default function Heritage(){
                   const lat = site.lat || site.latitude
                   const lng = site.lon || site.longitude
                   const name = site.name || site.title
-                  const image = site.image || `https://source.unsplash.com/80x80/?${(name || 'monument').split(' ').join('%20')}`
-                  const iconFor = icons[site.id || idx] || createImageIcon(image)
+                  const iconFor = createImageIcon(proxyImageUrl(site.image))
 
                   return (
                     <Marker
@@ -191,9 +152,7 @@ export default function Heritage(){
             {/* Image */}
             <div className="mb-6">
               <img 
-                src={(selected.image && selected.image.startsWith('/assets/'))
-                  ? selected.image
-                  : (selected.image || `https://source.unsplash.com/800x600/?${(selected.name || selected.title).split(' ').join('%20')}`)}
+                src={proxyImageUrl(selected.image)}
                 alt={selected.name}
                 className="w-full h-80 object-cover rounded-lg shadow-xl"
               />

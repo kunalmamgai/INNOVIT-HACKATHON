@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { apiUrl } from '../config/api'
+import { apiUrl, proxyImageUrl } from '../config/api'
 
 function useQuery() {
   return new URLSearchParams(useLocation().search)
@@ -48,11 +48,9 @@ export default function VirtualTour() {
   // Prefer a true equirectangular `panorama` URL if the place provides one.
   // Fallback to `image` (regular photo) if no panorama is available.
   const src = selected && (selected.panorama || selected.image) ? (selected.panorama || selected.image) : '/assets/panorama-placeholder.jpg'
-  const proxiedImg = src && src.startsWith('/')
-    ? src
-    : src
-      ? `${apiUrl('/proxy-image')}?url=${encodeURIComponent(src)}`
-      : '/assets/panorama-placeholder.jpg'
+  // Route remote images through the backend proxy (except Wikimedia, which is
+  // hotlink-friendly); local assets pass straight through.
+  const proxiedImg = proxyImageUrl(src, '/assets/panorama-placeholder.jpg')
 
   // preload image + aframe
   useEffect(() => {
