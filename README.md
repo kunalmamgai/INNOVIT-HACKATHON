@@ -1,53 +1,86 @@
 # Heritage & Culture Portal
 
-Full-stack heritage discovery platform with a React + Vite frontend and a FastAPI backend.
+> Full-stack heritage discovery platform with a React + Vite frontend and a FastAPI backend, featuring interactive geospatial mapping, virtual tours, AI-powered cultural Q&A, secure ticket booking, and community grievance tracking.
 
 ---
 
-## Project Overview
+## 🏛️ Project Architecture & System Overview
 
-This project helps users explore heritage places, view map-based monument details, start virtual tours, chat with an AI guide, and create bookings/payments.
+The application is structured around a modern decoupled client-server architecture. The frontend communicates asynchronously with the FastAPI backend, which interfaces with MongoDB (via Motor) and Google Gemini AI for intelligent recommendations and chatbot responses.
 
-### Current Feature Set
-- Interactive heritage map with monument details
-- Explore page with booking and payment flow
-- Virtual tour experience with image proxy support
-- AI chatbot for heritage/culture Q&A
-- Community endpoints for discussions, likes, and comments
-- Dark mode preference persistence
-- PWA assets and service-worker setup in frontend public folder
+```mermaid
+graph TD
+    subgraph Frontend [React 18 + Vite + TailwindCSS]
+        UI[User Interface / SPA Router]
+        Map[Leaflet Heritage Map]
+        Tour[Virtual Tour & Proxy]
+        Chat[AI Cultural Guide Chatbot]
+        Book[Booking & Payment Flow]
+    end
+
+    subgraph Backend [FastAPI Asynchronous Server]
+        API[RESTful Endpoints]
+        Auth[JWT Authentication]
+        AI[Google Gemini AI Integration]
+        Store[Heritage Store & Data Models]
+    end
+
+    subgraph Persistence [Data Storage]
+        DB[(MongoDB / Motor)]
+        JSON[JSON State Stores: Likes, Comments, Reports]
+    end
+
+    UI -->|HTTP Requests| API
+    Map -->|Fetch Places| API
+    Tour -->|Proxy Images| API
+    Chat -->|AI Prompt| API
+    Book -->|Transactions| API
+
+    API --> Auth
+    API --> AI
+    API --> Store
+    Store --> DB
+    API --> JSON
+```
 
 ---
 
-## Tech Stack
+## 🚀 Core Features & Capabilities
+
+- **Interactive Heritage Map:** Powered by Leaflet & React Leaflet for geospatial exploration of Delhi and national monuments.
+- **AI Cultural Guide:** Integrated with Google Gemini API to answer cultural queries and provide rich historical context.
+- **Virtual Tour Experience:** Immersive 360/panoramic cultural tour views with built-in CORS image proxy support.
+- **Explore, Booking & Payment Flow:** Streamlined ticketing system supporting multiple ticket types, visitor verification, and mock UPI/card payment workflows.
+- **Community & Citizen Grievance Portal:** Discussion forums with live likes/comments and government reporting endpoints for monument maintenance.
+- **PWA & Dark Mode:** Progressive Web App capabilities, service worker setup, and seamless dark/light theme switching with Zustand persistence.
+
+---
+
+## 🛠️ Tech Stack Breakdown
 
 ### Frontend
-- React 18
-- Vite 5
-- React Router 6
-- TailwindCSS 3
-- React Leaflet + Leaflet
-- Framer Motion
-- Zustand
-- i18next
+- **Core:** React 18, Vite 5, React Router 6
+- **Styling:** TailwindCSS 3, Framer Motion
+- **Geospatial & State:** React Leaflet, Leaflet, Zustand, i18next
 
 ### Backend
-- FastAPI
-- Uvicorn
-- Python 3.11+
-- Motor + PyMongo (MongoDB)
-- python-dotenv
-- google-genai (Gemini API integration)
+- **Core:** FastAPI, Uvicorn, Python 3.11+
+- **Database:** Motor (Async MongoDB), PyMongo
+- **AI & Security:** `google-genai` (Gemini API), `passlib` (Bcrypt)
 
 ---
 
-## Workspace Structure
+## 📂 Workspace Structure
 
 ```text
 INNOVIT-HACKATHON/
 ├── backend/
+│   ├── .env
+│   ├── .env.example
+│   ├── Procfile
 │   ├── main.py
 │   ├── mongo.py
+│   ├── auth.py
 │   ├── chatbot.py
 │   ├── recommend.py
 │   ├── user.py
@@ -60,13 +93,15 @@ INNOVIT-HACKATHON/
 ├── FRONTEND/
 │   ├── src/
 │   │   ├── App.jsx
-│   │   ├── config/api.js
+│   │   ├── main.jsx
 │   │   ├── components/
 │   │   ├── pages/
-│   │   ├── shared/
-│   │   ├── store/
-│   │   └── styles/
-│   └── package.json
+│   │   ├── config/api.js
+│   │   ├── store/useStore.js
+│   │   └── styles/main.css
+│   ├── package.json
+│   ├── tailwind.config.cjs
+│   └── vite.config.js
 ├── likes.json
 ├── comments.json
 ├── user.json
@@ -75,178 +110,100 @@ INNOVIT-HACKATHON/
 
 ---
 
-## Prerequisites
+## ⚡ Quick Start & Local Development
 
-- Node.js 18+
-- npm
-- Python 3.11+
-- pip
+### Prerequisites
+- Node.js 18+ & npm
+- Python 3.11+ & pip
 
----
-
-## Environment Variables
-
-Create a `.env` file in `backend/` (or provide variables in your runtime environment):
-
-```env
-MONGO_URL=your_mongodb_connection_string
-GEMINI_API_KEY=your_gemini_api_key
-```
-
----
-
-## Local Development
-
-### 1) Backend
-
+### 1) Backend Setup
 ```bash
 cd backend
 pip install -r requirements.txt
+# Configure your .env file with MONGO_URL and GEMINI_API_KEY
 uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 ```
+*Backend runs at:* `http://127.0.0.1:8000` (Interactive Swagger Docs at `/docs`)
 
-Backend runs at: `http://127.0.0.1:8000`
-
-### 2) Frontend
-
+### 2) Frontend Setup
 ```bash
 cd FRONTEND
 npm install
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
-
-Frontend runs at: `http://127.0.0.1:5173`
-
-The frontend API base is handled in `FRONTEND/src/config/api.js` and points to local backend in dev mode.
+*Frontend runs at:* `http://127.0.0.1:5173`
 
 ---
 
-## Frontend Routes (Current)
+## 🗺️ Frontend Routes
 
-| Route | Page |
-|---|---|
-| `/` | Home |
-| `/login` | Login / Signup UI |
-| `/heritage` | Heritage map |
-| `/festivals` | Festivals |
-| `/arts` | Art & Crafts |
-| `/explore` | Explore + booking/payment flow |
-| `/virtual-tour` | Virtual tour |
-| `/community` | Currently mapped to Virtual Tour |
-| `/about` | About |
-| `/contact` | Contact |
-| `*` | NotFound |
+| Route | Page Component | Description |
+|---|---|---|
+| `/` | `Home` | Hero section, featured heritage highlights, quick stats |
+| `/login` | `Login` | Secure user authentication and signup portal |
+| `/heritage` | `Heritage` | Interactive geospatial monument map |
+| `/festivals` | `Festivals` | Cultural festivals calendar and overview |
+| `/arts` | `ArtCrafts` | Traditional arts, crafts, and artisan stories |
+| `/explore` | `Explore` | Discovery engine with booking & payment flow |
+| `/virtual-tour` | `VirtualTour` | Immersive panoramic virtual tour |
+| `/community` | `TourismEventCoPublishing` | Community discussions and citizen reporting |
+| `/about` & `/contact` | `About` / `Contact` | Portal background and support channels |
 
 ---
 
-## Backend API (Current)
+## 🔌 Backend REST API Reference
 
-### Core
-- `GET /` - health message
-- `GET /places` - list all places
-- `GET /places/{place_key}` - single place details
-- `GET /proxy-image?url=...` - image proxy for virtual tour / CORS handling
+```mermaid
+sequenceDiagram
+    participant Client as Frontend (React)
+    participant Server as FastAPI Backend
+    participant AI as Google Gemini AI
+    participant DB as MongoDB / JSON Store
 
-### User & Recommendations
-- `POST /login`
-- `POST /recommend`
-- `POST /chat`
+    Client->>Server: GET /places
+    Server-->>Client: Heritage Places Catalog
+
+    Client->>Server: POST /chat {message}
+    Server->>AI: Generate Cultural Response
+    AI-->>Server: AI Insights
+    Server-->>Client: Return Response
+
+    Client->>Server: POST /bookings {user_id, place_key, ...}
+    Server->>DB: Save Booking Record
+    DB-->>Server: Confirmed
+    Server-->>Client: Booking Object
+
+### Core Endpoints
+- `GET /` — Health check status message
+- `GET /places` — Retrieve all heritage places
+- `GET /places/{place_key}` — Retrieve single place details
+- `GET /proxy-image?url=...` — Image proxy for virtual tour CORS handling
+
+### User Authentication & AI
+- `POST /signup` — Register new user account
+- `POST /login` — Authenticate and receive JWT access token
+- `POST /recommend` — Generate personalized cultural itineraries
+- `POST /chat` — AI cultural Q&A via Google Gemini
 
 ### Bookings & Payments
-- `POST /bookings`
-- `GET /bookings?user_id=...`
-- `POST /payments`
+- `POST /bookings` — Create a monument visit booking
+- `GET /bookings?user_id=...` — Fetch user bookings
+- `POST /payments` — Process payment (Card / UPI)
 
-### Community
-- `GET /discussions`
-- `POST /like`
-- `GET /comments`
-- `POST /comments`
-- `DELETE /comments?comment_id=...`
-
----
-
-## API Payload Examples
-
-### POST /bookings
-```json
-{
-  "user_id": "user-id",
-  "place_key": "qutub_minar",
-  "visit_date": "2026-03-01",
-  "num_tickets": 2,
-  "ticket_type": "indian"
-}
-```
-
-### POST /payments
-```json
-{
-  "booking_id": "booking-id",
-  "user_id": "user-id",
-  "amount": 500,
-  "payment_method": "upi",
-  "upi_id": "name@bank"
-}
-```
-
-### POST /chat
-```json
-{
-  "message": "Tell me about Humayun's Tomb",
-  "conversation_history": []
-}
-```
+### Community & Government Metrics
+- `GET /discussions` — Fetch discussion threads with aggregated likes & comments
+- `POST /like` — Register discussion like
+- `GET` / `POST` / `DELETE /comments` — Manage community comments
+- `GET /gov/metrics` — High-level statistics on sites, discussions, and reports
+- `GET` / `POST /gov/reports` — Citizen grievance and maintenance reporting
 
 ---
 
-## CORS (Backend)
+## 🚢 Deployment Guidelines
 
-Configured origins include:
-- `http://localhost:5173`
-- `http://127.0.0.1:5173`
-- `http://localhost:5174`
-- `http://127.0.0.1:5174`
-- `https://ar-vr-explore.vercel.app`
-- `http://127.0.0.1:8000`
+- **Frontend:** Pre-configured for **Vercel** deployment (`FRONTEND/vercel.json`).
+- **Backend:** Ready for production deployment on Uvicorn-compatible container platforms (Render, Railway, Heroku) using `Procfile` and `requirements.txt`.
+- **Environment Variables:** Ensure `MONGO_URL` and `GEMINI_API_KEY` are securely defined in your production runtime environment.
 
 ---
-
-## Frontend Scripts
-
-From `FRONTEND/`:
-
-```bash
-npm run dev
-npm run build
-npm run preview
-npm run lint
-npm run format
-```
-
----
-
-## Deployment Notes
-
-- Frontend: Vercel-ready (`FRONTEND/vercel.json`)
-- Backend: compatible with Uvicorn platforms (Render/Railway/Heroku-style)
-- Ensure `MONGO_URL` and `GEMINI_API_KEY` are configured in deployment environment
-
----
-
-## Additional Frontend Docs
-
-Inside `FRONTEND/`:
-- `QUICK_START.md`
-- `SETUP_GUIDE.md`
-- `INSTALLATION.md`
-- `FILE_STRUCTURE.md`
-- `EXAMPLES.md`
-- `COMPONENTS.md`
-- `INDEX.md`
-
----
-
-## License
-
-Project created for the INNOVIT Hackathon.
+*Project created for the INNOVIT Hackathon.*
