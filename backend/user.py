@@ -9,8 +9,8 @@ from auth import hash_password
 from mongo import users_collection
 
 # File fallback (used when MongoDB is unavailable)
-ROOT_DIR = Path(__file__).resolve().parent.parent
-USER_FILE = ROOT_DIR / "user.json"
+DATA_DIR = Path(__file__).resolve().parent / "data"
+USER_FILE = DATA_DIR / "user.json"
 
 
 def _read_user_file():

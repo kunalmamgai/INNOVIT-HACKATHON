@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { apiFetch, apiUrl } from '../config/api'
+import { apiFetch } from '../config/api'
 
 const products = [
   {
@@ -252,7 +252,6 @@ export default function Headset() {
     setIsLoading(true)
     const method = payment.method || 'card'
     const orderId = `VRH-${selectedProduct.id}-${Date.now()}`
-    const token = localStorage.getItem('access_token')
 
     try {
       const res = await apiFetch('/payments', {

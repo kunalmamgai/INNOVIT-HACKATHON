@@ -78,7 +78,6 @@ export default function App() {
             <Route path="/heritage" element={<Heritage />} />
             <Route path="/festivals" element={<Festivals />} />
             <Route path="/arts" element={<ArtCrafts />} />
-            <Route path="/community" element={<VirtualTour />} />
             <Route path="/virtual-tour" element={<VirtualTour />} />
             <Route path="/ar-vr-tour" element={<ARChaelogist />} />
             <Route path="/tourism-event-co-publishing" element={<TourismEventCoPublishing />} />

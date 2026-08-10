@@ -24,6 +24,19 @@ export default defineConfig({
     sourcemap: false,
     terserOptions: {
       compress: { drop_console: true }
+    },
+    rollupOptions: {
+      output: {
+        // Split heavy vendor libraries into stable, cacheable chunks so the
+        // initial bundle stays small and only loads what each route needs.
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
+          leaflet: ['leaflet', 'react-leaflet'],
+          pdf: ['jspdf'],
+          animation: ['framer-motion'],
+          state: ['zustand', 'i18next', 'react-i18next']
+        }
+      }
     }
   }
 })

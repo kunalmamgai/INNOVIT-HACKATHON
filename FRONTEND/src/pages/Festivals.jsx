@@ -5,7 +5,7 @@ import Modal from "../shared/Modal";
 
 function getNextOccurrence(dateStr) {
   const today = new Date()
-  const [year, month, day] = dateStr.split("-").map(Number)
+  const [, month, day] = dateStr.split("-").map(Number)
 
   // Assume festival happens every year on same month/day
   let nextDate = new Date(today.getFullYear(), month - 1, day)

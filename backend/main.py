@@ -20,10 +20,11 @@ from auth import verify_password, create_access_token, get_current_user
 
 app = FastAPI(title="Delhi Heritage Backend")
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-LIKES_FILE = ROOT_DIR / "likes.json"
-COMMENTS_FILE = ROOT_DIR / "comments.json"
-GOV_REPORTS_FILE = ROOT_DIR / "gov_reports.json"
+# Unified file-based state store (used when MongoDB is unavailable).
+DATA_DIR = Path(__file__).resolve().parent / "data"
+LIKES_FILE = DATA_DIR / "likes.json"
+COMMENTS_FILE = DATA_DIR / "comments.json"
+GOV_REPORTS_FILE = DATA_DIR / "gov_reports.json"
 
 
 def _read_json_file(file_path: Path, default):
@@ -37,6 +38,7 @@ def _read_json_file(file_path: Path, default):
 
 
 def _write_json_file(file_path: Path, payload):
+    file_path.parent.mkdir(parents=True, exist_ok=True)
     with file_path.open("w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=2, ensure_ascii=False)
 
@@ -275,10 +277,12 @@ async def recommend(data: dict, user_id: str = Depends(get_current_user)):
 
 
 @app.post("/chat")
-def chat_endpoint(data: dict):
+async def chat_endpoint(data: dict):
     message = data.get("message", "")
     history = data.get("conversation_history", [])
-    resp = get_ai_response(message, conversation_history=history)
+    # Async: the Gemini call yields to the event loop instead of blocking it,
+    # and get_ai_response serves common queries from a TTL cache.
+    resp = await get_ai_response(message, conversation_history=history)
     return {"response": resp}
 
 

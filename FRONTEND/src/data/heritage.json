@@ -1,7 +1,0 @@
-[
-  { "id": 1, "name": "Taj Mahal", "lat": 27.1751, "lng": 78.0421, "desc": "Agra's white marble mausoleum." },
-  { "id": 2, "name": "Qutub Minar", "lat": 28.5245, "lng": 77.1855, "desc": "Historic minaret in Delhi." },
-  { "id": 3, "name": "Hampi", "lat": 15.3350, "lng": 76.4600, "desc": "Ancient ruins of Vijayanagara." },
-  { "id": 4, "name": "Khajuraho", "lat": 24.8316, "lng": 79.9186, "desc": "Famous for temple sculptures." },
-  { "id": 5, "name": "Ajanta Caves", "lat": 20.5520, "lng": 75.7036, "desc": "Rock-cut Buddhist cave monuments." }
-]

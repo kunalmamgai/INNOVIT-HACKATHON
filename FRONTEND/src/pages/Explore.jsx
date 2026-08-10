@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion'
 import { apiUrl } from "../config/api";
+import { exportTicketPdf, exportItineraryPdf } from "../utils/pdfExport";
 
 export default function Explore({ currentUser: propUser }) {
   const [places, setPlaces] = useState([]);
@@ -27,6 +28,7 @@ export default function Explore({ currentUser: propUser }) {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("info");
   const [recommendations, setRecommendations] = useState([]);
+  const [lastPayment, setLastPayment] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -191,6 +193,7 @@ export default function Explore({ currentUser: propUser }) {
         showMessage(`Payment Error: ${result.error}`, "error");
       } else {
         showMessage(`✓ Payment Successful! Payment ID: ${result.payment_id}`, "success");
+        setLastPayment({ booking: pendingBooking, payment: result });
         setShowPaymentForm(false);
         setPendingBooking(null);
         setBookingData({ visit_date: "", num_tickets: 1, ticket_type: "indian", tour_type: "" });
@@ -232,6 +235,25 @@ export default function Explore({ currentUser: propUser }) {
         </motion.div>
       )}
 
+      {lastPayment && (
+        <div className="mb-6 p-6 rounded-lg border border-gold/40 bg-gray-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-gold">🎉 Payment Successful!</h2>
+            <p className="text-gray-300 text-sm mt-1">
+              {lastPayment.booking.place_name} · {lastPayment.booking.num_tickets} ticket(s) ·{' '}
+              <span className="text-gold font-semibold">₹{lastPayment.payment.amount}</span>
+            </p>
+            <p className="text-gray-400 text-xs mt-1">Booking ID: {lastPayment.booking.booking_id}</p>
+          </div>
+          <button
+            onClick={() => exportTicketPdf(lastPayment)}
+            className="bg-gold text-gray-900 px-5 py-3 rounded font-bold hover:bg-gold/90 transition"
+          >
+            📄 Download Ticket PDF
+          </button>
+        </div>
+      )}
+
       {currentUser ? (
         <div className="mb-8">
           <button
@@ -242,7 +264,15 @@ export default function Explore({ currentUser: propUser }) {
           </button>
           {recommendations.length > 0 && (
             <div className="mt-4">
-              <h2 className="text-2xl font-bold mb-4">Your Personalized Recommendations</h2>
+              <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+                <h2 className="text-2xl font-bold">Your Personalized Recommendations</h2>
+                <button
+                  onClick={() => exportItineraryPdf({ places: recommendations, userName: currentUser?.name })}
+                  className="bg-gray-800 text-gold border border-gold/40 px-4 py-2 rounded font-semibold hover:bg-gray-700 transition"
+                >
+                  📄 Export Itinerary PDF
+                </button>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {recommendations.map((p) => (
                   <motion.div

@@ -213,8 +213,8 @@ export default function TourismEventCoPublishing() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gold mb-3">Partner With Us</h2>
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            Join India's leading heritage technology platform. Whether you're a government tourism department,
-            cultural institution, or event organizer, let's create immersive experiences together.
+            Join India&apos;s leading heritage technology platform. Whether you&apos;re a government tourism department,
+            cultural institution, or event organizer, let&apos;s create immersive experiences together.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

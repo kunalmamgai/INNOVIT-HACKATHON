@@ -48,7 +48,8 @@ graph TD
 ## 🚀 Core Features & Capabilities
 
 - **Interactive Heritage Map:** Powered by Leaflet & React Leaflet for geospatial exploration of Delhi and national monuments.
-- **AI Cultural Guide:** Integrated with Google Gemini API to answer cultural queries and provide rich historical context.
+- **AI Cultural Guide:** Integrated with Google Gemini API (async, TTL-cached) to answer cultural queries with rich historical context — plus Web Speech voice input and read-aloud playback in the chatbot.
+- **PDF Export:** Download confirmed bookings as e-tickets and personalized itineraries as formatted PDFs (client-side, via `jspdf`).
 - **Virtual Tour Experience:** Immersive 360/panoramic cultural tour views with built-in CORS image proxy support.
 - **Explore, Booking & Payment Flow:** Streamlined ticketing system supporting multiple ticket types, visitor verification, and mock UPI/card payment workflows.
 - **Community & Citizen Grievance Portal:** Discussion forums with live likes/comments and government reporting endpoints for monument maintenance.
@@ -81,7 +82,7 @@ INNOVIT-HACKATHON/
 │   ├── main.py
 │   ├── mongo.py
 │   ├── auth.py
-│   ├── chatbot.py
+│   ├── chatbot.py          # Async Gemini client + TTL response cache
 │   ├── recommend.py
 │   ├── user.py
 │   ├── bookings.py
@@ -89,6 +90,7 @@ INNOVIT-HACKATHON/
 │   ├── data.py
 │   ├── delhi_places.py
 │   ├── india_places.py
+│   ├── data/               # File-fallback state store (likes, comments, reports, users)
 │   └── requirements.txt
 ├── FRONTEND/
 │   ├── src/
@@ -98,13 +100,12 @@ INNOVIT-HACKATHON/
 │   │   ├── pages/
 │   │   ├── config/api.js
 │   │   ├── store/useStore.js
-│   │   └── styles/main.css
+│   │   ├── styles/main.css
+│   │   └── utils/pdfExport.js   # Ticket & itinerary PDF generation (jspdf)
+│   ├── docs/README.md           # Single consolidated frontend documentation
 │   ├── package.json
 │   ├── tailwind.config.cjs
 │   └── vite.config.js
-├── likes.json
-├── comments.json
-├── user.json
 └── README.md
 ```
 
@@ -145,9 +146,12 @@ npm run dev -- --host 127.0.0.1 --port 5173
 | `/festivals` | `Festivals` | Cultural festivals calendar and overview |
 | `/arts` | `ArtCrafts` | Traditional arts, crafts, and artisan stories |
 | `/explore` | `Explore` | Discovery engine with booking & payment flow |
-| `/virtual-tour` | `VirtualTour` | Immersive panoramic virtual tour |
-| `/community` | `TourismEventCoPublishing` | Community discussions and citizen reporting |
+| `/virtual-tour` | `VirtualTour` | Immersive panoramic virtual tour (A-Frame viewer) |
+| `/ar-vr-tour` | `AR-Chaelogist` | AR/VR experience explainer |
+| `/headset` | `Headset` | VR headset storefront |
+| `/tourism-event-co-publishing` | `TourismEventCoPublishing` | Partner/event co-publishing |
 | `/about` & `/contact` | `About` / `Contact` | Portal background and support channels |
+| `*` | `NotFound` | 404 page |
 
 ---
 

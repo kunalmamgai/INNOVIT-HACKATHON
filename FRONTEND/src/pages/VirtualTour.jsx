@@ -17,7 +17,6 @@ export default function VirtualTour() {
   const [tourMode, setTourMode] = useState('vr')
 
   const [panoramaLoaded, setPanoramaLoaded] = useState(false)
-  const [isPanorama, setIsPanorama] = useState(false)
   const [forceShow, setForceShow] = useState(false)
   const [imageStatus, setImageStatus] = useState('idle') // 'idle' | 'loading' | 'ok' | 'error'
   const [imageError, setImageError] = useState(null)
@@ -58,7 +57,6 @@ export default function VirtualTour() {
   // preload image + aframe
   useEffect(() => {
     setPanoramaLoaded(false)
-    setIsPanorama(false)
     if (!selected || !selected.image) return
 
     let mounted = true
@@ -69,15 +67,6 @@ export default function VirtualTour() {
     imgObj.src = proxiedImg
     imgObj.onload = () => {
       if (!mounted) return
-      // mark image loaded and detect if it's a panorama by aspect ratio
-      try {
-        const w = imgObj.naturalWidth || imgObj.width || 0
-        const h = imgObj.naturalHeight || imgObj.height || 1
-        // heuristic: treat as panorama if width/height >= 2
-        setIsPanorama((w / h) >= 2)
-      } catch (e) {
-        setIsPanorama(false)
-      }
       setPanoramaLoaded(true)
       setImageStatus('ok')
       setImageError(null)
@@ -89,12 +78,7 @@ export default function VirtualTour() {
       try { setImageError(String(e?.message || 'load error')) } catch { setImageError('load error') }
     }
 
-    return () => {
-      mounted = false
-      imgObj.onload = null
-      imgObj.onerror = null
-    }
-
+    // Preload the A-Frame script so the viewer iframe starts fast.
     try {
       if (!document.querySelector('link[data-aframe-preload]')) {
         const l = document.createElement('link')
@@ -104,18 +88,19 @@ export default function VirtualTour() {
         l.setAttribute('data-aframe-preload', '1')
         document.head.appendChild(l)
       }
-    } catch (e) {}
+    } catch (e) { /* ignore preload failures */ }
 
     return () => {
+      mounted = false
       imgObj.onload = null
       imgObj.onerror = null
-      try { if (window.__vt_cleanup) { window.__vt_cleanup(); delete window.__vt_cleanup } } catch (e) {}
+      try { if (window.__vt_cleanup) { window.__vt_cleanup(); delete window.__vt_cleanup } } catch (e) { /* ignore */ }
     }
   }, [selectedIndex, selected])
 
   useEffect(() => {
     if (panoramaLoaded) {
-      try { if (window.__vt_cleanup) { window.__vt_cleanup(); delete window.__vt_cleanup } } catch (e) {}
+      try { if (window.__vt_cleanup) { window.__vt_cleanup(); delete window.__vt_cleanup } } catch (e) { /* ignore */ }
       setForceShow(false)
     }
   }, [panoramaLoaded])
@@ -223,7 +208,7 @@ export default function VirtualTour() {
                   ) : (
                     <div className="w-full h-[60vh] rounded bg-gray-900 flex items-center justify-center">
                       <div className="text-center">
-                        <p className="text-gray-400 mb-3">Choose "Start VR Tour" or "Start AR Tour" to load the immersive viewer for this monument.</p>
+                        <p className="text-gray-400 mb-3">Choose &ldquo;Start VR Tour&rdquo; or &ldquo;Start AR Tour&rdquo; to load the immersive viewer for this monument.</p>
                         <div className="flex gap-3 justify-center">
                           <button onClick={() => startTour('vr')} className="px-4 py-2 bg-gold text-gray-900 rounded">Start VR Tour</button>
                           <button onClick={() => startTour('ar')} className="px-4 py-2 bg-gray-700 text-white rounded">Start AR Tour</button>

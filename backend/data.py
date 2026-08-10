@@ -37,8 +37,3 @@ class HeritageStore:
 
     def get_place(self, key):
         return self.places.get(key)
-
-from delhi_places import delhi_places
-store = HeritageStore()
-store.add_bulk(delhi_places)
-

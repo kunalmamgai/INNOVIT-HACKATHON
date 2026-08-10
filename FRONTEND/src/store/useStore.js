@@ -5,10 +5,10 @@ export const useStore = create(set => ({
   filters: {},
   setDark: (val) => {
     set({ dark: val })
-    try { localStorage.setItem('hc_dark', val ? '1' : '0') } catch(e){}
+    try { localStorage.setItem('hc_dark', val ? '1' : '0') } catch (e) { /* ignore */ }
   },
   loadPrefs: () => {
-    try { const v = localStorage.getItem('hc_dark'); if(v !== null) set({ dark: v === '1' }) } catch(e){}
+    try { const v = localStorage.getItem('hc_dark'); if(v !== null) set({ dark: v === '1' }) } catch (e) { /* ignore */ }
   },
   setFilters: (filters) => set({ filters })
 }))

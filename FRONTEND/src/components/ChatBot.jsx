@@ -1,20 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { apiUrl, apiFetch } from '../config/api'
+import { apiFetch } from '../config/api'
+
+const SpeechRecognition = typeof window !== 'undefined'
+  ? (window.SpeechRecognition || window.webkitSpeechRecognition)
+  : null
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isListening, setIsListening] = useState(false)
+  const recognitionRef = useRef(null)
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your AI guide to India's heritage and culture. Ask me anything about monuments, festivals, crafts, or local traditions!",
+      text: "Hello! I'm your AI guide to India\u2019s heritage and culture. Ask me anything about monuments, festivals, crafts, or local traditions!",
       sender: 'assistant',
       timestamp: new Date(),
     },
   ])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [backendAvailable, setBackendAvailable] = useState(true)
   const [backendError, setBackendError] = useState('')
   const messagesEndRef = useRef(null)
 
@@ -25,6 +30,46 @@ export default function ChatBot() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // ----------------------------
+  // Voice assistant (Web Speech API)
+  // ----------------------------
+
+  const toggleListening = () => {
+    if (!SpeechRecognition) return
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+    try {
+      const recognition = new SpeechRecognition()
+      recognition.lang = 'en-IN'
+      recognition.interimResults = false
+      recognition.maxAlternatives = 1
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0]?.transcript || ''
+        setInputValue(transcript)
+      }
+      recognition.onend = () => setIsListening(false)
+      recognition.onerror = () => setIsListening(false)
+      recognitionRef.current = recognition
+      recognition.start()
+      setIsListening(true)
+    } catch (err) {
+      console.error('Voice input error:', err)
+      setIsListening(false)
+    }
+  }
+
+  const speak = (text) => {
+    if (!text || !('speechSynthesis' in window)) return
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'en-IN'
+    utterance.rate = 1
+    window.speechSynthesis.speak(utterance)
+  }
 
   const handleSendMessage = async (e) => {
     e.preventDefault()
@@ -77,10 +122,8 @@ export default function ChatBot() {
       setMessages((prev) => [...prev, newBotMessage])
 
       if (response.ok) {
-        setBackendAvailable(true)
         setBackendError('')
       } else {
-        setBackendAvailable(false)
         setBackendError(botText)
       }
 
@@ -97,7 +140,6 @@ export default function ChatBot() {
         },
       ])
 
-      setBackendAvailable(false)
       setBackendError("Network error")
     } finally {
       setIsLoading(false)
@@ -124,7 +166,7 @@ export default function ChatBot() {
             <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-t-2xl flex justify-between items-center">
               <div>
                 <h3 className="font-bold text-lg">Heritage Guide AI</h3>
-                <p className="text-xs opacity-90">Ask about India's culture</p>
+                <p className="text-xs opacity-90">Ask about India&apos;s culture</p>
               </div>
               <button onClick={() => setIsOpen(false)} className="text-2xl">
                 ✕
@@ -150,11 +192,22 @@ export default function ChatBot() {
                       }`}
                   >
                     <p className="text-sm">{msg.text}</p>
-                    <span className="text-xs opacity-70 block mt-1">
+                    <span className="text-xs opacity-70 block mt-1 flex items-center justify-between gap-2">
                       {msg.timestamp.toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit',
                       })}
+                      {msg.sender === 'assistant' && (
+                        <button
+                          type="button"
+                          onClick={() => speak(msg.text)}
+                          title="Read aloud"
+                          aria-label="Read response aloud"
+                          className="opacity-70 hover:opacity-100 hover:bg-gray-300 dark:hover:bg-gray-600 rounded px-1 transition"
+                        >
+                          🔊
+                        </button>
+                      )}
                     </span>
                   </div>
                 </div>
@@ -183,6 +236,19 @@ export default function ChatBot() {
                 className="flex-1 px-3 py-2 border rounded-lg"
                 disabled={isLoading}
               />
+              <button
+                type="button"
+                onClick={toggleListening}
+                disabled={!SpeechRecognition || isLoading}
+                title={SpeechRecognition ? (isListening ? 'Stop listening' : 'Speak your question') : 'Voice input not supported'}
+                aria-label="Voice input"
+                className={`px-3 py-2 rounded-lg border ${isListening
+                    ? 'bg-red-500 border-red-500 text-white animate-pulse'
+                    : 'bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 transition'
+                  }`}
+              >
+                🎤
+              </button>
               <button
                 type="submit"
                 disabled={isLoading}
