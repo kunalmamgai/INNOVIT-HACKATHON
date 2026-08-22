@@ -19,14 +19,42 @@ export const apiUrl = (path = "/") => {
   return `${API_BASE_URL}${normalizedPath}`
 }
 
+// Known-safe CDN origins that are hotlink-friendly and CORS-enabled.
+// Images from these origins bypass the backend proxy entirely —
+// fewer network hops, no cold-start penalty, and no rate-limit risk.
+const SAFE_IMAGE_ORIGINS = [
+  "upload.wikimedia.org",       // Wikimedia Commons — explicitly hotlink-friendly
+  "images.unsplash.com",        // Unsplash — open license, CDN-optimized
+  "plus.unsplash.com",          // Unsplash premium
+  "cdn.mos.cms.futurecdn.net",  // Future CDN (PC Gamer, etc.)
+]
+
+// Check if a URL belongs to a known-safe origin
+function isSafeOrigin(url) {
+  try {
+    const parsed = new URL(url)
+    return SAFE_IMAGE_ORIGINS.some(origin => parsed.hostname === origin || parsed.hostname.endsWith("." + origin))
+  } catch {
+    return false
+  }
+}
+
 // Route remote image hosts through the backend /proxy-image endpoint, which
 // sets the Referer header Unsplash requires for hotlinked images and caches
-// the response. Local assets, data: URIs, and Wikimedia Commons images pass
-// through unchanged — Wikimedia is hotlink-friendly and CORS-enabled, so
-// proxying it would only add a hop and risk rate-limit bursts.
+// the response.
+//
+// Bypass logic (no proxy hop):
+//   1. Local assets (start with "/" or "data:")
+//   2. Wikimedia Commons images
+//   3. Known-safe CDN origins (Unsplash, Future CDN, etc.)
+//
+// Everything else goes through the proxy (e.g., Wix, Google, custom CDNs
+// that block direct hotlinking).
 export const proxyImageUrl = (src, fallback = "/assets/placeholder-image.svg") => {
   if (!src) return fallback
-  if (src.startsWith("/") || src.startsWith("data:") || src.includes("upload.wikimedia.org")) return src
+  if (src.startsWith("/") || src.startsWith("data:")) return src
+  if (src.includes("upload.wikimedia.org")) return src
+  if (isSafeOrigin(src)) return src
   return `${apiUrl("/proxy-image")}?url=${encodeURIComponent(src)}`
 }
 

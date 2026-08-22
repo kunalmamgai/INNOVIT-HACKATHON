@@ -19,6 +19,7 @@ export default defineConfig({
   build: {
     target: 'esnext',
     minify: 'terser',
+    cssMinify: 'terser',
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: false,
@@ -32,10 +33,14 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
           leaflet: ['leaflet', 'react-leaflet'],
-          pdf: ['jspdf'],
+          pdf: ['jspdf', 'html2canvas'],
           animation: ['framer-motion'],
           state: ['zustand', 'i18next', 'react-i18next']
-        }
+        },
+        // Ensure stable chunk filenames for long-term caching
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     }
   }

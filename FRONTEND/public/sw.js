@@ -1,4 +1,4 @@
-const CACHE_NAME = 'heritage-portal-v2';
+const CACHE_NAME = 'heritage-portal-v3';
 const PRECACHE_URLS = ['/', '/index.html'];
 
 // Install: pre-cache only production-safe paths
@@ -21,14 +21,20 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch: network-first for navigations (HTML), cache-first for static assets
+// Fetch strategies:
+//   - Navigations: network-first (fresh HTML, offline fallback to cached)
+//   - Hashed assets (JS/CSS/images with content hash): cache-first (immutable)
+//   - Other same-origin requests: stale-while-revalidate (serve cache, update in background)
+//   - Cross-origin requests: pass through (don't cache third-party CDN)
 self.addEventListener('fetch', event => {
   const { request } = event;
 
-  // Skip non-GET and cross-origin requests
+  // Only handle GET
   if (request.method !== 'GET') return;
 
-  // Navigation requests (HTML pages): network-first, fallback to cache
+  const url = new URL(request.url);
+
+  // Navigation requests: network-first, fallback to cached index.html
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -42,18 +48,42 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Static assets (JS, CSS, images): cache-first, fallback to network
+  // Skip cross-origin (third-party CDNs, API calls, etc.)
+  if (url.origin !== self.location.origin) return;
+
+  // Hashed static assets (Vite appends content hash): cache-first (immutable)
+  // These filenames change when content changes, so caching forever is safe.
+  const isHashedAsset = /\/assets\/.*\.[a-f0-9]{8,}\.(js|css|woff2|png|svg|mp4|webp|jpg)$/.test(url.pathname);
+  if (isHashedAsset) {
+    event.respondWith(
+      caches.match(request).then(cached => {
+        if (cached) return cached;
+        return fetch(request).then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // Other same-origin requests (index.html, non-hashed assets):
+  // Stale-while-revalidate — serve from cache instantly, update in background
   event.respondWith(
     caches.match(request).then(cached => {
-      if (cached) return cached;
-      return fetch(request).then(response => {
-        // Only cache same-origin successful responses
-        if (response.ok && request.url.startsWith(self.location.origin)) {
+      const fetchPromise = fetch(request).then(response => {
+        if (response.ok) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
         }
         return response;
-      });
+      }).catch(() => cached); // If network fails, return whatever is cached
+
+      // Return cached version immediately if available, otherwise wait for network
+      return cached || fetchPromise;
     })
   );
 });

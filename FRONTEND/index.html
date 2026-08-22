@@ -7,8 +7,15 @@
       name="description"
       content="AR-Chaelogist - Explore Indian heritage sites, festivals, and crafts."
     />
-    <!-- Fonts self-hosted for faster loading (see src/styles/fonts.css) -->
+    <!-- Resource hints: DNS prefetch for external origins used by images/API -->
+    <link rel="dns-prefetch" href="//images.unsplash.com" />
+    <link rel="dns-prefetch" href="//plus.unsplash.com" />
+    <link rel="dns-prefetch" href="//upload.wikimedia.org" />
+    <link rel="dns-prefetch" href="//aframe.io" />
+    <link rel="dns-prefetch" href="//delhi-heritage-api.onrender.com" />
+    <!-- Preload critical assets -->
     <link rel="preload" href="/assets/hero.mp4" as="video" type="video/mp4" />
+    <link rel="preload" href="/assets/logo.svg" as="image" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

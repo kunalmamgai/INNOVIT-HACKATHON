@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { useStore } from './store/useStore'
 import ErrorBoundary from './components/ErrorBoundary'
+import PrefetchLinks from './components/PrefetchLinks'
 import './styles/main.css'
 
 const Navbar = lazy(() => import('./components/Navbar'))
@@ -74,6 +75,7 @@ export default function App() {
       <Helmet>
         <title>AR-Chaelogist</title>
       </Helmet>
+      <PrefetchLinks />
       <ErrorBoundary>
         <Suspense fallback={navFallback}>
           <Navbar currentUser={currentUser} onLogout={handleLogout} />
