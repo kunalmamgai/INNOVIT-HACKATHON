@@ -18,6 +18,8 @@ export default function Carousel(){
       <img
         src="/assets/hero-placeholder.svg"
         alt="Heritage motif background"
+        width="1200"
+        height="400"
         className="absolute inset-0 w-full h-full object-cover blur-sm scale-105"
       />
       <div className="absolute inset-0 bg-sand/85" />
@@ -29,7 +31,7 @@ export default function Carousel(){
 
           return (
           <div key={item.id} className="min-w-[85%] sm:min-w-[320px] md:min-w-[340px] bg-white/80 border border-earth/30 rounded-2xl shadow-md overflow-hidden backdrop-blur-sm flex flex-col">
-            <img src={item.img} alt={item.title} loading="lazy" className="h-44 sm:h-48 w-full object-cover" />
+            <img src={item.img} alt={item.title} loading="lazy" width="400" height="192" className="h-44 sm:h-48 w-full object-cover" />
             <div className="p-3 sm:p-4 flex flex-col flex-1">
               <h4 className="font-bold text-earth text-base sm:text-lg">{item.title}</h4>
               <p className="text-gray-700 text-xs sm:text-sm mt-2 leading-relaxed flex-1">

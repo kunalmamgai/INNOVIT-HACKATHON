@@ -154,6 +154,8 @@ export default function Heritage(){
               <img 
                 src={proxyImageUrl(selected.image)}
                 alt={selected.name}
+                width="800"
+                height="320"
                 className="w-full h-80 object-cover rounded-lg shadow-xl"
               />
             </div>

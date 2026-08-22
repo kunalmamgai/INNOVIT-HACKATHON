@@ -27,6 +27,8 @@ export default function Home(){
           <img
             src="/assets/hero-placeholder.svg"
             alt="AR VR section background"
+            width="1200"
+            height="600"
             className="absolute inset-0 w-full h-full object-cover blur-sm scale-105"
           />
           <div className="absolute inset-0 bg-sand/80" />
@@ -73,6 +75,8 @@ export default function Home(){
                   src="/assets/hero-placeholder.svg"
                   alt="AR VR immersive cultural preview"
                   loading="lazy"
+                  width="600"
+                  height="224"
                   className="w-full h-44 md:h-56 object-cover rounded-xl"
                 />
               </div>
@@ -85,6 +89,8 @@ export default function Home(){
                   src="/assets/hero-placeholder.svg"
                   alt="Virtual heritage interaction"
                   loading="lazy"
+                  width="300"
+                  height="112"
                   className="w-full h-28 object-cover rounded-xl"
                 />
               </div>

@@ -152,7 +152,7 @@ export default function VirtualTour() {
             <div className="lg:col-span-3">
               <div className="bg-gradient-to-b from-gray-900 to-black p-4 rounded">
                   <div className="flex items-start gap-6">
-                  <img src={proxiedImg} alt={selected?.name} className="w-48 h-32 object-cover rounded shadow-md" />
+                  <img src={proxiedImg} alt={selected?.name} width="192" height="128" className="w-48 h-32 object-cover rounded shadow-md" />
                   <div className="flex-1">
                     <h2 className="text-2xl font-bold text-gold">{selected?.name}</h2>
                     <p className="text-gray-300 mt-2">{selected?.description}</p>
@@ -199,7 +199,7 @@ export default function VirtualTour() {
                       {/* fallback: if A-Frame didn't load within timeout, show the proxied image so user sees something */}
                       {(!panoramaLoaded && forceShow) && (
                         <div className="w-full h-[60vh] bg-black rounded overflow-hidden flex items-center justify-center">
-                          <img src={selected?.image || proxiedImg} alt={selected?.name} className="max-h-[60vh] w-auto object-contain" />
+                          <img src={selected?.image || proxiedImg} alt={selected?.name} width="800" height="450" className="max-h-[60vh] w-auto object-contain" />
                         </div>
                       )}
                     </div>

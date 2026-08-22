@@ -122,6 +122,8 @@ export default function TourismEventCoPublishing() {
                   <img
                     src={slot.imageUrl}
                     alt={slot.title}
+                    width="640"
+                    height="360"
                     className="h-full w-full object-cover rounded-lg"
                     loading="lazy"
                   />

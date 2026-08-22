@@ -284,6 +284,8 @@ export default function Explore({ currentUser: propUser }) {
                     <img
                       src={proxyImageUrl(p.image)}
                       alt={p.name}
+                      width="400"
+                      height="256"
                       className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
                       onError={(e) => { e.target.src = "/assets/placeholder-image.svg"; }}
                     />
@@ -316,6 +318,8 @@ export default function Explore({ currentUser: propUser }) {
             <img
               src={proxyImageUrl(p.image)}
               alt={p.name}
+              width="400"
+              height="256"
               className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
               onError={(e) => { e.target.src = "/assets/placeholder-image.svg"; }}
             />
@@ -344,12 +348,13 @@ export default function Explore({ currentUser: propUser }) {
             animate={{ scale: 1 }}
             className="bg-gray-900 rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={proxyImageUrl(selectedPlace.image)}
-              alt={selectedPlace.name}
-              className="w-full h-64 object-cover"
-            />
+          >              <img
+                src={proxyImageUrl(selectedPlace.image)}
+                alt={selectedPlace.name}
+                width="640"
+                height="256"
+                className="w-full h-64 object-cover"
+              />
             <div className="p-6">
               <button onClick={() => setSelectedPlace(null)} className="float-right text-gray-400 hover:text-white text-2xl mb-4">✕</button>
               <h2 className="text-4xl font-bold text-white mb-2 clear-both">{selectedPlace.name}</h2>
