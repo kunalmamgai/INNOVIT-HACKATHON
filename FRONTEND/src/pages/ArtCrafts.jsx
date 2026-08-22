@@ -155,7 +155,7 @@ export default function ArtCrafts() {
             onClick={() => setSelected(c)}
           >
             <div className="h-56 w-full overflow-hidden">
-              <img src={c.img} alt={c.name} className="h-full w-full object-cover" />
+              <img src={c.img} alt={c.name} loading="lazy" className="h-full w-full object-cover" />
             </div>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/80 pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 p-4 space-y-1 text-white drop-shadow-lg">
@@ -170,7 +170,7 @@ export default function ArtCrafts() {
       {selected && (
         <Modal onClose={() => setSelected(null)}>
           <div className="grid md:grid-cols-2 gap-6 items-start">
-            <img src={selected.img} alt={selected.name} className="w-full rounded-lg object-cover" />
+            <img src={selected.img} alt={selected.name} loading="lazy" className="w-full rounded-lg object-cover" />
             <div className="space-y-3">
               <p className="text-sm uppercase tracking-wide text-amber-500 font-semibold">{selected.category}</p>
               <h2 className="text-2xl font-bold">{selected.name}</h2>

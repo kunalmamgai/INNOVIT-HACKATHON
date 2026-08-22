@@ -7,7 +7,7 @@ export default function Home(){
   return (
     <section className="relative overflow-hidden">
       <div className="relative h-[52vh] md:h-[60vh] flex items-center justify-center bg-earth/10">
-        <video className="hero-video" autoPlay muted loop playsInline>
+        <video className="hero-video" autoPlay muted loop playsInline preload="metadata" poster="/assets/hero-placeholder.svg">
           <source src="/assets/hero.mp4" type="video/mp4" />
         </video>
         <div className="z-10 text-center text-white px-4">
@@ -25,7 +25,7 @@ export default function Home(){
       <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} className="max-w-6xl mx-auto px-3 sm:px-4 py-8 md:py-14">
         <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-earth/60 bg-sand p-4 sm:p-6 md:p-12 text-gray-900 shadow-2xl">
           <img
-            src="https://blog.emb.global/wp-content/uploads/2024/01/Virtual-Reality-Tool-for-Cultural-Heritage-Preservation.webp"
+            src="/assets/hero-placeholder.svg"
             alt="AR VR section background"
             className="absolute inset-0 w-full h-full object-cover blur-sm scale-105"
           />
@@ -70,8 +70,9 @@ export default function Home(){
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
               <div className="sm:col-span-2 rounded-2xl border border-earth/30 bg-white/80 p-2 shadow-md">
                 <img
-                  src="https://blog.emb.global/wp-content/uploads/2024/01/Virtual-Reality-Tool-for-Cultural-Heritage-Preservation.webp"
+                  src="/assets/hero-placeholder.svg"
                   alt="AR VR immersive cultural preview"
+                  loading="lazy"
                   className="w-full h-44 md:h-56 object-cover rounded-xl"
                 />
               </div>
@@ -81,8 +82,9 @@ export default function Home(){
               </div>
               <div className="rounded-2xl border border-earth/30 bg-white/80 p-2 shadow-md">
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC5ZcSZOd2aqdRxaOX3kOXwbEOyaeQmPfS2A&s"
+                  src="/assets/hero-placeholder.svg"
                   alt="Virtual heritage interaction"
+                  loading="lazy"
                   className="w-full h-28 object-cover rounded-xl"
                 />
               </div>

@@ -2,10 +2,12 @@ import React, { lazy, useState, useEffect, Suspense } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { useStore } from './store/useStore'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import ChatBot from './components/ChatBot'
+import ErrorBoundary from './components/ErrorBoundary'
 import './styles/main.css'
+
+const Navbar = lazy(() => import('./components/Navbar'))
+const Footer = lazy(() => import('./components/Footer'))
+const ChatBot = lazy(() => import('./components/ChatBot'))
 
 const Home = lazy(() => import('./pages/Home'))
 const Heritage = lazy(() => import('./pages/Heritage'))
@@ -64,34 +66,47 @@ export default function App() {
     navigate('/')
   }
 
+  const navFallback = <div className="h-16 bg-white dark:bg-gray-900" />
+  const pageFallback = <div className="flex items-center justify-center min-h-[40vh] text-gold text-xl">Loading...</div>
+
   return (
     <div className="min-h-screen flex flex-col motif">
       <Helmet>
         <title>AR-Chaelogist</title>
       </Helmet>
-      <Navbar currentUser={currentUser} onLogout={handleLogout} />
-      <main className="flex-1">
-        <Suspense fallback={<div className="flex items-center justify-center min-h-[40vh] text-gold text-xl">Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/heritage" element={<Heritage />} />
-            <Route path="/festivals" element={<Festivals />} />
-            <Route path="/arts" element={<ArtCrafts />} />
-            <Route path="/virtual-tour" element={<VirtualTour />} />
-            <Route path="/ar-vr-tour" element={<ARChaelogist />} />
-            <Route path="/tourism-event-co-publishing" element={<TourismEventCoPublishing />} />
-            <Route path="/headset" element={<Headset />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            {/* Pass currentUser so Explore can use it without re-reading localStorage */}
-            <Route path="/explore" element={<Explore currentUser={currentUser} />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+      <ErrorBoundary>
+        <Suspense fallback={navFallback}>
+          <Navbar currentUser={currentUser} onLogout={handleLogout} />
         </Suspense>
+      </ErrorBoundary>
+      <main className="flex-1">
+        <ErrorBoundary>
+          <Suspense fallback={pageFallback}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/heritage" element={<Heritage />} />
+              <Route path="/festivals" element={<Festivals />} />
+              <Route path="/arts" element={<ArtCrafts />} />
+              <Route path="/virtual-tour" element={<VirtualTour />} />
+              <Route path="/ar-vr-tour" element={<ARChaelogist />} />
+              <Route path="/tourism-event-co-publishing" element={<TourismEventCoPublishing />} />
+              <Route path="/headset" element={<Headset />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              {/* Pass currentUser so Explore can use it without re-reading localStorage */}
+              <Route path="/explore" element={<Explore currentUser={currentUser} />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </main>
-      <Footer />
-      <ChatBot />
+      <ErrorBoundary>
+        <Suspense fallback={null}>
+          <Footer />
+          <ChatBot />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   )
 }

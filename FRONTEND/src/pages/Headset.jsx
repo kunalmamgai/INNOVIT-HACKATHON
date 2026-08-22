@@ -381,7 +381,7 @@ export default function Headset() {
                   className="rounded-2xl border border-gray-800 bg-gray-950 overflow-hidden shadow-lg flex flex-col"
                 >
                   <div className="relative h-36">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.target.src = '/assets/placeholder-image.svg' }} />
+                    <img src={product.image} alt={product.name} loading="lazy" className="w-full h-full object-cover" onError={(e) => { e.target.src = '/assets/placeholder-image.svg' }} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
                     <div className="absolute top-2 right-2 bg-gold text-gray-900 text-xs font-bold px-3 py-1 rounded-full shadow">₹{product.price.toLocaleString('en-IN')}</div>
                     <div className="absolute bottom-2 left-3 right-3 flex flex-wrap gap-2">

@@ -25,28 +25,28 @@ const festivals = [
     id: 1,
     name: "Diwali",
     date: "2026-11-01",
-    image: "https://images.unsplash.com/photo-1592843997881-cab3860b1067?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRpd2FsaXxlbnwwfHwwfHx8MA%3D%3D",
+    image: "https://images.unsplash.com/photo-1592843997881-cab3860b1067?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRpd2FsaXxlbnwwfHwwfHx8MA%3D%3D",
     description: "Diwali, the Festival of Lights, celebrates the victory of light over darkness and good over evil. Families light diyas, decorate homes, exchange sweets, and perform Lakshmi puja for prosperity.",
   },
   {
     id: 2,
     name: "Holi",
     date: "2026-03-25",
-    image: "https://images.unsplash.com/photo-1603228254119-e6a4d095dc59?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG9saXxlbnwwfHwwfHx8MA%3D%3D",
+    image: "https://images.unsplash.com/photo-1603228254119-e6a4d095dc59?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG9saXxlbnwwfHwwfHx8MA%3D%3D",
     description: "Holi is the vibrant spring festival of colors symbolizing joy, renewal, and togetherness. People celebrate with gulal, music, dance, and festive foods while strengthening community bonds.",
   },
   {
     id: 3,
     name: "Navratri",
     date: "2026-10-15",
-    image: "https://images.unsplash.com/photo-1622279488670-123d0fd161cb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG5hdnJhdHJpfGVufDB8fDB8fHww",
+    image: "https://images.unsplash.com/photo-1622279488670-123d0fd161cb?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG5hdnJhdHJpfGVufDB8fDB8fHww",
     description: "Navratri is a nine-night festival dedicated to Goddess Durga in her various forms. It is celebrated with devotional songs, fasting, Garba and Dandiya dances, and community worship.",
   },
   {
     id: 4,
     name: "Makar Sankranti",
     date: "2026-01-14",
-    image: "https://images.unsplash.com/photo-1641792113723-667c35b6766b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bWFrYXIlMjBzYW5rcmFudGl8ZW58MHx8MHx8fDA%3D",
+    image: "https://images.unsplash.com/photo-1641792113723-667c35b6766b?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bWFrYXIlMjBzYW5rcmFudGl8ZW58MHx8MHx8fDA%3D",
     description: "Makar Sankranti marks the sun’s transition into Capricorn and the harvest season in many regions. Kite flying, sesame sweets, and thanksgiving rituals are key parts of the celebration.",
   },
   {
@@ -59,8 +59,7 @@ const festivals = [
   {
   id: 6,
   name: "Raksha Bandhan",
-  date: "2026-08-19",
-  image: "https://images.unsplash.com/photo-1693473812472-a9f1887a6b2d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmFrc2hhJTIwYmFuZGhhbnxlbnwwfHwwfHx8MA%3D%3D",
+  date: "2026-08-19",    image: "https://images.unsplash.com/photo-1693473812472-a9f1887a6b2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmFrc2hhJTIwYmFuZGhhbnxlbnwwfHwwfHx8MA%3D%3D",
   description: "Raksha Bandhan celebrates the bond between brothers and sisters. Sisters tie a sacred thread (rakhi) on their brothers' wrists, symbolizing protection, love, and lifelong support."
   },
   
@@ -68,7 +67,7 @@ const festivals = [
     id: 7,
     name: "Ganesh Chaturthi",
     date: "2026-09-10",
-    image: "https://plus.unsplash.com/premium_photo-1674898516505-e8913fb7f40c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z2FuZXNoJTIwY2hhdHVydGhpfGVufDB8fDB8fHww",
+    image: "https://plus.unsplash.com/premium_photo-1674898516505-e8913fb7f40c?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z2FuZXNoJTIwY2hhdHVydGhpfGVufDB8fDB8fHww",
     description: "Ganesh Chaturthi honors Lord Ganesha, the remover of obstacles. Devotees install clay idols, perform prayers, sing devotional songs, and immerse the idols in water after celebrations."
   },
   
@@ -76,7 +75,7 @@ const festivals = [
     id: 8,
     name: "Durga Puja",
     date: "2026-10-20",
-    image: "https://images.unsplash.com/photo-1616074385287-67f6fb9e9eb8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHVyZ2ElMjBwdWphfGVufDB8fDB8fHww",
+    image: "https://images.unsplash.com/photo-1616074385287-67f6fb9e9eb8?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHVyZ2ElMjBwdWphfGVufDB8fDB8fHww",
     description: "Durga Puja celebrates Goddess Durga’s victory over evil. Beautifully decorated pandals, artistic idols, cultural performances, and community gatherings are central to the festivities."
   },
   
@@ -206,11 +205,11 @@ export default function Festivals() {
               <p className="text-[11px] mt-2 text-rose-200">Click to view details</p>
             </div>
 
-            {/* IMAGE */}
-            <img
-              src={f.image || "/assets/placeholder-image.svg"}
-              alt={f.name}
-              className="festival-image"
+            {/* IMAGE */}              <img
+                src={f.image || "/assets/placeholder-image.svg"}
+                alt={f.name}
+                loading="lazy"
+                className="festival-image"
             />
           </button>
         ))}
@@ -224,6 +223,7 @@ export default function Festivals() {
                 src={selectedFestival.image || "/assets/placeholder-image.svg"}
                 alt={selectedFestival.name}
                 className="w-full h-64 object-cover rounded-lg mb-5"
+                loading="lazy"
               />
 
               <h2 className="text-2xl font-bold text-cyan-200">{selectedFestival.name}</h2>
